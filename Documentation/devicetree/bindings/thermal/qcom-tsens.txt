@@ -4,6 +4,7 @@ Required properties:
 - compatible:
   Must be one of the following:
     - "qcom,msm8916-tsens" (MSM8916)
+    - "qcom,msm8956-tsens" (MSM8956)
     - "qcom,msm8974-tsens" (MSM8974)
     - "qcom,msm8996-tsens" (MSM8996)
     - "qcom,msm8998-tsens", "qcom,tsens-v2" (MSM8998)
