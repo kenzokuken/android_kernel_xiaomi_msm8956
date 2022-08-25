@@ -1,23 +1,20 @@
-/*
- * Copyright (c) 2014-2016, The Linux Foundation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 and
- * only version 2 as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- */
+// SPDX-License-Identifier: GPL-2.0
+// Copyright (c) 2014-2016, The Linux Foundation. All rights reserved.
+// Copyright (c) 2022, Benarji Anand <benarji385@gmail.com>
+
+#include <dt-bindings/interrupt-controller/arm-gic.h> 
 
 &rpm_bus {
 	rpm-regulator-smpa1 {
 		status = "okay";
 		pm8950_s1: regulator-s1 {
-			regulator-min-microvolt = <1000000>;
-			regulator-max-microvolt = <1162500>;
-			qcom,init-voltage = <1000000>;
+			regulator-min-microvolt =
+					<RPM_SMD_REGULATOR_LEVEL_RETENTION>;
+			regulator-max-microvolt =
+					<RPM_SMD_REGULATOR_LEVEL_TURBO>;
+			qcom,init-voltage-level = 
+					<RPM_SMD_REGULATOR_LEVEL_RETENTION>;
+			qcom,use-voltage-level;
 			status = "okay";
 		};
 	};
@@ -29,9 +26,12 @@
 			compatible = "qcom,rpm-smd-regulator";
 			regulator-name = "pm8950_s2_level";
 			qcom,set = <3>;
-			regulator-min-microvolt = <RPM_SMD_REGULATOR_LEVEL_RETENTION>;
-			regulator-max-microvolt = <RPM_SMD_REGULATOR_LEVEL_TURBO>;
-			qcom,init-voltage-level = <RPM_SMD_REGULATOR_LEVEL_RETENTION>;
+			regulator-min-microvolt =
+					<RPM_SMD_REGULATOR_LEVEL_RETENTION>;
+			regulator-max-microvolt =
+					<RPM_SMD_REGULATOR_LEVEL_TURBO>;
+			qcom,init-voltage-level =
+					<RPM_SMD_REGULATOR_LEVEL_RETENTION>;
 			qcom,use-voltage-level;
 		};
 
@@ -39,8 +39,10 @@
 			compatible = "qcom,rpm-smd-regulator";
 			regulator-name = "pm8950_s2_floor_level";
 			qcom,set = <3>;
-			regulator-min-microvolt = <RPM_SMD_REGULATOR_LEVEL_RETENTION>;
-			regulator-max-microvolt = <RPM_SMD_REGULATOR_LEVEL_TURBO>;
+			regulator-min-microvolt =
+					<RPM_SMD_REGULATOR_LEVEL_RETENTION>;
+			regulator-max-microvolt =
+					<RPM_SMD_REGULATOR_LEVEL_TURBO>;
 			qcom,use-voltage-floor-level;
 			qcom,always-send-voltage;
 		};
@@ -49,8 +51,10 @@
 			compatible = "qcom,rpm-smd-regulator";
 			regulator-name = "pm8950_s2_level_ao";
 			qcom,set = <1>;
-			regulator-min-microvolt = <RPM_SMD_REGULATOR_LEVEL_RETENTION>;
-			regulator-max-microvolt = <RPM_SMD_REGULATOR_LEVEL_TURBO>;
+			regulator-min-microvolt =
+					<RPM_SMD_REGULATOR_LEVEL_RETENTION>;
+			regulator-max-microvolt =
+					<RPM_SMD_REGULATOR_LEVEL_TURBO>;
 			qcom,use-voltage-level;
 		};
 	};
@@ -78,7 +82,6 @@
 	/* VDD_MX supply */
 	rpm-regulator-smpa6 {
 		status = "okay";
-		/* TODO: check this node */
 		pm8950_s6_level: regulator-s6-level {
 			compatible = "qcom,rpm-smd-regulator";
 			regulator-name = "pm8950_s6_level";
@@ -329,8 +332,6 @@
 			status = "okay";
 		};
 	};
-
-	/* TODO: BOOST-BYPASS */
 };
 
 /* SPM controlled regulators */
@@ -476,7 +477,7 @@
 		compatible = "qcom,cpr-regulator";
 		reg = <0xb118000 0x1000>, <0xa0000 0x1000>;
 		reg-names = "rbcpr", "efuse_addr";
-		interrupts = <0 19 0>;
+		interrupts = <GIC_SPI 19 IRQ_TYPE_EDGE_RISING>;
 		regulator-name = "apc1_corner";
 		regulator-min-microvolt = <1>;
 		regulator-max-microvolt = <9>;
@@ -667,12 +668,6 @@
 
 		qcom,cpr-gfx-dynamic-floor-offset = <40000>;
 		qcom,cpr-enable;
-	};
-};
-
-&pmi8950_charger {
-	smbcharger_charger_otg: qcom,smbcharger-boost-otg {
-		regulator-name = "smbcharger_charger_otg";
 	};
 };
 

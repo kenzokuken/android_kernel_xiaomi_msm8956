@@ -1,15 +1,6 @@
-/*
- * Copyright (c) 2015-2016, The Linux Foundation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 and
- * only version 2 as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- */
+// SPDX-License-Identifier: GPL-2.0
+// Copyright (c) 2015-2016, The Linux Foundation. All rights reserved.
+// Copyright (c) 2022, Benarji Anand <benarji385@gmail.com>
 
 #include "msm8956-pinctrl.dtsi"
 #include "msm8956-camera-sensor-cdp.dtsi"
@@ -197,45 +188,5 @@
 	pinctrl-1 = <&sdc3_clk_off &sdc3_cmd_off &sdc3_dat_off
 					&sdc3_wlan_gpio_sleep>;
 
-	status = "disabled";
-};
-
-
-/* CoreSight */
-&tpiu {
-	pinctrl-names = "seta-pctrl", "setb-pctrl", "sdcard", "trace",
-			"swduart", "swdtrc", "jtag", "spmi";
-	/* Mictor */
-	pinctrl-0 = <&seta_1 &seta_2 &seta_3 &seta_4 &seta_5 &seta_6 &seta_7
-		     &seta_8 &seta_9 &seta_10 &seta_11 &seta_12 &seta_13
-		     &seta_14 &seta_15 &seta_16 &seta_17 &seta_18>;
-	pinctrl-1 = <&setb_1 &setb_2 &setb_3 &setb_4 &setb_5 &setb_6 &setb_7
-		     &setb_8 &setb_9 &setb_10 &setb_11 &setb_12 &setb_13
-		     &setb_14 &setb_15 &setb_16 &setb_17 &setb_18>;
-	/* NIDnT */
-	pinctrl-2 = <&qdsd_clk_sdcard &qdsd_cmd_sdcard
-		    &qdsd_data0_sdcard &qdsd_data1_sdcard
-		    &qdsd_data2_sdcard &qdsd_data3_sdcard>;
-	pinctrl-3 = <&qdsd_clk_trace &qdsd_cmd_trace
-		    &qdsd_data0_trace &qdsd_data1_trace
-		    &qdsd_data2_trace &qdsd_data3_trace>;
-	pinctrl-4 = <&qdsd_cmd_swduart &qdsd_data0_swduart
-		    &qdsd_data1_swduart &qdsd_data2_swduart
-		    &qdsd_data3_swduart>;
-	pinctrl-5 = <&qdsd_clk_swdtrc &qdsd_cmd_swdtrc
-		    &qdsd_data0_swdtrc &qdsd_data1_swdtrc
-		    &qdsd_data2_swdtrc &qdsd_data3_swdtrc>;
-	pinctrl-6 = <&qdsd_cmd_jtag &qdsd_data0_jtag
-		    &qdsd_data1_jtag &qdsd_data2_jtag
-		    &qdsd_data3_jtag>;
-	pinctrl-7 = <&qdsd_clk_spmi &qdsd_cmd_spmi
-		    &qdsd_data0_spmi &qdsd_data3_spmi>;
-};
-
-&pm8950_cajon_dig {
-	status = "disabled";
-};
-
-&pm8950_cajon_analog {
 	status = "disabled";
 };
