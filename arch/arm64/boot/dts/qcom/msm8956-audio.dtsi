@@ -204,7 +204,7 @@
 
 		status = "disabled";
 		compatible = "qcom,msm8952-audio-slim-codec";
-		qcom,model = "msm8952-tasha-snd-card";
+		qcom,model = "msm8956-tasha-snd-card";
 		
 		reg = <0xc051000 0x4>,
 		    <0xc051004 0x4>,
