@@ -945,6 +945,8 @@
 		};
 	};
 
+	thermal_zones: thermal-zones {};
+
 	qcom,memshare {
 		compatible = "qcom,memshare";
 
@@ -2332,6 +2334,7 @@
 #include "pm8004.dtsi"
 #include "msm8956-regulator.dtsi"
 #include "msm-gdsc-8916.dtsi"
+#include "msm8956-thermal.dtsi"
 #include "msm8956-camera.dtsi"
 #include "msm8956-audio.dtsi"
 
