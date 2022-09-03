@@ -8,7 +8,9 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8994-angler-rev-101.dtb
 dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-mtp.dtb
 dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-mtp.dtb
 
-dtb-$(CONFIG_ARCH_MSM8956) += msm8956-qrd-skun.dtb
+dtb-$(CONFIG_ARCH_MSM8956) += msm8956-cdp.dtb \
+	msm8956-mtp.dtb \
+	msm8956-qrd-skun.dtb
 
 always		:= $(dtb-y)
 subdir-y	:= $(dts-dirs)
