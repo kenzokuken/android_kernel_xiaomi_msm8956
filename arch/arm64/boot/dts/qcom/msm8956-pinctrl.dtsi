@@ -11,6 +11,7 @@
 		gpio-controller;
 		#gpio-cells = <2>;
 		interrupt-controller;
+		interrupt-parent = <&wakegpio>;
 		#interrupt-cells = <2>;
 
 		cdc_reset_ctrl {
