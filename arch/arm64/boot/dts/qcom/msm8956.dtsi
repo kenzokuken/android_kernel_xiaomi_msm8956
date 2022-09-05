@@ -15,7 +15,7 @@
 	compatible = "qcom,msm8956";
 	qcom,msm-id = <266 0x0>;
 	qcom,msm-name = "MSM8956";
-	interrupt-parent = <&intc>;
+	interrupt-parent = <&wakegic>;
 
 	chosen {
 		bootargs = "sched_enable_hmp=1 kpti=0";
