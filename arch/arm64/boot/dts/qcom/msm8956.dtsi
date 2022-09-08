@@ -1089,6 +1089,21 @@
 		status = "disabled";
 	};
 
+	qcom,msm-adsprpc-mem {
+		compatible = "qcom,msm-adsprpc-mem-region";
+		memory-region = <&adsp_mem>;
+	};
+
+	qcom,msm_fastrpc {
+		compatible = "qcom,msm-fastrpc-legacy-compute";
+		qcom,msm_fastrpc_compute_cb {
+			compatible = "qcom,msm-fastrpc-legacy-compute-cb";
+			label = "adsprpc-smd";
+			iommus = <&apps_iommu 0x2408 0x7>;
+			sids = <0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf>;
+		};
+	};
+
 	blsp1_uart2: serial@78b0000 {
 		compatible = "qcom,msm-lsuart-v14";
 		reg = <0x78b0000 0x200>;
