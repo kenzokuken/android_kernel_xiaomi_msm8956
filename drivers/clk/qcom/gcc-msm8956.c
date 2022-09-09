@@ -1500,6 +1500,20 @@ static struct clk_rcg2 sdcc2_apps_clk_src = {
 	}
 };
 
+static struct clk_rcg2 sdcc3_apps_clk_src = {
+	.cmd_rcgr = 0x39004,
+	.mnd_width = 8,
+	.hid_width = 5,
+	.freq_tbl = ftbl_sdcc2_apps_clk_src,
+	.parent_map = gcc_sdcc_apps_map,
+	.clkr.hw.init = &(struct clk_init_data){
+		.name = "sdcc3_apps_clk_src",
+		.parent_data = gcc_sdcc_apss_data,
+		.num_parents = ARRAY_SIZE(gcc_sdcc_apss_data),
+		.ops = &clk_rcg2_floor_ops,
+	},
+};
+
 static const struct freq_tbl ftbl_usb30_master_clk_src[] = {
 	F(80000000, P_GPLL0_DIV2, 5, 0, 0),
 	F(100000000, P_GPLL0, 8, 0, 0),
@@ -3624,6 +3638,37 @@ static struct clk_branch gcc_sdcc2_apps_clk = {
 	}
 };
 
+static struct clk_branch gcc_sdcc3_ahb_clk = {
+	.halt_reg = 0x3901c,
+	.halt_check = BRANCH_HALT,
+	.clkr = {
+		.enable_reg = 0x3901c,
+		.enable_mask = BIT(0),
+		.hw.init = &(struct clk_init_data) {
+			.name = "gcc_sdcc3_ahb_clk",
+			.ops = &clk_branch2_ops,
+		},
+	},
+};
+
+static struct clk_branch gcc_sdcc3_apps_clk = {
+	.halt_reg = 0x39018,
+	.halt_check = BRANCH_HALT,
+	.clkr = {
+		.enable_reg = 0x39018,
+		.enable_mask = BIT(0),
+		.hw.init = &(struct clk_init_data) {
+			.name = "gcc_sdcc3_apps_clk",
+			.parent_hws = (const struct clk_hw*[]){
+				&sdcc3_apps_clk_src.clkr.hw,
+			},
+			.num_parents = 1,
+			.ops = &clk_branch2_ops,
+			.flags = CLK_SET_RATE_PARENT,
+		},
+	},
+};
+
 static struct clk_branch gcc_smmu_cfg_clk = {
 	.halt_reg = 0x12038,
 	.halt_check = BRANCH_HALT_VOTED,
@@ -4040,6 +4085,7 @@ static struct clk_regmap *gcc_msm8956_clocks[] = {
 	[SDCC1_APPS_CLK_SRC] = &sdcc1_apps_clk_src.clkr,
 	[SDCC1_ICE_CORE_CLK_SRC] = &sdcc1_ice_core_clk_src.clkr,
 	[SDCC2_APPS_CLK_SRC] = &sdcc2_apps_clk_src.clkr,
+	[SDCC3_APPS_CLK_SRC] = &sdcc3_apps_clk_src.clkr,
 	[USB30_MOCK_UTMI_CLK_SRC] = &usb30_mock_utmi_clk_src.clkr,
 	[USB3_AUX_CLK_SRC] = &usb3_aux_clk_src.clkr,
 	[GCC_APC0_DROOP_DETECTOR_GPLL0_CLK] = &gcc_apc0_droop_detector_gpll0_clk.clkr,
@@ -4126,6 +4172,8 @@ static struct clk_regmap *gcc_msm8956_clocks[] = {
 	[GCC_SDCC1_ICE_CORE_CLK] = &gcc_sdcc1_ice_core_clk.clkr,
 	[GCC_SDCC2_AHB_CLK] = &gcc_sdcc2_ahb_clk.clkr,
 	[GCC_SDCC2_APPS_CLK] = &gcc_sdcc2_apps_clk.clkr,
+	[GCC_SDCC3_AHB_CLK] = &gcc_sdcc3_ahb_clk.clkr,
+	[GCC_SDCC3_APPS_CLK] = &gcc_sdcc3_apps_clk.clkr,
 	[GCC_USB30_MASTER_CLK] = &gcc_usb30_master_clk.clkr,
 	[GCC_USB30_MOCK_UTMI_CLK] = &gcc_usb30_mock_utmi_clk.clkr,
 	[GCC_USB30_SLEEP_CLK] = &gcc_usb30_sleep_clk.clkr,
