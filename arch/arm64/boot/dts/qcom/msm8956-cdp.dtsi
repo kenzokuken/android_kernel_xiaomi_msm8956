@@ -2,10 +2,10 @@
 // Copyright (c) 2015-2016, The Linux Foundation. All rights reserved.
 // Copyright (c) 2022, Benarji Anand <benarji385@gmail.com>
 
-#include "msm8956-pinctrl.dtsi"
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/clock/qcom,gcc-msm8956.h>
 #include "msm8956-camera-sensor-cdp.dtsi"
-#include "msm8956-mdss-cdp.dtsi"
-#include "msm8956-wsa881x.dtsi"
+#include "msm8956-mdss-panels.dtsi"
 
 &i2c_4 { /* BLSP1 QUP4 */
 	synaptics@20 {
