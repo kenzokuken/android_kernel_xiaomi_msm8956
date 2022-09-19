@@ -5,10 +5,13 @@
 /dts-v1/;
 
 #include "msm8956.dtsi"
+#include "pmi8950.dtsi"
 #include "msm8956-mtp.dtsi"
+#include "msm8956-pmi8950.dtsi"
 
 / {
-	model = "Qualcomm Technologies, Inc. MSM8956 MTP";
+	model = "Qualcomm Technologies, Inc. MSM8956 + PMI8950 MTP";
 	compatible = "qcom,msm8956-mtp", "qcom,msm8956", "qcom,mtp";
 	qcom,board-id= <8 0>;
+	qcom,pmic-id = <0x010016 0x010011 0x0 0x0>;
 };
