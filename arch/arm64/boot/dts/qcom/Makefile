@@ -10,7 +10,8 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-mtp.dtb
 
 dtb-$(CONFIG_ARCH_MSM8956) += msm8956-cdp.dtb \
 	msm8956-mtp.dtb \
-	msm8956-qrd-skun.dtb
+	msm8956-qrd-skun.dtb \
+	msm8956-iot-mtp.dtb
 
 always		:= $(dtb-y)
 subdir-y	:= $(dts-dirs)
