@@ -969,7 +969,7 @@ int tcf_classify(struct sk_buff *skb, const struct tcf_proto *tp,
 reclassify:
 #endif
 	for (; tp; tp = rcu_dereference_bh(tp->next)) {
-		__be16 protocol = tc_skb_protocol(skb);
+		__be16 protocol = skb_protocol(skb, false);
 		int err;
 
 		if (tp->protocol != protocol &&
@@ -2038,8 +2038,10 @@ out:
 void tcf_exts_destroy(struct tcf_exts *exts)
 {
 #ifdef CONFIG_NET_CLS_ACT
-	tcf_action_destroy(exts->actions, TCA_ACT_UNBIND);
-	kfree(exts->actions);
+	if (exts->actions) {
+		tcf_action_destroy(exts->actions, TCA_ACT_UNBIND);
+		kfree(exts->actions);
+	}
 	exts->nr_actions = 0;
 #endif
 }

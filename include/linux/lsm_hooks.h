@@ -1211,22 +1211,22 @@
  *
  * @binder_set_context_mgr:
  *	Check whether @mgr is allowed to be the binder context manager.
- *	@mgr contains the struct cred for the current binder process.
+ *	@mgr contains the task_struct for the task being registered.
  *	Return 0 if permission is granted.
  * @binder_transaction:
  *	Check whether @from is allowed to invoke a binder transaction call
  *	to @to.
- *	@from contains the struct cred for the sending process.
- *	@to contains the struct cred for the receiving process.
+ *	@from contains the task_struct for the sending task.
+ *	@to contains the task_struct for the receiving task.
  * @binder_transfer_binder:
  *	Check whether @from is allowed to transfer a binder reference to @to.
- *	@from contains the struct cred for the sending process.
- *	@to contains the struct cred for the receiving process.
+ *	@from contains the task_struct for the sending task.
+ *	@to contains the task_struct for the receiving task.
  * @binder_transfer_file:
  *	Check whether @from is allowed to transfer @file to @to.
- *	@from contains the struct cred for the sending process.
+ *	@from contains the task_struct for the sending task.
  *	@file contains the struct file being transferred.
- *	@to contains the struct cred for the receiving process.
+ *	@to contains the task_struct for the receiving task.
  *
  * @ptrace_access_check:
  *	Check permission before allowing the current process to trace the
@@ -1270,7 +1270,7 @@
  *	@cred contains the credentials to use.
  *	@ns contains the user namespace we want the capability in
  *	@cap contains the capability <include/linux/capability.h>.
- *	@audit contains whether to write an audit message or not
+ *	@opts contains options for the capable check <include/linux/security.h>
  *	Return 0 if the capability is granted for @tsk.
  * @syslog:
  *	Check permission before accessing the kernel message ring or changing
@@ -1428,13 +1428,13 @@
  *
  */
 union security_list_options {
-	int (*binder_set_context_mgr)(const struct cred *mgr);
-	int (*binder_transaction)(const struct cred *from,
-					const struct cred *to);
-	int (*binder_transfer_binder)(const struct cred *from,
-					const struct cred *to);
-	int (*binder_transfer_file)(const struct cred *from,
-					const struct cred *to,
+	int (*binder_set_context_mgr)(struct task_struct *mgr);
+	int (*binder_transaction)(struct task_struct *from,
+					struct task_struct *to);
+	int (*binder_transfer_binder)(struct task_struct *from,
+					struct task_struct *to);
+	int (*binder_transfer_file)(struct task_struct *from,
+					struct task_struct *to,
 					struct file *file);
 
 	int (*ptrace_access_check)(struct task_struct *child,
@@ -1446,8 +1446,10 @@ union security_list_options {
 			const kernel_cap_t *effective,
 			const kernel_cap_t *inheritable,
 			const kernel_cap_t *permitted);
-	int (*capable)(const struct cred *cred, struct user_namespace *ns,
-			int cap, int audit);
+	int (*capable)(const struct cred *cred,
+			struct user_namespace *ns,
+			int cap,
+			unsigned int opts);
 	int (*quotactl)(int cmds, int type, int id, struct super_block *sb);
 	int (*quota_on)(struct dentry *dentry);
 	int (*syslog)(int type);
@@ -1777,6 +1779,14 @@ union security_list_options {
 	int (*bpf_prog_alloc_security)(struct bpf_prog_aux *aux);
 	void (*bpf_prog_free_security)(struct bpf_prog_aux *aux);
 #endif /* CONFIG_BPF_SYSCALL */
+#ifdef CONFIG_PERF_EVENTS
+	int (*perf_event_open)(struct perf_event_attr *attr, int type);
+	int (*perf_event_alloc)(struct perf_event *event);
+	void (*perf_event_free)(struct perf_event *event);
+	int (*perf_event_read)(struct perf_event *event);
+	int (*perf_event_write)(struct perf_event *event);
+
+#endif
 };
 
 struct security_hook_heads {
@@ -2011,6 +2021,13 @@ struct security_hook_heads {
 	struct hlist_head bpf_prog_alloc_security;
 	struct hlist_head bpf_prog_free_security;
 #endif /* CONFIG_BPF_SYSCALL */
+#ifdef CONFIG_PERF_EVENTS
+	struct hlist_head perf_event_open;
+	struct hlist_head perf_event_alloc;
+	struct hlist_head perf_event_free;
+	struct hlist_head perf_event_read;
+	struct hlist_head perf_event_write;
+#endif
 } __randomize_layout;
 
 /*

@@ -46,16 +46,6 @@ config USB_SEVSEG
 	  To compile this driver as a module, choose M here: the
 	  module will be called usbsevseg.
 
-config USB_RIO500
-	tristate "USB Diamond Rio500 support"
-	help
-	  Say Y here if you want to connect a USB Rio500 mp3 player to your
-	  computer's USB port. Please read <file:Documentation/usb/rio.txt>
-	  for more information.
-
-	  To compile this driver as a module, choose M here: the
-	  module will be called rio500.
-
 config USB_LEGOTOWER
 	tristate "USB Lego Infrared Tower support"
 	help
@@ -275,3 +265,9 @@ config USB_CHAOSKEY
 
 	  To compile this driver as a module, choose M here: the
 	  module will be called chaoskey.
+
+config USB_REDRIVER_NB7VPQ904M
+	tristate "USB 3.1 Gen1/Gen2 10Gbps re-driver driver for NB7VPQ904M"
+	depends on USB_PHY
+	help
+	  Say Y here if you want to support USB super speed re-driver NB7VPQ904M.

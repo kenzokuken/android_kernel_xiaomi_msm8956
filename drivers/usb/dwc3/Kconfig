@@ -52,7 +52,8 @@ comment "Platform Glue Driver Support"
 
 config USB_DWC3_OMAP
 	tristate "Texas Instruments OMAP5 and similar Platforms"
-	depends on EXTCON && (ARCH_OMAP2PLUS || COMPILE_TEST)
+	depends on ARCH_OMAP2PLUS || COMPILE_TEST
+	depends on EXTCON || !EXTCON
 	depends on OF
 	default USB_DWC3
 	help
@@ -114,6 +115,7 @@ config USB_DWC3_ST
 config USB_DWC3_QCOM
 	tristate "Qualcomm Platform"
 	depends on ARCH_QCOM || COMPILE_TEST
+	depends on EXTCON || !EXTCON
 	depends on OF
 	default USB_DWC3
 	help
@@ -121,6 +123,15 @@ config USB_DWC3_QCOM
 	  functionality.
 	  This driver also handles Qscratch wrapper which is needed
 	  for peripheral mode support.
+	  Say 'Y' or 'M' if you have one such device.
+
+config USB_DWC3_MSM
+	tristate "QTI MSM Platforms"
+	depends on ARCH_QCOM || COMPILE_TEST
+	help
+	  Applicable to QTI MSM Platforms with DesignWare Core
+	  USB3 IP.
+	  Driver supports host, device and dual-role modes of operation.
 	  Say 'Y' or 'M' if you have one such device.
 
 endif

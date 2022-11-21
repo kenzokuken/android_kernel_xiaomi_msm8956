@@ -205,6 +205,18 @@ int mmc_send_op_cond(struct mmc_host *host, u32 ocr, u32 *rocr)
 	if (rocr && !mmc_host_is_spi(host))
 		*rocr = cmd.resp[0];
 
+	/*
+	 * As per design, internal CRC error flag will be cleared after 3
+	 * MCLK once clear command issued. Since the MCLK will be running
+	 * at 400KHz during initialization, design is taking max of 7.5us
+	 * to clear the status. So if the CMD_CRC_CHECK_EN bit is enabled
+	 * before the source is cleared, CRC INTR bit will be set in the 17th
+	 * bit of INTR status register. So it expected to issue the next
+	 * command and enable CMD_CRC_CHK_EN after 7.5us (3*MCLK) delay.
+	 */
+	if (!err)
+		udelay(8);
+
 	return err;
 }
 
@@ -366,7 +378,7 @@ int mmc_get_ext_csd(struct mmc_card *card, u8 **new_ext_csd)
 	 * As the ext_csd is so large and mostly unused, we don't store the
 	 * raw block in mmc_card.
 	 */
-	ext_csd = kzalloc(512, GFP_KERNEL);
+	ext_csd = kzalloc(512, GFP_NOIO | __GFP_NOFAIL);
 	if (!ext_csd)
 		return -ENOMEM;
 
@@ -536,10 +548,12 @@ int __mmc_switch(struct mmc_card *card, u8 set, u8 index, u8 value,
 	 * If the cmd timeout and the max_busy_timeout of the host are both
 	 * specified, let's validate them. A failure means we need to prevent
 	 * the host from doing hw busy detection, which is done by converting
-	 * to a R1 response instead of a R1B.
+	 * to a R1 response instead of a R1B. Note, some hosts requires R1B,
+	 * which also means they are on their own when it comes to deal with the
+	 * busy timeout.
 	 */
-	if (timeout_ms && host->max_busy_timeout &&
-		(timeout_ms > host->max_busy_timeout))
+	if (!(host->caps & MMC_CAP_NEED_RSP_BUSY) && timeout_ms &&
+	    host->max_busy_timeout && (timeout_ms > host->max_busy_timeout))
 		use_r1b_resp = false;
 
 	cmd.opcode = MMC_SWITCH;
@@ -802,7 +816,7 @@ static int mmc_send_hpi_cmd(struct mmc_card *card, u32 *status)
 	unsigned int opcode;
 	int err;
 
-	if (!card->ext_csd.hpi) {
+	if (!card->ext_csd.hpi_en) {
 		pr_warn("%s: Card didn't support HPI command\n",
 			mmc_hostname(card->host));
 		return -EINVAL;
@@ -819,7 +833,7 @@ static int mmc_send_hpi_cmd(struct mmc_card *card, u32 *status)
 
 	err = mmc_wait_for_cmd(card->host, &cmd, 0);
 	if (err) {
-		pr_warn("%s: error %d interrupting operation. "
+		pr_debug("%s: error %d interrupting operation. "
 			"HPI command response %#x\n", mmc_hostname(card->host),
 			err, cmd.resp[0]);
 		return err;
@@ -875,8 +889,6 @@ int mmc_interrupt_hpi(struct mmc_card *card)
 	}
 
 	err = mmc_send_hpi_cmd(card, &status);
-	if (err)
-		goto out;
 
 	prg_wait = jiffies + msecs_to_jiffies(card->ext_csd.out_of_int_time);
 	do {
@@ -884,8 +896,13 @@ int mmc_interrupt_hpi(struct mmc_card *card)
 
 		if (!err && R1_CURRENT_STATE(status) == R1_STATE_TRAN)
 			break;
-		if (time_after(jiffies, prg_wait))
-			err = -ETIMEDOUT;
+		if (time_after(jiffies, prg_wait)) {
+			err = mmc_send_status(card, &status);
+			if (!err && R1_CURRENT_STATE(status) != R1_STATE_TRAN)
+				err = -ETIMEDOUT;
+			else
+				break;
+		}
 	} while (!err);
 
 out:
@@ -934,8 +951,14 @@ static int mmc_read_bkops_status(struct mmc_card *card)
 	if (err)
 		return err;
 
-	card->ext_csd.raw_bkops_status = ext_csd[EXT_CSD_BKOPS_STATUS];
-	card->ext_csd.raw_exception_status = ext_csd[EXT_CSD_EXP_EVENTS_STATUS];
+	card->ext_csd.raw_bkops_status = ext_csd[EXT_CSD_BKOPS_STATUS] &
+						MMC_BKOPS_URGENCY_MASK;
+	card->ext_csd.raw_exception_status =
+					ext_csd[EXT_CSD_EXP_EVENTS_STATUS] &
+					(EXT_CSD_URGENT_BKOPS |
+					 EXT_CSD_DYNCAP_NEEDED |
+					 EXT_CSD_SYSPOOL_EXHAUSTED
+					 | EXT_CSD_PACKED_FAILURE);
 	kfree(ext_csd);
 	return 0;
 }
@@ -1014,7 +1037,8 @@ int mmc_flush_cache(struct mmc_card *card)
 
 	if (mmc_card_mmc(card) &&
 			(card->ext_csd.cache_size > 0) &&
-			(card->ext_csd.cache_ctrl & 1)) {
+			(card->ext_csd.cache_ctrl & 1) &&
+			(!(card->quirks & MMC_QUIRK_CACHE_DISABLE))) {
 		err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
 				EXT_CSD_FLUSH_CACHE, 1, 0);
 		if (err)
