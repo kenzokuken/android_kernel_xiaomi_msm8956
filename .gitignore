@@ -59,6 +59,11 @@ modules.builtin
 /Module.markers
 
 #
+# Output directory (make O=out)
+#
+/out/
+
+#
 # RPM spec file (make rpm-pkg)
 #
 /*.spec
