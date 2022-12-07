@@ -11,6 +11,7 @@ Required properties :
 			"qcom,gcc-ipq8074"
 			"qcom,gcc-msm8660"
 			"qcom,gcc-msm8916"
+			"qcom,gcc-msm8956"
 			"qcom,gcc-msm8960"
 			"qcom,gcc-msm8974"
 			"qcom,gcc-msm8974pro"
