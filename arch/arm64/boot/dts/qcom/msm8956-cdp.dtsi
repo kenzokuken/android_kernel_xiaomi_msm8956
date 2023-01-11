@@ -7,39 +7,6 @@
 #include "msm8956-camera-sensor-cdp.dtsi"
 #include "msm8956-mdss-panels.dtsi"
 
-&i2c_4 { /* BLSP1 QUP4 */
-	synaptics@20 {
-		compatible = "synaptics,dsx";
-		reg = <0x20>;
-		interrupt-parent = <&msm_gpio>;
-		interrupts = <65 0x2008>;
-		avdd-supply = <&pm8950_l10>;
-		vdd-supply = <&pm8950_l6>;
-		/* pins used by touchscreen */
-		pinctrl-names = "pmx_ts_active","pmx_ts_suspend","pmx_ts_release";
-		pinctrl-0 = <&ts_int_active &ts_reset_active>;
-		pinctrl-1 = <&ts_int_suspend &ts_reset_suspend>;
-		pinctrl-2 = <&ts_release>;
-		synaptics,irq-gpio = <&msm_gpio 65 0x2008>;
-		synaptics,reset-gpio = <&msm_gpio 64 0x0>;
-		synaptics,disable-gpios;
-		synaptics,detect-device;
-		synaptics,bypass-packrat-id-check;
-		synaptics,device1 {
-			synaptics,package-id = <3528>;
-			synaptics,bypass-sensor-coords-check;
-			synaptics,display-coords = <0 0 1439 2559>;
-			synaptics,panel-coords = <0 0 1439 2559>;
-		};
-		synaptics,device2 {
-			synaptics,package-id = <3408>;
-			synaptics,display-coords = <0 0 1079 1919>;
-			synaptics,panel-coords = <0 0 1079 2063>;
-			synaptics,key-codes = <158 139 172 217>;
-		};
-	};
-};
-
 &soc {
 	gpio_keys {
 		compatible = "gpio-keys";
@@ -107,13 +74,6 @@
 		pinctrl-2 = <&pri_tlmm_lines_sus &cross_conn_det_act>;
 		pinctrl-3 = <&pri_tlmm_lines_act &cross_conn_det_act>;
 		qcom,cdc-us-euro-gpios = <&msm_gpio 144 0>;
-	};
-};
-
-&tlmm_pinmux {
-	tlmm_gpio_key {
-		qcom,pins = <&gp 112>, <&gp 113>, <&gp 114>, <&gp 115>;
-		qcom,num-grp-pins = <4>;
 	};
 };
 
@@ -225,8 +185,7 @@
 	pinctrl-names = "active", "sleep";
 	pinctrl-0 = <&sdc3_clk_on &sdc3_cmd_on &sdc3_dat_on
 					&sdc3_wlan_gpio_active>;
-	pinctrl-1 = <&sdc3_clk_off &sdc3_cmd_off &sdc3_dat_off
-					&sdc3_wlan_gpio_sleep>;
+	pinctrl-1 = <&sdc3_clk_off &sdc3_cmd_off &sdc3_dat_off>;
 
 	status = "disabled";
 };

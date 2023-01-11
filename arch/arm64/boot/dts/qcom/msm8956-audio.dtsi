@@ -5,10 +5,6 @@
 #include "msm-audio-lpass.dtsi"
 #include "msm8956-wsa881x.dtsi"
 
-&msm-audio-ion {
-	compatible = "qcom,msm-audio-ion";
-};
-
 &soc {
 	qcom,msm-audio-apr {
 		compatible = "qcom,msm-audio-apr";
@@ -58,7 +54,7 @@
 			"WSA_SPK OUT", "VDD_WSA_SWITCH",
 			"SpkrMono WSA_IN", "WSA_SPK OUT";
 
-		qcom,cdc-us-euro-gpios = <&msm_gpio 144 0>;
+		qcom,cdc-us-euro-gpios = <&msm_gpio 63 0>;
 		qcom,cdc-us-eu-gpios = <&cdc_us_euro_sw>;
 		qcom,cdc-comp-gpios = <&cdc_comp_gpios>;
 		qcom,pri-mi2s-gpios = <&cdc_pri_mi2s_gpios>;
@@ -77,21 +73,23 @@
 			"msm-pcm-afe", "msm-lsm-client",
 			"msm-pcm-routing", "msm-pcm-lpa",
 			"msm-voice-svc";
-		asoc-cpu = <&dai_pri_auxpcm>, <&dai_hdmi>,
-			<&dai_mi2s0>, <&dai_mi2s1>, <&dai_mi2s2>,
-			<&dai_mi2s3>, <&dai_mi2s5>, <&dai_mi2s6>,
+		asoc-cpu = <&dai_pri_auxpcm>,
+			<&dai_mi2s0>, <&dai_mi2s1>,
+			<&dai_mi2s2>, <&dai_mi2s3>,
+			<&dai_mi2s4>, <&dai_mi2s5>,
 			<&sb_0_rx>, <&sb_0_tx>, <&sb_1_rx>, <&sb_1_tx>,
 			<&sb_3_rx>, <&sb_3_tx>, <&sb_4_rx>, <&sb_4_tx>,
-			<&bt_sco_rx>, <&bt_sco_tx>, <&int_fm_rx>,
-			<&int_fm_tx>, <&afe_pcm_rx>, <&afe_pcm_tx>,
+			<&bt_sco_rx>, <&bt_sco_tx>,
+			<&int_fm_rx>, <&int_fm_tx>,
+			<&afe_pcm_rx>, <&afe_pcm_tx>,
 			<&afe_proxy_rx>, <&afe_proxy_tx>,
 			<&incall_record_rx>, <&incall_record_tx>,
 			<&incall_music_rx>, <&incall_music_2_rx>,
 			<&afe_loopback_tx>;
-		asoc-cpu-names = "msm-dai-q6-auxpcm.1", "msm-dai-q6-hdmi.8",
+		asoc-cpu-names = "msm-dai-q6-auxpcm.1",
 			"msm-dai-q6-mi2s.0", "msm-dai-q6-mi2s.1",
 			"msm-dai-q6-mi2s.2", "msm-dai-q6-mi2s.3",
-			"msm-dai-q6-mi2s.5", "msm-dai-q6-mi2s.6",
+			"msm-dai-q6-mi2s.4", "msm-dai-q6-mi2s.5",
 			"msm-dai-q6-dev.16384", "msm-dai-q6-dev.16385",
 			"msm-dai-q6-dev.16386", "msm-dai-q6-dev.16387",
 			"msm-dai-q6-dev.16390", "msm-dai-q6-dev.16391",
@@ -107,7 +105,7 @@
 				<&pmic_analog_codec>;
 		asoc-codec-names = "msm-stub-codec.1", "msm-dig-codec",
 					"analog-codec";
-		asoc-wsa-codec-names = "wsa881x-i2c-codec.8-000f";
+		asoc-wsa-codec-names = "wsa881x-i2c-codec.2-000f";
 		asoc-wsa-codec-prefixes = "SpkrMono";
 
 		msm-vdd-wsa-switch-supply = <&pm8950_l13>;
@@ -147,22 +145,6 @@
 		status = "okay";
 		#address-cells = <1>;
 		#size-cells = <0>;
-		wsa881x_i2c_e: wsa881x-i2c-codec@e {
-			status = "okay";
-			compatible = "qcom,wsa881x-i2c-codec";
-			reg = <0x0e>;
-			qcom,wsa-analog-vi-gpio = <&wsa881x_analog_vi_gpio>;
-			qcom,wsa-analog-clk-gpio = <&wsa881x_analog_clk_gpio>;
-			qcom,wsa-analog-reset-gpio =
-				<&wsa881x_analog_reset_gpio>;
-		};
-
-		wsa881x_i2c_44: wsa881x-i2c-codec@44 {
-			status = "okay";
-			compatible = "qcom,wsa881x-i2c-codec";
-			reg = <0x44>;
-		};
-
 		wsa881x_i2c_f: wsa881x-i2c-codec@f {
 			status = "okay";
 			compatible = "qcom,wsa881x-i2c-codec";
@@ -198,7 +180,6 @@
 		pinctrl-0 = <&wsa_reset_on>;
 		pinctrl-1 = <&wsa_reset_off>;
 	};
-};
 
 	ext_codec: sound-9335 {
 
@@ -252,7 +233,7 @@
 			"SpkrRight IN", "SPK2 OUT";
 
 		qcom,tasha-mclk-clk-freq = <9600000>;
-		qcom,cdc-us-euro-gpios = <&msm_gpio 144 0>;
+		qcom,cdc-us-euro-gpios = <&msm_gpio 63 0>;
 		qcom,msm-mbhc-hphl-swh = <0>;
 		qcom,msm-mbhc-gnd-swh = <0>;
 		qcom,cdc-us-eu-gpios = <&cdc_us_euro_sw>;
@@ -261,23 +242,25 @@
 		asoc-platform = <&pcm0>, <&pcm1>, <&pcm2>, <&voip>, <&voice>,
 				<&loopback>, <&compress>, <&hostless>,
 				<&afe>, <&lsm>, <&routing>, <&cpe>, <&lpa>;
-		asoc-platform-names = "msm-pcm-dsp.0", "msm-pcm-dsp.1", "msm-pcm-dsp.2",
-				"msm-voip-dsp", "msm-pcm-voice", "msm-pcm-loopback",
-				"msm-compress-dsp", "msm-pcm-hostless", "msm-pcm-afe",
-				"msm-lsm-client", "msm-pcm-routing", "msm-cpe-lsm",
+		asoc-platform-names = "msm-pcm-dsp.0", "msm-pcm-dsp.1",
+				"msm-pcm-dsp.2", "msm-voip-dsp",
+				"msm-pcm-voice", "msm-pcm-loopback",
+				"msm-compress-dsp", "msm-pcm-hostless",
+				"msm-pcm-afe", "msm-lsm-client",
+				"msm-pcm-routing", "msm-cpe-lsm",
 				"msm-pcm-lpa";
-		asoc-cpu = <&dai_pri_auxpcm>, <&dai_hdmi>, <&dai_mi2s_hdmi>,
+		asoc-cpu = <&dai_pri_auxpcm>,
 				<&dai_mi2s2>, <&dai_mi2s3>, <&dai_mi2s5>,
 				<&sb_0_rx>, <&sb_0_tx>, <&sb_1_rx>, <&sb_1_tx>,
 				<&sb_2_rx>, <&sb_2_tx>, <&sb_3_rx>, <&sb_3_tx>,
-				<&sb_4_rx>, <&sb_4_tx>, <&sb_5_tx>, <&afe_pcm_rx>,
-				<&afe_pcm_tx>, <&afe_proxy_rx>, <&afe_proxy_tx>,
+				<&sb_4_rx>, <&sb_4_tx>, <&sb_5_tx>,
+				<&afe_pcm_rx>, <&afe_pcm_tx>,
+				<&afe_proxy_rx>, <&afe_proxy_tx>,
 				<&incall_record_rx>, <&incall_record_tx>,
 				<&incall_music_rx>, <&incall_music_2_rx>,
-				<&sb_5_rx>,  <&bt_sco_rx>,
-				<&bt_sco_tx>, <&int_fm_rx>, <&int_fm_tx>;
+				<&sb_5_rx>,  <&bt_sco_rx>, <&bt_sco_tx>, 
+				<&int_fm_rx>, <&int_fm_tx>, <&sb_6_rx>;
 		asoc-cpu-names = "msm-dai-q6-auxpcm.1",	"msm-dai-q6-hdmi.8",
-				"msm-dai-q6-mi2s-hdmi.4118",
 				"msm-dai-q6-mi2s.2",
 				"msm-dai-q6-mi2s.3", "msm-dai-q6-mi2s.5",
 				"msm-dai-q6-dev.16384", "msm-dai-q6-dev.16385",
@@ -312,7 +295,7 @@
 		interrupt-controller;
 		#interrupt-cells = <1>;
 		interrupt-parent = <&msm_gpio>;
-		qcom,gpio-connect = <&msm_gpio 120 0>;
+		qcom,gpio-connect = <&msm_gpio 73 0>;
 		pinctrl-names = "default";
 		pinctrl-0 = <&wcd_intr_default>;
 	};
@@ -330,7 +313,7 @@
 		clocks = <&clock_gcc clk_div_clk2>;
 	};
 
-	wcd_rst_gpio: msm_cdc_pinctrl@133 {
+	wcd_rst_gpio: msm_cdc_pinctrl@67 {
 		status = "disabled";
 		compatible = "qcom,msm-cdc-pinctrl";
 		pinctrl-names = "aud_active", "aud_sleep";
@@ -341,7 +324,7 @@
 
 &slim_msm {
 	status = "disabled";
-	
+
 	dai_slim: msm_dai_slim {
 		status = "disabled";
 		compatible = "qcom,msm-dai-slim";
@@ -413,19 +396,10 @@
 		status = "ok";
 		qcom,mode = <1>;
 		qcom,pull = <5>;
-		qcom,vin-sel = <2>;
+		qcom,vin-sel = <0>;
 		qcom,src-sel = <2>;
 		qcom,master-en = <1>;
 		qcom,out-strength = <2>;
-	};
-
-	gpio@c600 {
-		status = "ok";
-		qcom,mode = <1>;
-		qcom,pull = <5>;
-		qcom,vin-sel = <0>;
-		qcom,src-sel = <0>;
-		qcom,master-en = <1>;
 	};
 
 	tasha_mclk {

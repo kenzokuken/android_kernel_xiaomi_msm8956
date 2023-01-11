@@ -2893,24 +2893,6 @@ static struct clk_branch gcc_camss_mclk2_clk = {
 	}
 };
 
-static struct clk_branch gcc_camss_mclk3_clk = {
-	.halt_reg = 0x5e018,
-	.halt_check = BRANCH_HALT,
-	.clkr = {
-		.enable_reg = 0x5e018,
-		.enable_mask = BIT(0),
-		.hw.init = &(struct clk_init_data) {
-			.name = "gcc_camss_mclk3_clk",
-			.parent_hws = (const struct clk_hw*[]){
-				&mclk3_clk_src.clkr.hw,
-			},
-			.num_parents = 1,
-			.ops = &clk_branch2_ops,
-			.flags = CLK_SET_RATE_PARENT,
-		}
-	}
-};
-
 static struct clk_branch gcc_camss_micro_ahb_clk = {
 	.halt_reg = 0x5600c,
 	.halt_check = BRANCH_HALT,
@@ -4144,7 +4126,6 @@ static struct clk_regmap *gcc_msm8956_clocks[] = {
 	[GCC_CAMSS_MCLK0_CLK] = &gcc_camss_mclk0_clk.clkr,
 	[GCC_CAMSS_MCLK1_CLK] = &gcc_camss_mclk1_clk.clkr,
 	[GCC_CAMSS_MCLK2_CLK] = &gcc_camss_mclk2_clk.clkr,
-	[GCC_CAMSS_MCLK3_CLK] = &gcc_camss_mclk3_clk.clkr,
 	[GCC_CAMSS_MICRO_AHB_CLK] = &gcc_camss_micro_ahb_clk.clkr,
 	[GCC_CAMSS_CSI0PHYTIMER_CLK] = &gcc_camss_csi0phytimer_clk.clkr,
 	[GCC_CAMSS_CSI1PHYTIMER_CLK] = &gcc_camss_csi1phytimer_clk.clkr,

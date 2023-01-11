@@ -64,20 +64,17 @@
 		smd11 = &smdtty_data11;
 		smd21 = &smdtty_data21;
 		smd36 = &smdtty_loopback;
-		i2c2  = &i2c_2;
-		i2c4  = &i2c_4;
-		i2c6  = &i2c_6;
-		i2c8  = &i2c_8;
-	};
-
-	soc: soc { };
-
-	aliases {
 		sdhc1 = &sdhc_1; /* SDC1 eMMC slot */
 		sdhc2 = &sdhc_2; /* SDC2 SD card slot */
 		sdhc3 = &sdhc_3; /* SDC3 SDIO card slot */
+		i2c1 = &i2c_1;
+		i2c2 = &i2c_2;
+		i2c3 = &i2c_3;
+		i2c5 = &i2c_5;
 		spi3 = &spi_3;
 	};
+
+	soc: soc { };
 
 	reserved-memory {
 		#address-cells = <2>;
@@ -341,7 +338,7 @@
 		reg-names = "rcgwr-c0-base", "rcgwr-c1-base",
 			    "c0-pll", "c0-mux", "c1-mux", 
 			    "cci-mux", "efuse";
-		vdd-mx-supply = <&pm8950_s7_level_ao>;
+		vdd-mx-supply = <&pm8950_s6_level_ao>;
 		vdd-cl-supply = <&apc_vreg>;
 		clocks = <&clock_gcc clk_xo_a_clk_src>;
 		clock-names = "xo_a";
@@ -521,7 +518,7 @@
 			 <&clock_cpu clk_a53_pwr_clk>,
 			 <&clock_cpu clk_a53_pwr_clk>,
 			 <&clock_cpu clk_a53_pwr_clk>,
-			 <&clock_cpu clk_a53_pwr_clk>,
+			 <&clock_cpu clk_a53_pwr_clk>;
 		qcom,governor-per-policy;
 		qcom,cpufreq-table-0 =
 			<  400000 >,
@@ -2075,8 +2072,8 @@
 		pinctrl-1 = <&wcnss_sleep>;
 		pinctrl-2 = <&wcnss_gpio_default>;
 
-		gpios = <&msm_gpio 40 0>, <&msm_gpio 41 0>, <&msm_gpio 42 0>,
-			<&msm_gpio 43 0>, <&msm_gpio 44 0>;
+		gpios = <&msm_gpio 76 0>, <&msm_gpio 77 0>, <&msm_gpio 78 0>,
+			<&msm_gpio 79 0>, <&msm_gpio 80 0>;
 
 		clocks = <&clock_gcc clk_xo_wlan_clk>,
 			 <&clock_gcc clk_rf_clk2>,
@@ -2289,7 +2286,7 @@
 		vdd_mss-supply = <&pm8950_s1>;
 		vdd_cx-supply = <&pm8950_s2_level>;
 		vdd_cx-voltage = <RPM_SMD_REGULATOR_LEVEL_TURBO>;
-		vdd_mx-supply = <&pm8950_s7_level_ao>;
+		vdd_mx-supply = <&pm8950_s6_level_ao>;
 		vdd_mx-uV = <RPM_SMD_REGULATOR_LEVEL_TURBO>;
 		vdd_pll-supply = <&pm8950_l7>;
 		qcom,vdd_pll = <1800000>;

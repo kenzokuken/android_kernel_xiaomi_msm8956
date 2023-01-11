@@ -130,11 +130,6 @@
 			L2_1: l2-cache {
 			      compatible = "arm,arch-cache";
 			      cache-level = <2>;
-			      power-domain = <&l2ccc_1>;
-			};
-			L2_1: l2-cache {
-			      compatible = "arm,arch-cache";
-			      cache-level = <2>;
 			      /* A53 L2 dump not supported */
 			      qcom,dump-size = <0x0>;
 			};

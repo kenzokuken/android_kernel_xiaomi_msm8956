@@ -84,8 +84,9 @@
 				&cam_sensor_rear_default>;
 		pinctrl-1 = <&cam_sensor_mclk0_sleep &cam_sensor_rear_sleep>;
 		gpios = <&msm_gpio 26 0>,
-			<&msm_gpio 129 0>,
-			<&msm_gpio 35 0>;
+			<&msm_gpio 39 0>,
+			<&msm_gpio 40 0>,
+			<&msm_gpio 134 0>;
 		qcom,gpio-reset = <1>;
 		qcom,gpio-standby = <2>;
 		qcom,gpio-req-tbl-num = <0 1 2>;
@@ -165,9 +166,9 @@
 								&cam_sensor_front1_default>;
 		pinctrl-1 = <&cam_sensor_mclk2_sleep
 								&cam_sensor_front1_sleep>;
-		gpios = <&msm_gpio 28 0>,
-			<&msm_gpio 131 0>,
-			<&msm_gpio 38 0>;
+		gpios = <&msm_gpio 27 0>,
+			<&msm_gpio 129 0>,
+			<&msm_gpio 130 0>;
 		qcom,gpio-reset = <1>;
 		qcom,gpio-standby = <2>;
 		qcom,gpio-req-tbl-num = <0 1 2>;
@@ -218,8 +219,9 @@
 				&cam_sensor_rear_default>;
 		pinctrl-1 = <&cam_sensor_mclk0_sleep &cam_sensor_rear_sleep>;
 		gpios = <&msm_gpio 26 0>,
-			<&msm_gpio 129 0>,
-			<&msm_gpio 35 0>;
+			<&msm_gpio 39 0>,
+			<&msm_gpio 40 0>,
+			<&msm_gpio 134 0>;
 		qcom,gpio-reset = <1>;
 		qcom,gpio-standby = <2>;
 		qcom,gpio-req-tbl-num = <0 1 2>;
@@ -255,9 +257,9 @@
 		pinctrl-names = "cam_default", "cam_suspend";
 		pinctrl-0 = <&cam_sensor_mclk1_default &cam_sensor_front_default>;
 		pinctrl-1 = <&cam_sensor_mclk1_sleep &cam_sensor_front_sleep>;
-		gpios = <&msm_gpio 27 0>,
-			<&msm_gpio 130 0>,
-			<&msm_gpio 36 0>;
+		gpios = <&msm_gpio 28 0>,
+			<&msm_gpio 131 0>,
+			<&msm_gpio 132 0>;
 		qcom,gpio-reset = <1>;
 		qcom,gpio-standby = <2>;
 		qcom,gpio-req-tbl-num = <0 1 2>;
@@ -296,9 +298,9 @@
 								&cam_sensor_front1_default>;
 		pinctrl-1 = <&cam_sensor_mclk2_sleep
 								&cam_sensor_front1_sleep>;
-		gpios = <&msm_gpio 28 0>,
-			<&msm_gpio 131 0>,
-			<&msm_gpio 38 0>;
+		gpios = <&msm_gpio 27 0>,
+			<&msm_gpio 129 0>,
+			<&msm_gpio 130 0>;
 		qcom,gpio-reset = <1>;
 		qcom,gpio-standby = <2>;
 		qcom,gpio-req-tbl-num = <0 1 2>;

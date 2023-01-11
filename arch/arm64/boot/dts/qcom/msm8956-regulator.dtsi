@@ -671,7 +671,6 @@
 	};
 };
 
-&soc {
 	eldo2_8956: eldo2 {
 		compatible = "regulator-fixed";
 		regulator-name = "eldo2_8956";
@@ -686,6 +685,6 @@
 		regulator-name = "adv_vreg";
 		startup-delay-us = <400>;
 		enable-avtive-high;
-		gpio = <&pm8004_mpps 4 0>;
+		gpio = <&pm8950_mpps 4 0>;
 	};
 };
