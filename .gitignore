@@ -52,6 +52,11 @@ Module.symvers
 modules.order
 
 #
+# Output directory (make O=out)
+#
+/out
+
+#
 # Top-level generic files
 #
 /linux
