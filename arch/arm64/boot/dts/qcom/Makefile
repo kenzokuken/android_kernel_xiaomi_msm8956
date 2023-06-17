@@ -95,3 +95,11 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx203.dtb
 dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx206.dtb
 dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-hdk.dtb
 dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-mtp.dtb
+
+dtb-$(CONFIG_ARCH_MSM8956) += msm8956-cdp.dtb \
+	msm8956-mtp.dtb \
+	msm8956-qrd-skun.dtb
+
+dtb-$(CONFIG_ARCH_MSM8976) += msm8976-cdp.dtb \
+	msm8976-mtp.dtb \
+	msm8976-qrd-skun.dtb
