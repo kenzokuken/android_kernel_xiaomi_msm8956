@@ -215,6 +215,26 @@ config ARCH_QCOM
 	help
 	  This enables support for the ARMv8 based Qualcomm chipsets.
 
+config ARCH_MSM8956
+	bool "Enable Support for Qualcomm Technologies Inc. MSM8956"
+	depends on ARCH_QCOM
+	select CPU_FREQ_QCOM
+	select COMMON_CLK
+	select COMMON_CLK_QCOM
+	help
+	  This enables support for the MSM8956 chipset. If you do not
+	  wish to build a kernel that runs on this chipset, say 'N' here.
+
+config ARCH_MSM8976
+	bool "Enable Support for Qualcomm Technologies Inc. MSM8976"
+	depends on ARCH_QCOM
+	select CPU_FREQ_QCOM
+	select COMMON_CLK
+	select COMMON_CLK_QCOM
+	help
+	  This enables support for the MSM8976 chipset. If you do not
+	  wish to build a kernel that runs on this chipset, say 'N' here.
+
 config ARCH_REALTEK
 	bool "Realtek Platforms"
 	select RESET_CONTROLLER
