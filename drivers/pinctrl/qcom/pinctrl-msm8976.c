@@ -2,7 +2,7 @@
 /*
  * Copyright (c) 2015-2016, The Linux Foundation. All rights reserved.
  *
- * Copyright (c) 2016, AngeloGioacchino Del Regno <kholk11@gmail.com>
+ * Copyright (c) 2016-2023, AngeloGioacchino Del Regno <kholk11@gmail.com>
  */
 
 #include <linux/module.h>
@@ -1094,6 +1094,7 @@ static int msm8976_pinctrl_probe(struct platform_device *pdev)
 }
 
 static const struct of_device_id msm8976_pinctrl_of_match[] = {
+        { .compatible = "qcom,msm8956-pinctrl", },
 	{ .compatible = "qcom,msm8976-pinctrl", },
 	{ },
 };
