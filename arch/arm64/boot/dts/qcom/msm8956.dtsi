@@ -2576,7 +2576,7 @@
 
 };
 
-#include "msm-pm8950-rpm-regulator.dtsi"
+#include "pm8950-rpm-regulator.dtsi"
 #include "msm-pm8950.dtsi"
 #include "msm-pmi8950.dtsi"
 #include "msm-pm8004.dtsi"
