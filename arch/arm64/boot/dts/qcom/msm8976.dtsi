@@ -3,6 +3,7 @@
 // Copyright (c) 2023, Benarji Anand <benarji385@gmail.com>
 
 #include "skeleton64.dtsi"
+#include <dt-bindings/clock/qcom,rpmcc.h>
 #include <dt-bindings/clock/qcom,gcc-msm8976.h>
 #include <dt-bindings/regulator/qcom,rpm-smd-regulator.h>
 
@@ -196,6 +197,11 @@
 			compatible = "qcom,msm-imem-pil";
 			reg = <0x94c 200>;
 		};
+	};
+
+	clock_rpmcc: qcom,rpmcc {
+		compatible = "qcom,rpmcc-msm8976";
+		#clock-cells = <1>;
 	};
 
 	clock_gcc: qcom,gcc@1800000 {

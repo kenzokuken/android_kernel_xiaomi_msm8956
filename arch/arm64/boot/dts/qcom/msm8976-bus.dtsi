@@ -1,14 +1,6 @@
-/* Copyright (c) 2015, The Linux Foundation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 and
- * only version 2 as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- */
+// SPDX-License-Identifier: GPL-2.0
+// Copyright (c) 2015, The Linux Foundation. All rights reserved.
+// Copyright (c) 2023, Benarji Anand <benarji385@gmail.com>
 
 #include <dt-bindings/msm/msm-bus-ids.h>
 
@@ -31,8 +23,8 @@
 			qcom,bus-type = <2>;
 			qcom,util-fact = <154>;
 			clock-names = "bus_clk", "bus_a_clk";
-			clocks = <&clock_gcc  clk_bimc_msmbus_clk>,
-				<&clock_gcc  clk_bimc_msmbus_a_clk>;
+			clocks = <&clock_rpmcc RPM_SMD_BIMC_CLK>,
+				<&clock_rpmcc RPM_SMD_BIMC_A_CLK>;
 
 			coresight-id = <203>;
 			coresight-name = "coresight-bimc";
@@ -51,8 +43,8 @@
 			qcom,qos-delta = <0x1000>;
 			qcom,bus-type = <1>;
 			clock-names = "bus_clk", "bus_a_clk";
-			clocks = <&clock_gcc  clk_pcnoc_msmbus_clk>,
-				<&clock_gcc  clk_pcnoc_msmbus_a_clk>;
+			clocks = <&clock_rpmcc RPM_SMD_PCNOC_CLK>,
+				<&clock_rpmcc RPM_SMD_PCNOC_A_CLK>;
 
 			coresight-id = <201>;
 			coresight-name = "coresight-pcnoc";
@@ -71,8 +63,8 @@
 			qcom,qos-off = <0x1000>;
 			qcom,bus-type = <1>;
 			clock-names = "bus_clk", "bus_a_clk";
-			clocks = <&clock_gcc  clk_snoc_msmbus_clk>,
-				<&clock_gcc  clk_snoc_msmbus_a_clk>;
+			clocks = <&clock_rpmcc RPM_SMD_SNOC_CLK>,
+				<&clock_rpmcc RPM_SMD_SNOC_A_CLK>;
 
 			coresight-id = <200>;
 			coresight-name = "coresight-snoc";
@@ -92,8 +84,8 @@
 			qcom,bus-type = <1>;
 			qcom,util-fact = <154>;
 			clock-names = "bus_clk", "bus_a_clk";
-			clocks = <&clock_gcc  clk_sysmmnoc_msmbus_clk>,
-				<&clock_gcc  clk_sysmmnoc_msmbus_a_clk>;
+			clocks = <&clock_rpmcc RPM_SMD_SYSMMNOC_CLK>,
+				<&clock_rpmcc RPM_SMD_SYSMMNOC_A_CLK>;
 		};
 
 		/*BIMC Masters*/
