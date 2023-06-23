@@ -1,15 +1,6 @@
-/*
- * Copyright (c) 2015, The Linux Foundation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 and
- * only version 2 as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- */
+// SPDX-License-Identifier: GPL-2.0
+// Copyright (c) 2015, The Linux Foundation. All rights reserved.
+// Copyright (c) 2023, Benarji Anand <benarji385@gmail.com>
 
 #include "msm8976-pinctrl.dtsi"
 #include "msm8976-camera-sensor-cdp.dtsi"
@@ -25,8 +16,8 @@
 		avdd-supply = <&pm8950_l10>;
 		vdd-supply = <&pm8950_l6>;
 		clock-names = "iface_clk", "core_clk";
-		clocks = <&clock_gcc clk_gcc_blsp1_ahb_clk>,
-			<&clock_gcc clk_gcc_blsp1_qup4_i2c_apps_clk>;
+		clocks = <&clock_gcc GCC_BLSP1_AHB_CLK>,
+			<&clock_gcc GCC_BLSP1_QUP4_I2C_APPS_CLK>;
 		/* pins used by touchscreen */
 		pinctrl-names = "pmx_ts_active","pmx_ts_suspend","pmx_ts_release";
 		pinctrl-0 = <&ts_int_active &ts_reset_active>;

@@ -1,16 +1,6 @@
-/*
- * Copyright (c) 2015, The Linux Foundation. All rights reserved.
- * Copyright (C) 2016 XiaoMi, Inc.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 and
- * only version 2 as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- */
+// SPDX-License-Identifier: GPL-2.0
+// Copyright (c) 2015, The Linux Foundation. All rights reserved.
+// Copyright (c) 2023, Benarji Anand <benarji385@gmail.com>
 
 &soc {
 	led_flash0: qcom,camera-flash {
@@ -122,8 +112,8 @@
 		qcom,cam-power-seq-cfg-val = <1 1 1 1 24000000 1>;
 		qcom,cam-power-seq-delay = <5 5 5 5 5 5>;
 
-		clocks = <&clock_gcc clk_mclk0_clk_src>,
-				<&clock_gcc clk_gcc_camss_mclk0_clk>;
+		clocks = <&clock_gcc MCLK0_CLK_SRC>,
+				<&clock_gcc GCC_CAMSS_MCLK0_CLK>;
 		clock-names = "cam_src_clk", "cam_clk";
 		status = "ok";
 	};
@@ -197,8 +187,8 @@
 		qcom,cam-power-seq-cfg-val = <1 1 1 1 24000000 1>;
 		qcom,cam-power-seq-delay = <5 5 5 5 5 5>;
 
-		clocks = <&clock_gcc clk_mclk0_clk_src>,
-				<&clock_gcc clk_gcc_camss_mclk0_clk>;
+		clocks = <&clock_gcc MCLK0_CLK_SRC>,
+				<&clock_gcc GCC_CAMSS_MCLK0_CLK>;
 		clock-names = "cam_src_clk", "cam_clk";
 		status = "ok";
 	};
@@ -246,8 +236,8 @@
 		qcom,cam-power-seq-cfg-val = <1 1 1 1 1 24000000>;
 		qcom,cam-power-seq-delay = <5 5 5 5 5 5>;
 
-		clocks = <&clock_gcc clk_mclk2_clk_src>,
-			<&clock_gcc clk_gcc_camss_mclk2_clk>;
+		clocks = <&clock_gcc MCLK2_CLK_SRC>,
+			<&clock_gcc GCC_CAMSS_MCLK2_CLK>;
 		clock-names = "cam_src_clk", "cam_clk";
 	};
 
@@ -297,8 +287,8 @@
 		qcom,cam-power-seq-cfg-val = <1 1 1 1 24000000 1>;
 		qcom,cam-power-seq-delay = <5 5 5 5 5 5>;
 
-		clocks = <&clock_gcc clk_mclk0_clk_src>,
-				<&clock_gcc clk_gcc_camss_mclk0_clk>;
+		clocks = <&clock_gcc MCLK0_CLK_SRC>,
+				<&clock_gcc GCC_CAMSS_MCLK0_CLK>;
 		clock-names = "cam_src_clk", "cam_clk";
 		status = "ok";
 	};
@@ -349,8 +339,8 @@
 		qcom,cam-power-seq-cfg-val = <1 1 1 1 24000000 1>;
 		qcom,cam-power-seq-delay = <5 5 5 5 5 5>;
 
-		clocks = <&clock_gcc clk_mclk0_clk_src>,
-				<&clock_gcc clk_gcc_camss_mclk0_clk>;
+		clocks = <&clock_gcc MCLK0_CLK_SRC>,
+				<&clock_gcc GCC_CAMSS_MCLK0_CLK>;
 		clock-names = "cam_src_clk", "cam_clk";
 		status = "ok";
 	};
@@ -421,8 +411,8 @@
 		qcom,cam-power-seq-cfg-val = <1 1 1 1 1 24000000>;
 		qcom,cam-power-seq-delay = <5 5 5 5 5 5>;
 
-		clocks = <&clock_gcc clk_mclk2_clk_src>,
-			<&clock_gcc clk_gcc_camss_mclk2_clk>;
+		clocks = <&clock_gcc MCLK2_CLK_SRC>,
+			<&clock_gcc GCC_CAMSS_MCLK2_CLK>;
 		clock-names = "cam_src_clk", "cam_clk";
 	};
 
@@ -463,8 +453,8 @@
 		qcom,sensor-mode = <0>;
 		qcom,cci-master = <0>;
 		status = "ok";
-		clocks = <&clock_gcc clk_mclk0_clk_src>,
-				<&clock_gcc clk_gcc_camss_mclk0_clk>;
+		clocks = <&clock_gcc MCLK0_CLK_SRC>,
+				<&clock_gcc GCC_CAMSS_MCLK0_CLK>;
 		clock-names = "cam_src_clk", "cam_clk";
 	};
 
@@ -501,8 +491,8 @@
 		qcom,sensor-mode = <0>;
 		qcom,cci-master = <0>;
 		status = "ok";
-		clocks = <&clock_gcc clk_mclk2_clk_src>,
-			<&clock_gcc clk_gcc_camss_mclk2_clk>;
+		clocks = <&clock_gcc MCLK2_CLK_SRC>,
+			<&clock_gcc GCC_CAMSS_MCLK2_CLK>;
 		clock-names = "cam_src_clk", "cam_clk";
 	};
 };

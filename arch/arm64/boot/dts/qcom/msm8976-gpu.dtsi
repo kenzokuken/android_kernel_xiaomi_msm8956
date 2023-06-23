@@ -1,14 +1,6 @@
-/* Copyright (c) 2015, The Linux Foundation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 and
- * only version 2 as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- */
+// SPDX-License-Identifier: GPL-2.0
+// Copyright (c) 2015, The Linux Foundation. All rights reserved.
+// Copyright (c) 2023, Benarji Anand <benarji385@gmail.com>
 
 &soc {
 	msm_bus: qcom,kgsl-busmon{
@@ -63,16 +55,16 @@
 		 */
 		qcom,clk-map = <0x00000F9E>;
 
-	clocks = <&clock_gcc_gfx clk_gcc_oxili_gfx3d_clk>,
-		 <&clock_gcc_gfx clk_gcc_oxili_ahb_clk>,
-		 <&clock_gcc_gfx clk_gcc_oxili_gmem_clk>,
-		 <&clock_gcc_gfx clk_gcc_bimc_gfx_clk>,
-		 <&clock_gcc_gfx clk_gcc_gtcu_ahb_clk>,
-		 <&clock_gcc_gfx clk_gcc_gfx_tcu_clk>,
-		 <&clock_gcc_gfx clk_gcc_gfx_tbu_clk>,
-		 <&clock_gcc_gfx clk_gcc_gfx_1_tbu_clk>,
-		 <&clock_gcc_gfx clk_gcc_oxili_timer_clk>,
-		 <&clock_gcc_gfx clk_gcc_oxili_aon_clk>;
+	clocks = <&clock_gfx GCC_OXILI_GFX3D_CLK>,
+		 <&clock_gfx GCC_OXILI_AHB_CLK>,
+		 <&clock_gfx GCC_OXILI_GMEM_CLK>,
+		 <&clock_gfx GCC_BIMC_GFX_CLK>,
+		 <&clock_gfx GCC_GTCU_AHB_CLK>,
+		 <&clock_gfx GCC_GFX_TCU_CLK>,
+		 <&clock_gfx GCC_GFX_TBU_CLK>,
+		 <&clock_gfx GCC_GFX_1_TBU_CLK>,
+		 <&clock_gfx GCC_OXILI_TIMER_CLK>,
+		 <&clock_gfx GCC_OXILI_AON_CLK>;
 
 	clock-names =   "core_clk", "iface_clk", "mem_clk",
 			"mem_iface_clk", "gtcu_iface_clk",
