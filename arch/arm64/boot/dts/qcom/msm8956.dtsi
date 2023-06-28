@@ -601,6 +601,8 @@
 		#thermal-sensor-cells = <1>;
 	};
 
+	thermal_zones: thermal-zones {};
+
 	qcom,memshare {
 		compatible = "qcom,memshare";
 
@@ -1780,6 +1782,7 @@
 #include "pm8004.dtsi"
 #include "msm8976-regulator.dtsi"
 #include "msm-gdsc-8916.dtsi"
+#include "msm8976-thermal.dtsi"
 #include "msm8976-camera.dtsi"
 #include "msm8976-audio.dtsi"
 
