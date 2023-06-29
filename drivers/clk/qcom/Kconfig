@@ -673,4 +673,6 @@ config CLK_GFM_LPASS_SM8250
 	  Support for the Glitch Free Mux (GFM) Low power audio
           subsystem (LPASS) clocks found on SM8250 SoCs.
 
+source "drivers/clk/qcom/mdss/Kconfig"
+
 endif
