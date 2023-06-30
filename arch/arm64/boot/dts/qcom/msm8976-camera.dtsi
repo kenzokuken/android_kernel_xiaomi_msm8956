@@ -19,9 +19,9 @@
 		interrupt-names = "csiphy";
 		clocks = <&clock_gcc GCC_CAMSS_TOP_AHB_CLK>,
 			<&clock_gcc GCC_CAMSS_ISPIF_AHB_CLK>,
-			<&clock_gcc clk_csi0phytimer_clk_src>,
+			<&clock_gcc CSI0PHYTIMER_CLK_SRC>,
 			<&clock_gcc GCC_CAMSS_CSI0PHYTIMER_CLK>,
-			<&clock_gcc clk_camss_top_ahb_clk_src>,
+			<&clock_gcc CAMSS_TOP_AHB_CLK_SRC>,
 			<&clock_gcc GCC_CAMSS_CSI0PHY_CLK>,
 			<&clock_gcc GCC_CAMSS_AHB_CLK>;
 		clock-names = "camss_top_ahb_clk", "ispif_ahb_clk",
@@ -41,9 +41,9 @@
 		interrupt-names = "csiphy";
 		clocks = <&clock_gcc GCC_CAMSS_TOP_AHB_CLK>,
 			<&clock_gcc GCC_CAMSS_ISPIF_AHB_CLK>,
-			<&clock_gcc clk_csi1phytimer_clk_src>,
+			<&clock_gcc CSI1PHYTIMER_CLK_SRC>,
 			<&clock_gcc GCC_CAMSS_CSI1PHYTIMER_CLK>,
-			<&clock_gcc clk_camss_top_ahb_clk_src>,
+			<&clock_gcc CAMSS_TOP_AHB_CLK_SRC>,
 			<&clock_gcc GCC_CAMSS_CSI1PHY_CLK>,
 			<&clock_gcc GCC_CAMSS_AHB_CLK>;
 		clock-names = "camss_top_ahb_clk", "ispif_ahb_clk",
@@ -65,7 +65,7 @@
 		clocks = <&clock_gcc GCC_CAMSS_TOP_AHB_CLK>,
 			<&clock_gcc GCC_CAMSS_ISPIF_AHB_CLK>,
 			<&clock_gcc GCC_CAMSS_CSI0_AHB_CLK>,
-			<&clock_gcc clk_csi0_clk_src>,
+			<&clock_gcc CSI0_CLK_SRC>,
 			<&clock_gcc GCC_CAMSS_CSI0_CLK>,
 			<&clock_gcc GCC_CAMSS_CSI0PIX_CLK>,
 			<&clock_gcc GCC_CAMSS_CSI0RDI_CLK>,
@@ -89,7 +89,7 @@
 		clocks = <&clock_gcc GCC_CAMSS_TOP_AHB_CLK>,
 			<&clock_gcc GCC_CAMSS_ISPIF_AHB_CLK>,
 			<&clock_gcc GCC_CAMSS_CSI1_AHB_CLK>,
-			<&clock_gcc clk_csi1_clk_src>,
+			<&clock_gcc CSI1_CLK_SRC>,
 			<&clock_gcc GCC_CAMSS_CSI1_CLK>,
 			<&clock_gcc GCC_CAMSS_CSI1PIX_CLK>,
 			<&clock_gcc GCC_CAMSS_CSI1RDI_CLK>,
@@ -113,7 +113,7 @@
 		clocks = <&clock_gcc GCC_CAMSS_TOP_AHB_CLK>,
 			<&clock_gcc GCC_CAMSS_ISPIF_AHB_CLK>,
 			<&clock_gcc GCC_CAMSS_CSI2_AHB_CLK>,
-			<&clock_gcc clk_csi2_clk_src>,
+			<&clock_gcc CSI2_CLK_SRC>,
 			<&clock_gcc GCC_CAMSS_CSI2_CLK>,
 			<&clock_gcc GCC_CAMSS_CSI2PIX_CLK>,
 			<&clock_gcc GCC_CAMSS_CSI2RDI_CLK>,
@@ -137,22 +137,22 @@
 		vfe0-vdd-supply = <&gdsc_vfe>;
 		vfe1-vdd-supply = <&gdsc_vfe1>;
 		clocks = <&clock_gcc GCC_CAMSS_ISPIF_AHB_CLK>,
-			<&clock_gcc clk_csi0_clk_src>,
+			<&clock_gcc CSI0_CLK_SRC>,
 			<&clock_gcc GCC_CAMSS_CSI0_CLK>,
 			<&clock_gcc GCC_CAMSS_CSI0RDI_CLK>,
 			<&clock_gcc GCC_CAMSS_CSI0PIX_CLK>,
-			<&clock_gcc clk_csi1_clk_src>,
+			<&clock_gcc CSI1_CLK_SRC>,
 			<&clock_gcc GCC_CAMSS_CSI1_CLK>,
 			<&clock_gcc GCC_CAMSS_CSI1RDI_CLK>,
 			<&clock_gcc GCC_CAMSS_CSI1PIX_CLK>,
-			<&clock_gcc clk_csi2_clk_src>,
+			<&clock_gcc CSI2_CLK_SRC>,
 			<&clock_gcc GCC_CAMSS_CSI2_CLK>,
 			<&clock_gcc GCC_CAMSS_CSI2RDI_CLK>,
 			<&clock_gcc GCC_CAMSS_CSI2PIX_CLK>,
-			<&clock_gcc clk_vfe0_clk_src>,
+			<&clock_gcc VFE0_CLK_SRC>,
 			<&clock_gcc GCC_CAMSS_VFE0_CLK>,
 			<&clock_gcc GCC_CAMSS_CSI_VFE0_CLK>,
-			<&clock_gcc clk_vfe1_clk_src>,
+			<&clock_gcc VFE1_CLK_SRC>,
 			<&clock_gcc GCC_CAMSS_VFE1_CLK>,
 			<&clock_gcc GCC_CAMSS_CSI_VFE1_CLK>;
 		clock-names = "ispif_ahb_clk",
@@ -189,7 +189,7 @@
 			vdd-supply = <&gdsc_vfe>;
 			clocks = <&clock_gcc GCC_CAMSS_TOP_AHB_CLK>,
 				<&clock_gcc GCC_CAMSS_AHB_CLK>,
-				<&clock_gcc clk_vfe0_clk_src>,
+				<&clock_gcc VFE0_CLK_SRC>,
 				<&clock_gcc GCC_CAMSS_VFE0_CLK>,
 				<&clock_gcc GCC_CAMSS_CSI_VFE0_CLK>,
 				<&clock_gcc GCC_CAMSS_VFE_AHB_CLK>,
@@ -239,7 +239,7 @@
 			vdd-supply = <&gdsc_vfe1>;
 			clocks = <&clock_gcc GCC_CAMSS_TOP_AHB_CLK>,
 				<&clock_gcc GCC_CAMSS_AHB_CLK>,
-				<&clock_gcc clk_vfe1_clk_src>,
+				<&clock_gcc VFE1_CLK_SRC>,
 				<&clock_gcc GCC_CAMSS_VFE1_CLK>,
 				<&clock_gcc GCC_CAMSS_CSI_VFE1_CLK>,
 				<&clock_gcc GCC_CAMSS_VFE1_AHB_CLK>,
@@ -348,7 +348,7 @@
 		interrupt-names = "cpp";
 		vdd-supply = <&gdsc_cpp>;
 		clocks = <&clock_gcc GCC_CAMSS_TOP_AHB_CLK>,
-			<&clock_gcc clk_cpp_clk_src>,
+			<&clock_gcc CPP_CLK_SRC>,
 			<&clock_gcc GCC_CAMSS_CPP_AHB_CLK>,
 			<&clock_gcc GCC_CAMSS_CPP_AXI_CLK>,
 			<&clock_gcc GCC_CAMSS_CPP_CLK>,
@@ -380,7 +380,7 @@
 		interrupts = <0 50 0>;
 		interrupt-names = "cci";
 		clocks = <&clock_gcc GCC_CAMSS_TOP_AHB_CLK>,
-			<&clock_gcc clk_cci_clk_src>,
+			<&clock_gcc CCI_CLK_SRC>,
 			<&clock_gcc GCC_CAMSS_CCI_AHB_CLK>,
 			<&clock_gcc GCC_CAMSS_CCI_CLK>,
 			<&clock_gcc GCC_CAMSS_AHB_CLK>,

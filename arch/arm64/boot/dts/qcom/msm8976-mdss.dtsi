@@ -90,11 +90,9 @@
 			 <&clock_gcc MDP_CLK_SRC>,
 			 <&clock_gcc GCC_MDSS_MDP_CLK>,
 			 <&clock_gcc GCC_MDSS_VSYNC_CLK>,
-			 <&clock_gcc GCC_MDP_TBU_CLK>,
-			 <&clock_gcc GCC_MDP_RT_TBU_CLK>;
+			 <&clock_gcc GCC_MDP_TBU_CLK>;
 		clock-names = "iface_clk", "bus_clk", "core_clk_src",
-				"core_clk", "vsync_clk", "tbu_clk",
-				"tbu_rt_clk";
+				"core_clk", "vsync_clk", "tbu_clk";
 		qcom,mdp-settings = <0x0000117c 0x0000ffff>,
 				    <0x00001180 0x0000000f>,
 				    <0x00001184 0x0000ffc0>,

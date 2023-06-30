@@ -47,30 +47,18 @@
 		qcom,pm-qos-active-latency = <401>;
 		qcom,pm-qos-wakeup-latency = <101>;
 
-		/*
-		 * Clocks = KGSL_CLK_CORE | KGSL_CLK_IFACE | KGSL_CLK_MEM |
-		 * KGSL_CLK_MEM_IFACE | KGSL_CLK_RBBMTIMER |
-		 * KGSL_CLK_GFX_GTCU  | KGSL_CLK_GFX_GTBU |
-		 * KGSL_CLK_GFX_GTBU1 | KGSL_CLK_AON
-		 */
 		qcom,clk-map = <0x00000F9E>;
 
 	clocks = <&clock_gfx GCC_OXILI_GFX3D_CLK>,
 		 <&clock_gfx GCC_OXILI_AHB_CLK>,
 		 <&clock_gfx GCC_OXILI_GMEM_CLK>,
 		 <&clock_gfx GCC_BIMC_GFX_CLK>,
-		 <&clock_gfx GCC_GTCU_AHB_CLK>,
-		 <&clock_gfx GCC_GFX_TCU_CLK>,
-		 <&clock_gfx GCC_GFX_TBU_CLK>,
-		 <&clock_gfx GCC_GFX_1_TBU_CLK>,
 		 <&clock_gfx GCC_OXILI_TIMER_CLK>,
 		 <&clock_gfx GCC_OXILI_AON_CLK>;
 
 	clock-names =   "core_clk", "iface_clk", "mem_clk",
 			"mem_iface_clk", "gtcu_iface_clk",
-			"gtcu_clk", "gtbu_clk", "gtbu1_clk",
-			"rbbmtimer_clk", "aon_clk";
-
+			"gtcu_clk", "rbbmtimer_clk", "aon_clk";
 
 		/* Bus Scale Settings */
 		qcom,gpubw-dev = <&gpubw>;

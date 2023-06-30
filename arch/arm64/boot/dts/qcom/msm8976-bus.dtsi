@@ -1120,9 +1120,6 @@
 		qcom,msm-bus,active-only;
 		qcom,spdm-client = <0>;
 
-		clock-names = "cci_clk";
-		clocks = <&clock_cpu clk_cci_clk>;
-
 		qcom,bw-upstep = <520>;
 		qcom,bw-dwnstep = <3640>;
 		qcom,max-vote = <6760>;

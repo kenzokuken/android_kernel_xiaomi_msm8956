@@ -123,7 +123,6 @@
 #include "msm8976-pinctrl.dtsi"
 #include "msm8976-ion.dtsi"
 #include "msm-arm-smmu-8976.dtsi"
-#include "msm8976-iommu-domains.dtsi"
 #include "msm8976-smp2p.dtsi"
 #include "msm8976-bus.dtsi"
 #include "msm8976-jtag.dtsi"
@@ -215,8 +214,6 @@
 
 	clock_debug: qcom,cc-debug@1874000 {
 		compatible = "qcom,cc-debug-8976";
-		clocks = <&clock_cpu clk_cpu_debug_pri_mux>;
-		clock-names = "debug_cpu_clk";
 		#clock-cells = <1>;
 	};
 
@@ -244,12 +241,6 @@
 		compatible = "qcom,gcc-msm8956";
 		reg = <0x1800000 0x80000>;
                 reg-names = "cc_base";
-		clocks = <&mdss_dsi0_pll clk_dsi_pll0_pixel_clk_src>,
-			 <&mdss_dsi0_pll clk_dsi_pll0_byte_clk_src>,
-			 <&mdss_dsi1_pll clk_dsi_pll1_pixel_clk_src>,
-			 <&mdss_dsi1_pll clk_dsi_pll1_byte_clk_src>;
-		clock-names = "pclk0_src", "byte0_src", "pclk1_src",
-				 "byte1_src";
 		#clock-cells = <1>;
 	};
 
@@ -303,10 +294,6 @@
 		vdd_a72-supply = <&apc1_vreg_corner>;
 		vdd_a53-supply = <&apc0_vreg_corner>;
 		vdd_cci-supply = <&apc0_vreg_corner>;
-		clocks = <&clock_gcc clk_xo_a_clk_src>,
-			 <&clock_gcc clk_gpll4_clk_src>,
-			 <&clock_gcc clk_gpll0_ao_clk_src>;
-		clock-names = "xo_a", "aux_clk_2", "aux_clk_3";
 		qcom,speed0-bin-v0-c0 =
 			<          0 0>,
 			<  400000000 1>,
@@ -369,19 +356,6 @@
 			reg-names = "spm_c0_base", "spm_c1_base",
 				     "spm_cci_base";
 		};
-	};
-
-	cci_cache: qcom,cci {
-		compatible = "devfreq-simple-dev";
-		clock-names = "devfreq_clk";
-		clocks = <&clock_cpu clk_cci_clk>;
-		governor = "cpufreq";
-		freq-tbl-khz =
-			<  307200 >,
-			<  403200 >,
-			<  441600 >,
-			<  556800 >,
-			<  614400 >;
 	};
 
 	cpubw: qcom,cpubw {
@@ -475,15 +449,6 @@
 
 	qcom,msm-cpufreq {
 		compatible = "qcom,msm-cpufreq";
-		clock-names = "l2_clk", "cpu0_clk", "cpu1_clk", "cpu2_clk",
-			      "cpu3_clk", "cpu4_clk", "cpu5_clk";
-		clocks = <&clock_cpu clk_cci_clk>,
-			 <&clock_cpu clk_a53_clk>,
-			 <&clock_cpu clk_a53_clk>,
-			 <&clock_cpu clk_a53_clk>,
-			 <&clock_cpu clk_a53_clk>,
-			 <&clock_cpu clk_a72_clk>,
-			 <&clock_cpu clk_a72_clk>;
 		qcom,governor-per-policy;
 		qcom,cpufreq-table-0 =
 			<  400000 >,
@@ -629,13 +594,6 @@
 		};
 	};
 
-	qcom,lmh@b1db000 {
-		compatible = "qcom,lmh";
-		interrupts = <0 264 4>;
-		reg = <0xb1db000 0x4>;
-		qcom,lmh-trim-err-offset = <18>;
-	};
-
 	rpm_bus: qcom,rpm-smd {
 		compatible = "qcom,rpm-smd";
 		rpm-channel-name = "rpm_requests";
@@ -657,7 +615,7 @@
 		qcom,enable-ice-clk;
 		clock-names = "ice_core_clk_src", "ice_core_clk",
 				"bus_clk", "iface_clk";
-		clocks = <&clock_gcc clk_sdcc1_ice_core_clk_src>,
+		clocks = <&clock_gcc SDCC1_ICE_CORE_CLK_SRC>,
 			 <&clock_gcc GCC_SDCC1_ICE_CORE_CLK>,
 			 <&clock_gcc GCC_SDCC1_APPS_CLK>,
 			 <&clock_gcc GCC_SDCC1_AHB_CLK>;
@@ -1004,17 +962,8 @@
 		clocks = <&clock_gcc GCC_USB_HS_AHB_CLK>,
 			 <&clock_gcc GCC_USB_HS_SYSTEM_CLK>,
 			 <&clock_gcc GCC_USB2A_PHY_SLEEP_CLK>,
-			 <&clock_gcc clk_bimc_usb_clk>,
-			 <&clock_gcc clk_snoc_usb_clk>,
-			 <&clock_gcc clk_pcnoc_usb_clk>,
-			 <&clock_gcc GCC_QUSB2_PHY_CLK>,
-			 <&clock_gcc GCC_USB2_HS_PHY_ONLY_CLK>,
-			 <&clock_gcc GCC_USB_HS_PHY_CFG_AHB_CLK>,
 			 <&clock_gcc clk_xo_otg_clk>;
-		clock-names = "iface_clk", "core_clk", "sleep_clk",
-				"bimc_clk", "snoc_clk", "pcnoc_clk",
-				"phy_reset_clk", "phy_por_clk", "phy_csr_clk",
-				"xo";
+		clock-names = "iface_clk", "core_clk", "sleep_clk", "xo";
 		qcom,bus-clk-rate = <320000000 200000000 100000000>;
 		qcom,max-nominal-sysclk-rate = <133330000>;
 	};
@@ -1122,7 +1071,7 @@
                 qcom,ipa-hw-ver = <6>; /* IPA core version = IPAv2.6L */
                 qcom,ipa-hw-mode = <0>; /* IPA hw type = Normal */
                 clock-names = "core_clk";
-                clocks = <&clock_gcc clk_ipa_clk>;
+                clocks = <&clock_rpmcc RPM_SMD_IPA_CLK>;
                 qcom,ee = <0>;
                 qcom,msm-bus,name = "ipa";
                 qcom,msm-bus,num-cases = <3>;
@@ -1282,7 +1231,7 @@
 		qcom,msm-bus,vectors-KBps =
 			<55 512 0 0>,
 			<55 512 393600 393600>;
-		clocks = <&clock_gcc clk_crypto_clk_src>,
+		clocks = <&clock_gcc CRYPTO_CLK_SRC>,
 			 <&clock_gcc GCC_CRYPTO_CLK>,
 			 <&clock_gcc GCC_CRYPTO_AHB_CLK>,
 			 <&clock_gcc GCC_CRYPTO_AXI_CLK>;
@@ -1311,7 +1260,7 @@
 		qcom,msm-bus,vectors-KBps =
 			<55 512 0 0>,
 			<55 512 393600 393600>;
-		clocks = <&clock_gcc clk_crypto_clk_src>,
+		clocks = <&clock_gcc CRYPTO_CLK_SRC>,
 			 <&clock_gcc GCC_CRYPTO_CLK>,
 			 <&clock_gcc GCC_CRYPTO_AHB_CLK>,
 			 <&clock_gcc GCC_CRYPTO_AXI_CLK>;
@@ -1338,7 +1287,7 @@
 			<55 512 0 0>,
 			<55 512 120000 1200000>,
 			<55 512 393600 3936000>;
-		clocks = <&clock_gcc clk_crypto_clk_src>,
+		clocks = <&clock_gcc CRYPTO_CLK_SRC>,
 			 <&clock_gcc GCC_CRYPTO_CLK>,
 			 <&clock_gcc GCC_CRYPTO_AHB_CLK>,
 			 <&clock_gcc GCC_CRYPTO_AXI_CLK>;
@@ -1545,11 +1494,9 @@
 			<&msm_gpio 43 0>, <&msm_gpio 44 0>;
 
 		clocks = <&clock_gcc clk_xo_wlan_clk>,
-			 <&clock_gcc clk_rf_clk2>,
-			 <&clock_debug GCC_DEBUG_MUX>,
-			 <&clock_gcc clk_wcnss_m_clk>;
+			 <&clock_rpmcc RPM_SMD_RF_CLK2>;
 
-		clock-names = "xo", "rf_clk", "measure", "wcnss_debug";
+		clock-names = "xo", "rf_clk";
 
 		qcom,has-autodetect-xo;
 		qcom,is-pronto-v3;
@@ -1569,7 +1516,7 @@
 			 <&clock_gcc GCC_CRYPTO_CLK>,
 			 <&clock_gcc GCC_CRYPTO_AHB_CLK>,
 			 <&clock_gcc GCC_CRYPTO_AXI_CLK>,
-			 <&clock_gcc clk_crypto_clk_src>;
+			 <&clock_gcc CRYPTO_CLK_SRC>;
 
 		clock-names = "core_clk", "iface_clk", "bus_clk",
 				"scm_core_clk", "scm_iface_clk",
@@ -1606,7 +1553,7 @@
 			 <&clock_gcc GCC_CRYPTO_CLK>,
 			 <&clock_gcc GCC_CRYPTO_AHB_CLK>,
 			 <&clock_gcc GCC_CRYPTO_AXI_CLK>,
-			 <&clock_gcc clk_crypto_clk_src>;
+			 <&clock_gcc CRYPTO_CLK_SRC>;
 		clock-names = "xo", "scm_core_clk", "scm_iface_clk",
 				"scm_bus_clk", "scm_core_clk_src";
 		qcom,proxy-clock-names = "xo", "scm_core_clk", "scm_iface_clk",
@@ -1691,7 +1638,7 @@
 			 <&clock_gcc GCC_CRYPTO_CLK>,
 			 <&clock_gcc GCC_CRYPTO_AHB_CLK>,
 			 <&clock_gcc GCC_CRYPTO_AXI_CLK>,
-			 <&clock_gcc clk_crypto_clk_src>;
+			 <&clock_gcc CRYPTO_CLK_SRC>;
 
 		clock-names = "xo", "scm_core_clk", "scm_iface_clk",
 				"scm_bus_clk", "scm_core_clk_src";
