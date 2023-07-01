@@ -69,7 +69,6 @@
 	/* VDD_MX supply */
 	rpm-regulator-smpa6 {
 		status = "okay";
-		/* TODO: check this node */
 		pm8950_s6_level: regulator-s6-level {
 			compatible = "qcom,rpm-smd-regulator";
 			regulator-name = "pm8950_s6_level";
@@ -77,7 +76,7 @@
 			regulator-min-microvolt =
 					<RPM_SMD_REGULATOR_LEVEL_RETENTION>;
 			regulator-max-microvolt =
-					<RPM_SMD_REGULATOR_LEVEL_TURBO_HIGH>;
+					<RPM_SMD_REGULATOR_LEVEL_TURBO>;
 			qcom,init-voltage-level =
 					<RPM_SMD_REGULATOR_LEVEL_RETENTION>;
 			qcom,use-voltage-level;
@@ -91,7 +90,7 @@
 			regulator-min-microvolt =
 					<RPM_SMD_REGULATOR_LEVEL_RETENTION>;
 			regulator-max-microvolt =
-					<RPM_SMD_REGULATOR_LEVEL_TURBO_HIGH>;
+					<RPM_SMD_REGULATOR_LEVEL_TURBO>;
 			qcom,use-voltage-level;
 			qcom,always-send-voltage;
 		};
@@ -103,7 +102,7 @@
 			regulator-min-microvolt =
 					<RPM_SMD_REGULATOR_LEVEL_RETENTION>;
 			regulator-max-microvolt =
-					<RPM_SMD_REGULATOR_LEVEL_TURBO_HIGH>;
+					<RPM_SMD_REGULATOR_LEVEL_TURBO>;
 			qcom,init-voltage-level =
 					<RPM_SMD_REGULATOR_LEVEL_RETENTION>;
 			qcom,use-voltage-level;
@@ -116,7 +115,7 @@
 			regulator-min-microvolt =
 					<RPM_SMD_REGULATOR_LEVEL_RETENTION>;
 			regulator-max-microvolt =
-					<RPM_SMD_REGULATOR_LEVEL_TURBO_HIGH>;
+					<RPM_SMD_REGULATOR_LEVEL_TURBO>;
 			qcom,use-voltage-floor-level;
 			qcom,always-send-voltage;
 		};
