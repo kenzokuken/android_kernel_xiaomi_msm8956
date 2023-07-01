@@ -45,6 +45,22 @@
 		spi0 = &spi_0;
 	};
 
+	clocks {
+		xo_board {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <19200000>;
+			clock-output-names = "xo_board";
+		};
+
+		sleep_clk {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <32764>;
+			clock-output-names = "sleep_clk";
+		};
+	};
+
 	memory {
 		#address-cells = <2>;
 		#size-cells = <2>;
@@ -962,7 +978,7 @@
 		clocks = <&clock_gcc GCC_USB_HS_AHB_CLK>,
 			 <&clock_gcc GCC_USB_HS_SYSTEM_CLK>,
 			 <&clock_gcc GCC_USB2A_PHY_SLEEP_CLK>,
-			 <&clock_gcc clk_xo_otg_clk>;
+			 <&xo_board>;
 		clock-names = "iface_clk", "core_clk", "sleep_clk", "xo";
 		qcom,bus-clk-rate = <320000000 200000000 100000000>;
 		qcom,max-nominal-sysclk-rate = <133330000>;
@@ -1493,7 +1509,7 @@
 		gpios = <&msm_gpio 40 0>, <&msm_gpio 41 0>, <&msm_gpio 42 0>,
 			<&msm_gpio 43 0>, <&msm_gpio 44 0>;
 
-		clocks = <&clock_gcc clk_xo_wlan_clk>,
+		clocks = <&xo_board>,
 			 <&clock_rpmcc RPM_SMD_RF_CLK2>;
 
 		clock-names = "xo", "rf_clk";
@@ -1549,7 +1565,7 @@
 		qcom,proxy-reg-names = "vdd_cx";
 		qcom,vdd_cx-uV-uA = <7 100000>;
 
-		clocks = <&clock_gcc clk_xo_pil_lpass_clk>,
+		clocks = <&xo_board>,
 			 <&clock_gcc GCC_CRYPTO_CLK>,
 			 <&clock_gcc GCC_CRYPTO_AHB_CLK>,
 			 <&clock_gcc GCC_CRYPTO_AXI_CLK>,
@@ -1634,7 +1650,7 @@
 		vdd_pronto_pll-supply = <&pm8950_l7>;
 		proxy-reg-names = "vdd_pronto_pll";
 		vdd_pronto_pll-uV-uA = <1800000 18000>;
-		clocks = <&clock_gcc clk_xo_pil_pronto_clk>,
+		clocks = <&xo_board>,
 			 <&clock_gcc GCC_CRYPTO_CLK>,
 			 <&clock_gcc GCC_CRYPTO_AHB_CLK>,
 			 <&clock_gcc GCC_CRYPTO_AXI_CLK>,
@@ -1696,7 +1712,7 @@
 		vdd_pll-supply = <&pm8950_l7>;
 		qcom,vdd_pll = <1800000>;
 
-		clocks = <&clock_gcc clk_xo_pil_mss_clk>,
+		clocks = <&xo_board>,
 			 <&clock_gcc GCC_MSS_CFG_AHB_CLK>,
 			 <&clock_gcc GCC_MSS_Q6_BIMC_AXI_CLK>,
 			 <&clock_gcc GCC_BOOT_ROM_AHB_CLK>;
