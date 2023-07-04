@@ -192,8 +192,8 @@
 				<&clock_gcc VFE0_CLK_SRC>,
 				<&clock_gcc GCC_CAMSS_VFE0_CLK>,
 				<&clock_gcc GCC_CAMSS_CSI_VFE0_CLK>,
-				<&clock_gcc GCC_CAMSS_VFE_AHB_CLK>,
-				<&clock_gcc GCC_CAMSS_VFE_AXI_CLK>,
+				<&clock_gcc GCC_CAMSS_VFE0_AHB_CLK>,
+				<&clock_gcc GCC_CAMSS_VFE0_AXI_CLK>,
 				<&clock_gcc GCC_CAMSS_ISPIF_AHB_CLK>;
 			clock-names = "camss_top_ahb_clk" , "camss_ahb_clk",
 				"vfe_clk_src", "camss_vfe_vfe_clk",
