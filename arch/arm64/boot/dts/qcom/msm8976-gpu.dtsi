@@ -41,13 +41,13 @@
 
 		qcom,initial-pwrlevel = <4>;
 
-		qcom,idle-timeout = <8>; //<HZ/12>
+		qcom,idle-timeout = <80>; //msecs
+		qcom,deep-nap-timeout = <100>; //msecs
 		qcom,strtstp-sleepwake;
 
-		qcom,pm-qos-active-latency = <401>;
-		qcom,pm-qos-wakeup-latency = <101>;
+		qcom,highest-bank-bit = <14>;
 
-		qcom,clk-map = <0x00000F9E>;
+		qcom,snapshot-size = <1048576>; //bytes
 
 	clocks = <&clock_gfx GCC_OXILI_GFX3D_CLK>,
 		 <&clock_gfx GCC_OXILI_AHB_CLK>,
@@ -80,12 +80,20 @@
 				<26 512 0 6451200>, /* 9. 806.4  MHz */
 				<26 512 0 7449600>; /*10. 931.2  MHz */
 
+		/* GDSC regulator names */
+		regulator-names = "vddcx", "vdd";
 		/* GDSC oxili regulators */
 		vddcx-supply = <&gdsc_oxili_cx>;
 		vdd-supply = <&gdsc_oxili_gx>;
 
-		/* IOMMU Data */
-                iommu = <&gfx_iommu>;
+		/* CPU latency parameter */
+		qcom,pm-qos-active-latency = <213>;
+		qcom,pm-qos-wakeup-latency = <213>;
+
+		/* Quirks */
+		qcom,gpu-quirk-two-pass-use-wfi;
+		qcom,gpu-quirk-dp2clockgating-disable;
+		qcom,gpu-quirk-lmloadkill-disable;
 
 		/* Trace bus */
 		coresight-id = <67>;
@@ -94,6 +102,35 @@
 		coresight-outports = <0>;
 		coresight-child-list = <&funnel_in0>;
 		coresight-child-ports = <4>;
+
+		/* Enable context aware freq. scaling */
+		qcom,enable-ca-jump;
+
+		/* Context aware jump busy penalty in us */
+		qcom,ca-busy-penalty = <12000>;
+
+		/* Context aware jump target power level */
+		qcom,ca-target-pwrlevel = <3>;
+
+		/* GPU Mempools */
+		qcom,gpu-mempools {
+			#address-cells= <1>;
+			#size-cells = <0>;
+			compatible = "qcom,gpu-mempools";
+
+			qcom,mempool-max-pages = <32768>;
+
+			/* 4K Page Pool configuration */
+			qcom,gpu-mempool@0 {
+				reg = <0>;
+				qcom,mempool-page-size = <4096>;
+			};
+			/* 64K Page Pool configuration */
+			qcom,gpu-mempool@1 {
+				reg = <1>;
+				qcom,mempool-page-size  = <65536>;
+			};
+		};
 
 		/* Power levels */
 		qcom,gpu-pwrlevels {
