@@ -199,10 +199,8 @@
 		pinctrl-0 = <&wsa_reset_on>;
 		pinctrl-1 = <&wsa_reset_off>;
 	};
-};
 
 	ext_codec: sound-9335 {
-
 		status = "disabled";
 		compatible = "qcom,msm8952-audio-slim-codec";
 		qcom,model = "msm8976-tasha-snd-card";
@@ -318,19 +316,6 @@
 		pinctrl-0 = <&wcd_intr_default>;
 	};
 
-	clock_audio: audio_ext_clk {
-		status = "disabled";
-		compatible = "qcom,audio-ref-clk";
-		clock-names = "osr_clk";
-		qcom,node_has_rpm_clock;
-		#clock-cells = <1>;
-		pinctrl-names = "active", "sleep";
-		pinctrl-0 = <&tasha_mclk_default>;
-		pinctrl-1 = <&tasha_mclk_default>;
-		qcom,audio-ref-clk-gpio = <&pm8950_gpios 1 0>;
-		clocks = <&clock_rpmcc RPM_SMD_DIV_CLK2>;
-	};
-
 	wcd_rst_gpio: msm_cdc_pinctrl@133 {
 		status = "disabled";
 		compatible = "qcom,msm-cdc-pinctrl";
@@ -362,10 +347,6 @@
 			17 18 19 20 21 22 23 24 25 26 27 28 29 30>;
 
 		qcom,wcd-rst-gpio-node = <&wcd_rst_gpio>;
-
-		clock-names = "wcd_clk", "wcd_native_clk";
-		clocks = <&clock_audio clk_audio_pmi_clk>,
-			<&clock_audio clk_audio_ap_clk2>;
 
 		qcom,cdc-static-supplies =
 				"cdc-vdd-buck",
