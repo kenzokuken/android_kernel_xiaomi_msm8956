@@ -56,52 +56,27 @@ config SND_SOC_APQ8016_SBC
 config SND_SOC_QCOM_COMMON
 	tristate
 
-config SND_SOC_QDSP6_COMMON
-	tristate
-
-config SND_SOC_QDSP6_CORE
-	tristate
-
-config SND_SOC_QDSP6_AFE
-	tristate
-
-config SND_SOC_QDSP6_AFE_DAI
-	tristate
-
-config SND_SOC_QDSP6_AFE_CLOCKS
-	tristate
-
-config SND_SOC_QDSP6_ADM
-	tristate
-
-config SND_SOC_QDSP6_ROUTING
-	tristate
-
-config SND_SOC_QDSP6_ASM
-	tristate
-
-config SND_SOC_QDSP6_ASM_DAI
-	select SND_SOC_COMPRESS
-	tristate
-
-config SND_SOC_QDSP6
-	tristate "SoC ALSA audio driver for QDSP6"
-	depends on QCOM_APR
+config SND_SOC_MSM8952
+	tristate "SoC Machine driver for MSM8952 boards"
+	depends on QCOM_APR && SOUNDWIRE
 	depends on COMMON_CLK
-	select SND_SOC_QDSP6_COMMON
-	select SND_SOC_QDSP6_CORE
-	select SND_SOC_QDSP6_AFE
-	select SND_SOC_QDSP6_AFE_DAI
-	select SND_SOC_QDSP6_AFE_CLOCKS
-	select SND_SOC_QDSP6_ADM
-	select SND_SOC_QDSP6_ROUTING
-	select SND_SOC_QDSP6_ASM
-	select SND_SOC_QDSP6_ASM_DAI
+	select SND_SOC_QDSP6V2
+	select SND_SOC_QCOM_COMMON
 	help
-	 To add support for MSM QDSP6 Soc Audio.
-	 This will enable sound soc platform specific
-	 audio drivers. This includes q6asm, q6adm,
-	 q6afe interfaces to DSP using apr.
+	  To add support for audio on Qualcomm Technologies Inc.
+	  MSM8952 SoC-based systems.
+	  Say Y if you want to use audio device on this SoCs.
+
+config SND_SOC_MSM8976
+	tristate "SoC Machine driver for MSM8976 boards"
+	depends on QCOM_APR && SOUNDWIRE
+	depends on COMMON_CLK
+	select SND_SOC_QDSP6V2
+	select SND_SOC_QCOM_COMMON
+	help
+	  To add support for audio on Qualcomm Technologies Inc.
+	  MSM8976 SoC-based systems.
+	  Say Y if you want to use audio device on this SoCs.
 
 config SND_SOC_MSM8996
 	tristate "SoC Machine driver for MSM8996 and APQ8096 boards"
@@ -151,5 +126,9 @@ config SND_SOC_SC7180
 	  To add support for audio on Qualcomm Technologies Inc.
 	  SC7180 SoC-based systems.
 	  Say Y if you want to use audio device on this SoCs.
+
+source "sound/soc/qcom/qdsp6/Kconfig"
+
+source "sound/soc/qcom/qdsp6v2/Kconfig"
 
 endif #SND_SOC_QCOM

@@ -18,6 +18,8 @@ obj-$(CONFIG_SND_SOC_LPASS_SC7180) += snd-soc-lpass-sc7180.o
 snd-soc-storm-objs := storm.o
 snd-soc-apq8016-sbc-objs := apq8016_sbc.o
 snd-soc-apq8096-objs := apq8096.o
+snd-soc-msm8952-objs := msm8952.o
+snd-soc-msm8976-objs := msm8952-slimbus.o msm8952-dai-links.o
 snd-soc-sc7180-objs := sc7180.o
 snd-soc-sdm845-objs := sdm845.o
 snd-soc-sm8250-objs := sm8250.o
@@ -25,6 +27,8 @@ snd-soc-qcom-common-objs := common.o
 
 obj-$(CONFIG_SND_SOC_STORM) += snd-soc-storm.o
 obj-$(CONFIG_SND_SOC_APQ8016_SBC) += snd-soc-apq8016-sbc.o
+obj-$(CONFIG_SND_SOC_MSM8952) += snd-soc-msm8952.o
+obj-$(CONFIG_SND_SOC_MSM8976) += snd-soc-msm8976.o
 obj-$(CONFIG_SND_SOC_MSM8996) += snd-soc-apq8096.o
 obj-$(CONFIG_SND_SOC_SC7180) += snd-soc-sc7180.o
 obj-$(CONFIG_SND_SOC_SDM845) += snd-soc-sdm845.o
@@ -32,4 +36,5 @@ obj-$(CONFIG_SND_SOC_SM8250) += snd-soc-sm8250.o
 obj-$(CONFIG_SND_SOC_QCOM_COMMON) += snd-soc-qcom-common.o
 
 #DSP lib
-obj-$(CONFIG_SND_SOC_QDSP6) += qdsp6/
+obj-y += qdsp6/
+obj-y += qdsp6v2/

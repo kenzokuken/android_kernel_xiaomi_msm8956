@@ -1,0 +1,48 @@
+# SPDX-License-Identifier: GPL-2.0-only
+config SND_SOC_QDSP6_COMMON
+	tristate
+
+config SND_SOC_QDSP6_CORE
+	tristate
+
+config SND_SOC_QDSP6_AFE
+	tristate
+
+config SND_SOC_QDSP6_AFE_DAI
+	tristate
+
+config SND_SOC_QDSP6_AFE_CLOCKS
+	tristate
+
+config SND_SOC_QDSP6_ADM
+	tristate
+
+config SND_SOC_QDSP6_ROUTING
+	tristate
+
+config SND_SOC_QDSP6_ASM
+	tristate
+
+config SND_SOC_QDSP6_ASM_DAI
+	select SND_SOC_COMPRESS
+	tristate
+
+config SND_SOC_QDSP6
+	tristate "SoC ALSA audio driver for QDSP6"
+	depends on QCOM_APR
+	depends on COMMON_CLK
+	select SND_SOC_QDSP6_COMMON
+	select SND_SOC_QDSP6_CORE
+	select SND_SOC_QDSP6_AFE
+	select SND_SOC_QDSP6_AFE_DAI
+	select SND_SOC_QDSP6_AFE_CLOCKS
+	select SND_SOC_QDSP6_ADM
+	select SND_SOC_QDSP6_ROUTING
+	select SND_SOC_QDSP6_ASM
+	select SND_SOC_QDSP6_ASM_DAI
+	help
+	 To add support for MSM QDSP6 Soc Audio.
+	 This will enable sound soc platform specific
+	 audio drivers. This includes q6asm, q6adm,
+	 q6afe interfaces to DSP using apr.
+

@@ -1,0 +1,92 @@
+# SPDX-License-Identifier: GPL-2.0
+config WCD9XXX_CODEC_CORE
+        tristate "WCD9XXX Codec Core"
+	help
+	  This enables support for WCD9xxx core drivers to suspend,
+	  resume or reset, execute callback functions for regmap buses
+	  and read/write functions.
+
+config WCD9XXX_CODEC_CORE_V2
+        tristate "WCD9XXX Codec Core v2"
+	help
+	  This enables v2 support for WCD9xxx core drivers to suspend,
+	  resume or reset, execute callback functions for regmap buses
+	  and read/write functions.
+
+config SND_SOC_WCD9XXX_V2
+        tristate "WCD9XXX v2 Codec"
+	help
+	  This enables additional support for WCD9XXX core drivers.
+
+config SND_SOC_WCD9335
+        tristate "WCD9335 Codec"
+        depends on SOUNDWIRE
+        select REGMAP_SOUNDWIRE
+        tristate
+        help
+	  This enables the WCD9335 codec driver. The driver provides
+	  the read/write capability to registers that are integral to
+	  the WCD9335. The WCD9335 codec support either I2C or Slimbus
+	  for control and data exchange with master processor.
+
+config SND_SOC_WSA881X
+	tristate "WSA881X Codec"
+	depends on SOUNDWIRE
+	select REGMAP_SOUNDWIRE
+	tristate
+	help
+	  This enables the Qualcomm WSA881x smart amplifier. The driver
+	  provides the read/write capability to registers that are 
+	  integral to the WSA881x.
+
+config SND_SOC_WSA881X_ANALOG
+	tristate "WSA881X Analog Codec"
+	depends on SOUNDWIRE
+	select REGMAP_SOUNDWIRE
+	tristate
+	help
+	  This enables the analog audio transmission driver for Qualcomm
+	  WSA881x smart amplifier. The driver provides the read/write
+	  capability to registers that are integral to the WSA881x.
+
+config SND_SOC_QCOM_STUB
+        tristate "QCOM Stub Codec"
+	help
+	  This enables stub codec support on Qualcomm core drivers.
+
+config SND_SOC_WCD_SPI
+        tristate "WCD SPI Codec"
+	help
+	  This enables SPI codec support on WCD9XXX core drivers.
+
+config SND_SOC_WCD_CPE
+        tristate "WCD CPE Codec"
+	help
+	  This enables CPE codec support on WCD9XXX core drivers.
+
+config SND_SOC_WCD_MBHC
+        tristate "WCD MBHC Codec"
+	help
+	  This enables MBHC codec support for WCD9xxx core drivers.
+
+config SND_SOC_WCD_MBHC_ADC
+        tristate "WCD MBHC ADC Codec"
+	help
+	  This enables MBHC ADC codec support on WCD9xxx core drivers.
+
+config SND_SOC_WCD_MBHC_LEGACY
+        tristate "WCD MBHC Legacy Codec"
+	help
+	  This enables legacy MBHC codec support on WCD9xxx core drivers.
+
+config SND_SOC_QCOM_HDMI_CODEC_RX
+        tristate "QCOM HDMI Codec RX"
+	help
+	  This enables the driver for HDMI audio panel on Qualcomm
+	  supported platforms.
+
+config SND_SOC_WCD_IRQ
+        tristate "WCD Interrupts"
+	help
+	  This enables the WCD9XXX core drivers to send interrupt
+	  signals over the IRQ channels.

@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: GPL-2.0-only
+config SND_SOC_QDSP6V2
+	tristate "SoC ALSA audio driver for QDSP6V2"
+	depends on QCOM_APR
+	depends on COMMON_CLK
+	select SND_SOC_QCOM_COMMON
+	help
+	 To add support for MSM QDSP6V2 Soc Audio.
+	 This will enable sound soc platform specific
+	 audio drivers. This includes q6asm-v2, q6adm-v2,
+	 q6afe-v2 interfaces to DSP using apr.
