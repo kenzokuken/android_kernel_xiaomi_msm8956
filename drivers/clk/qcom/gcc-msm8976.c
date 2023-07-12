@@ -3671,6 +3671,24 @@ static struct clk_branch gcc_venus0_core0_vcodec0_clk = {
 	}
 };
 
+static struct clk_branch gcc_venus0_core1_vcodec0_clk = {
+	.halt_reg = 0x4c034,
+	.halt_check = BRANCH_HALT,
+	.clkr = {
+		.enable_reg = 0x4c034,
+		.enable_mask = BIT(0),
+		.hw.init = &(struct clk_init_data) {
+			.name = "gcc_venus0_core1_vcodec0_clk",
+			.parent_hws = (const struct clk_hw*[]){
+				&vcodec0_clk_src.clkr.hw,
+			},
+			.num_parents = 1,
+			.ops = &clk_branch2_ops,
+			.flags = CLK_SET_RATE_PARENT,
+		}
+	}
+};
+
 static struct clk_branch gcc_venus0_vcodec0_clk = {
 	.halt_reg = 0x4c01c,
 	.halt_check = BRANCH_HALT,
@@ -4002,6 +4020,7 @@ static struct clk_regmap *gcc_msm8976_clocks[] = {
 	[GCC_VENUS0_AHB_CLK] = &gcc_venus0_ahb_clk.clkr,
 	[GCC_VENUS0_AXI_CLK] = &gcc_venus0_axi_clk.clkr,
 	[GCC_VENUS0_CORE0_VCODEC0_CLK] = &gcc_venus0_core0_vcodec0_clk.clkr,
+	[GCC_VENUS0_CORE1_VCODEC0_CLK] = &gcc_venus0_core1_vcodec0_clk.clkr,
 	[GCC_VENUS0_VCODEC0_CLK] = &gcc_venus0_vcodec0_clk.clkr,
 	[MDP_CLK_SRC] = &mdp_clk_src.clkr,
 	[PCLK0_CLK_SRC] = &pclk0_clk_src.clkr,
