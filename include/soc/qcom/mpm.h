@@ -14,11 +14,7 @@ struct mpm_pin {
 	irq_hw_number_t hwirq;
 };
 
-extern const struct mpm_pin mpm_bengal_gic_chip_data[];
-extern const struct mpm_pin mpm_scuba_gic_chip_data[];
-extern const struct mpm_pin mpm_sdm660_gic_chip_data[];
-extern const struct mpm_pin mpm_msm8937_gic_chip_data[];
-extern const struct mpm_pin mpm_msm8953_gic_chip_data[];
-extern const struct mpm_pin mpm_khaje_gic_chip_data[];
+extern const struct mpm_pin mpm_msm8956_gic_chip_data[];
+extern const struct mpm_pin mpm_msm8976_gic_chip_data[];
 
 #endif /* __QCOM_MPM_H__ */
