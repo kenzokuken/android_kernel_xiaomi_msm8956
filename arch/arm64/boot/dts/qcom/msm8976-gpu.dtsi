@@ -13,6 +13,7 @@
 		compatible = "qcom,devbw";
 		governor = "bw_vbif";
 		qcom,src-dst-ports = <26 512>;
+		qcom,active-only;
 		qcom,bw-tbl =
 			< 0 >,    /* off                            */
 			< 805  >, /* DDR: 105.6 MHz BIMC:  52.8 MHz */
