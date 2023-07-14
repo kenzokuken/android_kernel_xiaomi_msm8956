@@ -47,10 +47,10 @@
 		smd11 = &smdtty_data11;
 		smd21 = &smdtty_data21;
 		smd36 = &smdtty_loopback;
+		i2c1  = &i2c_1;
 		i2c2  = &i2c_2;
-		i2c4  = &i2c_4;
-		i2c6  = &i2c_6;
-		i2c8  = &i2c_8;
+		i2c3  = &i2c_3;
+		i2c5  = &i2c_5;
 	};
 
 	soc: soc { };
@@ -868,102 +868,108 @@
                 qcom,summing-threshold = <10>;
         };
 
-	i2c_2: i2c@78b6000 { /* BLSP1 QUP2 */
-                compatible = "qcom,i2c-msm-v2";
-                #address-cells = <1>;
-                #size-cells = <0>;
-                reg-names = "qup_phys_addr";
-                reg = <0x78b6000 0x1000>;
-                interrupt-names = "qup_irq";
-                interrupts = <0 96 0>;
-                qcom,clk-freq-out = <400000>;
-                qcom,clk-freq-in  = <19200000>;
-                clock-names = "iface_clk", "core_clk";
-                clocks = <&clock_gcc GCC_BLSP1_AHB_CLK>,
-                         <&clock_gcc GCC_BLSP1_QUP2_I2C_APPS_CLK>;
-                pinctrl-names = "i2c_active", "i2c_sleep";
-                pinctrl-0 = <&i2c_2_active>;
-                pinctrl-1 = <&i2c_2_sleep>;
-                qcom,noise-rjct-scl = <0>;
-                qcom,noise-rjct-sda = <0>;
-                qcom,master-id = <86>;
-                dmas = <&dma_blsp1 6 64 0x20000020 0x20>,
-                        <&dma_blsp1 7 32 0x20000020 0x20>;
-                dma-names = "tx", "rx";
-        };
-
-	i2c_4: i2c@78b8000 { /* BLSP1 QUP4 */
+	i2c_1: i2c@78b5000 { /* BLSP1 QUP1 */
 		compatible = "qcom,i2c-msm-v2";
 		#address-cells = <1>;
 		#size-cells = <0>;
 		reg-names = "qup_phys_addr";
-		reg = <0x78b8000 0x600>;
+		reg = <0x78b5000 0x600>;
 		interrupt-names = "qup_irq";
-		interrupts = <0 98 0>;
+		interrupts = <0 95 0>;
+		qcom,master-id = <86>;
+		qcom,clk-freq-out = <100000>;
+		qcom,clk-freq-in  = <19200000>;
+		clock-names = "iface_clk", "core_clk";
+		clocks = <&clock_gcc GCC_BLSP1_AHB_CLK>,
+				 <&clock_gcc GCC_BLSP1_QUP1_I2C_APPS_CLK>;
+		pinctrl-names = "i2c_active", "i2c_sleep";
+		pinctrl-0 = <&i2c_1_active>;
+		pinctrl-1 = <&i2c_1_sleep>;
+		qcom,noise-rjct-scl = <0>;
+		qcom,noise-rjct-sda = <0>;
+		dmas = <&dma_blsp1 4 64 0x20000020 0x20>,
+			<&dma_blsp1 5 32 0x20000020 0x20>;
+		dma-names = "tx", "rx";
+		status = "disabled";
+	};
+
+	i2c_2: i2c@78b6000 { /* BLSP1 QUP2 */
+		compatible = "qcom,i2c-msm-v2";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		reg-names = "qup_phys_addr";
+		reg = <0x78b6000 0x600>;
+		interrupt-names = "qup_irq";
+		interrupts = <0 96 0>;
 		qcom,clk-freq-out = <400000>;
 		qcom,clk-freq-in  = <19200000>;
 		clock-names = "iface_clk", "core_clk";
 		clocks = <&clock_gcc GCC_BLSP1_AHB_CLK>,
-			<&clock_gcc GCC_BLSP1_QUP4_I2C_APPS_CLK>;
+			<&clock_gcc GCC_BLSP1_QUP2_I2C_APPS_CLK>;
+
 		pinctrl-names = "i2c_active", "i2c_sleep";
-		pinctrl-0 = <&i2c_4_active>;
-		pinctrl-1 = <&i2c_4_sleep>;
+		pinctrl-0 = <&i2c_2_active>;
+		pinctrl-1 = <&i2c_2_sleep>;
 		qcom,noise-rjct-scl = <0>;
 		qcom,noise-rjct-sda = <0>;
 		qcom,master-id = <86>;
-		dmas = <&dma_blsp1 10 64 0x20000020 0x20>,
-			<&dma_blsp1 11 32 0x20000020 0x20>;
+		dmas = <&dma_blsp1 6 64 0x20000020 0x20>,
+			<&dma_blsp1 7 32 0x20000020 0x20>;
 		dma-names = "tx", "rx";
+		status = "disabled";
 	};
 
-	i2c_6: i2c@7af6000 { /* BLSP2 QUP2 */
+	i2c_3: i2c@78b7000 { /* BLSP1 QUP3 */
 		compatible = "qcom,i2c-msm-v2";
 		#address-cells = <1>;
 		#size-cells = <0>;
 		reg-names = "qup_phys_addr";
-		reg = <0x7af6000 0x600>;
+		reg = <0x78b7000 0x600>;
 		interrupt-names = "qup_irq";
-		interrupts = <0 300 0>;
+		interrupts = <0 97 0>;
+		qcom,clk-freq-out = <400000>;
+		qcom,clk-freq-in  = <19200000>;
+		clock-names = "iface_clk", "core_clk";
+		clocks = <&clock_gcc GCC_BLSP1_AHB_CLK>,
+			<&clock_gcc GCC_BLSP1_QUP3_I2C_APPS_CLK>;
+
+		pinctrl-names = "i2c_active", "i2c_sleep";
+		pinctrl-0 = <&i2c_3_active>;
+		pinctrl-1 = <&i2c_3_sleep>;
+		qcom,noise-rjct-scl = <0>;
+		qcom,noise-rjct-sda = <0>;
+		qcom,master-id = <86>;
+		dmas = <&dma_blsp1 8 64 0x20000020 0x20>,
+			<&dma_blsp1 9 32 0x20000020 0x20>;
+		dma-names = "tx", "rx";
+		status = "disabled";
+	};
+
+	i2c_5: i2c@7af5000 { /* BLSP2 QUP1 */
+		compatible = "qcom,i2c-msm-v2";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		reg-names = "qup_phys_addr";
+		reg = <0x7af5000 0x600>;
+		interrupt-names = "qup_irq";
+		interrupts = <0 299 0>;
 		qcom,clk-freq-out = <400000>;
 		qcom,clk-freq-in  = <19200000>;
 		clock-names = "iface_clk", "core_clk";
 		clocks = <&clock_gcc GCC_BLSP2_AHB_CLK>,
-			<&clock_gcc GCC_BLSP2_QUP2_I2C_APPS_CLK>;
+			<&clock_gcc GCC_BLSP2_QUP1_I2C_APPS_CLK>;
+
 		pinctrl-names = "i2c_active", "i2c_sleep";
-		pinctrl-0 = <&i2c_6_active>;
-		pinctrl-1 = <&i2c_6_sleep>;
+		pinctrl-0 = <&i2c_5_active>;
+		pinctrl-1 = <&i2c_5_sleep>;
 		qcom,noise-rjct-scl = <0>;
 		qcom,noise-rjct-sda = <0>;
 		qcom,master-id = <84>;
-		dmas = <&dma_blsp2 6 64 0x20000020 0x20>,
-			<&dma_blsp2 7 32 0x20000020 0x20>;
+		dmas = <&dma_blsp2 4 64 0x20000020 0x20>,
+			<&dma_blsp2 5 32 0x20000020 0x20>;
 		dma-names = "tx", "rx";
+		status = "disabled";
 	};
-
-	i2c_8: i2c@7af8000 { /* BLSP2 QUP4 */
-                compatible = "qcom,i2c-msm-v2";
-                #address-cells = <1>;
-                #size-cells = <0>;
-                reg-names = "qup_phys_addr";
-                reg = <0x7af8000 0x600>;
-                interrupt-names = "qup_irq";
-                interrupts = <0 302 0>;
-                qcom,clk-freq-out = <400000>;
-                qcom,clk-freq-in  = <19200000>;
-                clock-names = "iface_clk", "core_clk";
-                clocks = <&clock_gcc GCC_BLSP2_AHB_CLK>,
-                        <&clock_gcc GCC_BLSP2_QUP4_I2C_APPS_CLK>;
-                pinctrl-names = "i2c_active", "i2c_sleep";
-                pinctrl-0 = <&i2c_8_active>;
-                pinctrl-1 = <&i2c_8_sleep>;
-                qcom,noise-rjct-scl = <0>;
-                qcom,noise-rjct-sda = <0>;
-                qcom,master-id = <84>;
-                dmas = <&dma_blsp2 10 64 0x20000020 0x20>,
-                        <&dma_blsp2 11 32 0x20000020 0x20>;
-                dma-names = "tx", "rx";
-        };
-
 
 	usb_otg: usb@78db000 {
 		compatible = "qcom,hsusb-otg";

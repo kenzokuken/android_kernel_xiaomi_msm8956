@@ -1,22 +1,13 @@
-/*
- * Copyright (c) 2015, The Linux Foundation. All rights reserved.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 and
- * only version 2 as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- */
+// SPDX-License-Identifier: GPL-2.0
+// Copyright (c) 2015, The Linux Foundation. All rights reserved.
+// Copyright (c) 2023, Benarji Anand <benarji385@gmail.com>
 
 #include "msm8976-pinctrl.dtsi"
 #include "msm8976-camera-sensor-cdp.dtsi"
 #include "msm8976-mdss-cdp.dtsi"
 #include "msm8976-wsa881x.dtsi"
 
-&i2c_4 { /* BLSP1 QUP4 */
+&i2c_2 { /* BLSP1 QUP2 */
 	synaptics@20 {
 		compatible = "synaptics,dsx";
 		reg = <0x20>;

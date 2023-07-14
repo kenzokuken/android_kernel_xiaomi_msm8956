@@ -7,7 +7,7 @@
 #include "msm8976-mdss-cdp.dtsi"
 #include "msm8976-wsa881x.dtsi"
 
-&i2c_4 { /* BLSP1 QUP4 */
+&i2c_2 { /* BLSP1 QUP2 */
 	synaptics@20 {
 		compatible = "synaptics,dsx";
 		reg = <0x20>;
@@ -43,7 +43,7 @@
 	};
 };
 
-&i2c_8 { /* BLSP2 QUP4 */
+&i2c_5 { /* BLSP2 QUP1 */
 	/* DSI_TO_HDMI I2C configuration */
 	adv7533@39 {
 		compatible = "adv7533";
@@ -66,7 +66,7 @@
 	};
 };
 
-&i2c_2 {
+&i2c_1 {
 	pericom-type-c@3d {
 		compatible = "pericom,usb-type-c";
 		reg = <0x3d>;
