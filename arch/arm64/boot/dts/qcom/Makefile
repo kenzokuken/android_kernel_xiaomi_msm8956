@@ -103,3 +103,7 @@ dtb-$(CONFIG_ARCH_MSM8956) += msm8956-cdp.dtb \
 dtb-$(CONFIG_ARCH_MSM8976) += msm8976-cdp.dtb \
 	msm8976-mtp.dtb \
 	msm8976-qrd-skun.dtb
+
+always		:= $(dtb-y)
+subdir-y	:= $(dts-dirs)
+clean-files    := *.dtb *.dtbo
