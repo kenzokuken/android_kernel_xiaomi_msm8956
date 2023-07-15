@@ -14,7 +14,7 @@ struct mpm_pin {
 	irq_hw_number_t hwirq;
 };
 
-extern const struct mpm_pin mpm_msm8956_gic_chip_data[];
 extern const struct mpm_pin mpm_msm8976_gic_chip_data[];
+extern const struct mpm_pin mpm_msm8976_gpio_chip_data[];
 
 #endif /* __QCOM_MPM_H__ */
