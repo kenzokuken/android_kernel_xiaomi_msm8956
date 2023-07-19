@@ -1,6 +1,7 @@
 /* SPDX-License-Identifier: GPL-2.0 */
 /*
  * Copyright (c) 2015, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2021-2022 Qualcomm Innovation Center, Inc. All rights reserved.
  */
 
 #ifndef __QCOM_TSENS_H__
@@ -21,6 +22,7 @@
 #include <linux/thermal.h>
 #include <linux/regmap.h>
 #include <linux/slab.h>
+#include <linux/ipc_logging.h>
 
 struct tsens_priv;
 
@@ -54,6 +56,7 @@ struct tsens_sensor {
 	unsigned int			hw_id;
 	int				slope;
 	u32				status;
+	int				cached_temp;
 };
 
 /**
@@ -146,6 +149,34 @@ struct tsens_ops {
 	[_name##_##13] = REG_FIELD(_offset, 29, 29),	\
 	[_name##_##14] = REG_FIELD(_offset, 30, 30),	\
 	[_name##_##15] = REG_FIELD(_offset, 31, 31)
+
+#define IPC_LOGPAGES 10
+#define TSENS_DBG(dev, msg, args...) do {		\
+		pr_debug("%s:" msg, __func__, args);	\
+		if ((dev) && (dev)->ipc_log) {		\
+			ipc_log_string((dev)->ipc_log,	\
+			"%s: " msg " [%s]\n",		\
+			__func__, args, current->comm);	\
+		}					\
+	} while (0)
+
+#define TSENS_DBG_1(priv, msg, args...) do {		\
+		dev_dbg((priv)->dev, "%s:" msg, __func__, args);	\
+		if ((priv) && (priv)->ipc_log1) {		\
+			ipc_log_string((priv)->ipc_log1,	\
+			"%s: " msg " [%s]\n",		\
+			__func__, args, current->comm);	\
+		}					\
+	} while (0)
+
+#define TSENS_DBG_2(priv, msg, args...) do {		\
+		dev_dbg((priv)->dev, "%s:" msg, __func__, args);	\
+		if ((priv) && (priv)->ipc_log2) {		\
+			ipc_log_string((priv)->ipc_log2,	\
+			"%s: " msg " [%s]\n",		\
+			__func__, args, current->comm);	\
+		}					\
+	} while (0)
 
 /*
  * reg_field IDs to use as an index into an array
@@ -553,6 +584,9 @@ struct tsens_context {
  * @ops: pointer to list of callbacks supported by this device
  * @debug_root: pointer to debugfs dentry for all tsens
  * @debug: pointer to debugfs dentry for tsens controller
+ * @ipc_log: pointer for first ipc log context id
+ * @ipc_log1: pointer for second ipc log context id
+ * @ipc_log2: pointer for third ipc log context id
  * @sensor: list of sensors attached to this device
  */
 struct tsens_priv {
@@ -573,6 +607,12 @@ struct tsens_priv {
 
 	struct dentry			*debug_root;
 	struct dentry			*debug;
+	void				*ipc_log;
+	void				*ipc_log1;
+	void				*ipc_log2;
+
+	/* add for save tsens data into minidump */
+	struct minidump_data		*tsens_md;
 
 	struct tsens_sensor		sensor[];
 };
@@ -590,7 +630,7 @@ extern struct tsens_plat_data data_8960;
 extern struct tsens_plat_data data_8916, data_8939, data_8974, data_9607;
 
 /* TSENS v1 targets */
-extern struct tsens_plat_data data_tsens_v1, data_8976, data_8956;
+extern struct tsens_plat_data data_tsens_v1, data_8976;
 
 /* TSENS v2 targets */
 extern struct tsens_plat_data data_8996, data_tsens_v2;
