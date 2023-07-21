@@ -1,8 +1,11 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
  * Copyright (c) 2016-2021, The Linux Foundation. All rights reserved.
- * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
  */
+
+#define pr_fmt(fmt) "%s:[%s][%d]: " fmt, KBUILD_MODNAME, __func__, __LINE__
+
 #include <linux/debugfs.h>
 #include <linux/errno.h>
 #include <linux/delay.h>
@@ -17,17 +20,22 @@
 #include <linux/uaccess.h>
 #include <linux/of.h>
 #include <linux/dma-buf.h>
-#include <linux/ion_kernel.h>
-
-#include <soc/qcom/scm.h>
+#include <linux/qcom_scm.h>
 #include <soc/qcom/qseecomi.h>
-#include <soc/qcom/qtee_shmbridge.h>
+#include <linux/qtee_shmbridge.h>
+#include <linux/proc_fs.h>
+#if IS_ENABLED(CONFIG_MSM_TMECOM_QMP)
+#include <linux/tmelog.h>
+#endif
 
 /* QSEE_LOG_BUF_SIZE = 32K */
 #define QSEE_LOG_BUF_SIZE 0x8000
 
 /* enlarged qsee log buf size is 128K by default */
 #define QSEE_LOG_BUF_SIZE_V2 0x20000
+
+/* Tme log buffer size 20K */
+#define TME_LOG_BUF_SIZE 0x5000
 
 /* TZ Diagnostic Area legacy version number */
 #define TZBSP_DIAG_MAJOR_VERSION_LEGACY	2
@@ -38,10 +46,9 @@
 #define TZBSP_FVER_MINOR_SHIFT          12
 #define TZBSP_DIAG_MAJOR_VERSION_V9     9
 #define TZBSP_DIAG_MINOR_VERSION_V2     2
-#define TZBSP_DIAG_MINOR_VERSION_V21     3
+#define TZBSP_DIAG_MINOR_VERSION_V21    3
+#define TZBSP_DIAG_MINOR_VERSION_V22    4
 
-/* TZ Version Id */
-#define QCOM_SCM_FEAT_LOG_ID            0x0a
 /* TZ Diag Feature Version Id */
 #define QCOM_SCM_FEAT_DIAG_ID           0x06
 
@@ -78,15 +85,13 @@
 #define TZBSP_NONCE_LEN 12
 #define TZBSP_TAG_LEN 16
 
-/* smc calls to query encrypted log feature and request encrpted log buffer*/
-#define TZ_OS_QUERY_ENCR_LOG_FEATURE_ID 0x3200010B
-#define TZ_OS_QUERY_ENCR_LOG_FEATURE_ID_PARAM_ID 0
-
-#define TZ_OS_REQUEST_ENCR_LOG_BUFFER_ID 0x3200010C
-#define TZ_OS_REQUEST_ENCR_LOG_BUFFER_ID_PARAM_ID 0x00000023
-
 #define ENCRYPTED_TZ_LOG_ID 0
 #define ENCRYPTED_QSEE_LOG_ID 1
+
+/*
+ * Directory for TZ DBG logs
+ */
+#define TZDBG_DIR_NAME "tzdbg"
 
 /*
  * VMID Table
@@ -195,13 +200,13 @@ struct tzdbg_log_pos_v2_t {
 struct tzdbg_log_t {
 	struct tzdbg_log_pos_t	log_pos;
 	/* open ended array to the end of the 4K IMEM buffer */
-	uint8_t	log_buf[];
+	uint8_t					log_buf[];
 };
 
 struct tzdbg_log_v2_t {
 	struct tzdbg_log_pos_v2_t	log_pos;
 	/* open ended array to the end of the 4K IMEM buffer */
-	uint8_t	log_buf[];
+	uint8_t					log_buf[];
 };
 
 struct tzbsp_encr_info_for_log_chunk_t {
@@ -286,18 +291,15 @@ struct tzdbg_t {
 			/*
 			 * Boot Info
 			 */
-			struct tzdbg_boot_info_t boot_info[TZBSP_MAX_CPU_COUNT];
+			struct tzdbg_boot_info_t  boot_info[TZBSP_MAX_CPU_COUNT];
 			/*
 			 * Reset Info
 			 */
-			struct tzdbg_reset_info_t
-				reset_info[TZBSP_MAX_CPU_COUNT];
-
+			struct tzdbg_reset_info_t reset_info[TZBSP_MAX_CPU_COUNT];
 			uint32_t num_interrupts;
 			struct tzdbg_int_t  int_info[TZBSP_DIAG_INT_NUM];
 			/* Wake up info */
-			struct tzbsp_diag_wakeup_info_t
-				wakeup_info[TZBSP_MAX_CPU_COUNT];
+			struct tzbsp_diag_wakeup_info_t  wakeup_info[TZBSP_MAX_CPU_COUNT];
 
 			uint8_t key[TZBSP_AES_256_ENCRYPTED_KEY_SIZE];
 
@@ -315,25 +317,20 @@ struct tzdbg_t {
 			/*
 			 * VMID to EE Mapping
 			 */
-			struct tzdbg_vmid_t
-				vmid_info_v2[TZBSP_DIAG_NUM_OF_VMID];
+			struct tzdbg_vmid_t vmid_info_v2[TZBSP_DIAG_NUM_OF_VMID];
 			/*
 			 * Boot Info
 			 */
-			struct tzdbg_boot_info_t
-				boot_info_v2[TZBSP_MAX_CPU_COUNT];
+			struct tzdbg_boot_info_t  boot_info_v2[TZBSP_MAX_CPU_COUNT];
 			/*
 			 * Reset Info
 			 */
-			struct tzdbg_reset_info_t
-				reset_info_v2[TZBSP_MAX_CPU_COUNT];
-
+			struct tzdbg_reset_info_t reset_info_v2[TZBSP_MAX_CPU_COUNT];
 			uint32_t num_interrupts_v2;
-			struct tzdbg_int_t int_info_v2[TZBSP_DIAG_INT_NUM];
+			struct tzdbg_int_t  int_info_v2[TZBSP_DIAG_INT_NUM];
 
 			/* Wake up info */
-			struct tzbsp_diag_wakeup_info_t
-				wakeup_info_v2[TZBSP_MAX_CPU_COUNT];
+			struct tzbsp_diag_wakeup_info_t  wakeup_info_v2[TZBSP_MAX_CPU_COUNT];
 
 			struct tzbsp_encr_info_t encr_info_for_log;
 		};
@@ -350,6 +347,14 @@ struct hypdbg_log_pos_t {
 	uint16_t offset;
 };
 
+struct rmdbg_log_hdr_t {
+	uint32_t write_idx;
+	uint32_t size;
+};
+struct rmdbg_log_pos_t {
+	uint32_t read_idx;
+	uint32_t size;
+};
 struct hypdbg_boot_info_t {
 	uint32_t warm_entry_cnt;
 	uint32_t warm_exit_cnt;
@@ -379,6 +384,11 @@ struct hypdbg_t {
 	uint8_t log_buf_p[];
 };
 
+struct tme_log_pos {
+	uint32_t offset;
+	size_t size;
+};
+
 /*
  * Enumeration order for VMID's
  */
@@ -392,6 +402,8 @@ enum tzdbg_stats_type {
 	TZDBG_QSEE_LOG,
 	TZDBG_HYP_GENERAL,
 	TZDBG_HYP_LOG,
+	TZDBG_RM_LOG,
+	TZDBG_TME_LOG,
 	TZDBG_STATS_MAX
 };
 
@@ -405,16 +417,25 @@ struct tzdbg_stat {
 struct tzdbg {
 	void __iomem *virt_iobase;
 	void __iomem *hyp_virt_iobase;
+	void __iomem *rmlog_virt_iobase;
+	void __iomem *tmelog_virt_iobase;
 	struct tzdbg_t *diag_buf;
 	struct hypdbg_t *hyp_diag_buf;
+	uint8_t *rm_diag_buf;
+	uint8_t *tme_buf;
 	char *disp_buf;
 	int debug_tz[TZDBG_STATS_MAX];
 	struct tzdbg_stat stat[TZDBG_STATS_MAX];
 	uint32_t hyp_debug_rw_buf_size;
+	uint32_t rmlog_rw_buf_size;
 	bool is_hyplog_enabled;
 	uint32_t tz_version;
 	bool is_encrypted_log_enabled;
 	bool is_enlarged_buf;
+	bool is_full_encrypted_tz_logs_supported;
+	bool is_full_encrypted_tz_logs_enabled;
+	int tz_diag_minor_version;
+	int tz_diag_major_version;
 };
 
 struct tzbsp_encr_log_t {
@@ -453,6 +474,8 @@ static struct tzdbg tzdbg = {
 	.stat[TZDBG_QSEE_LOG].name = "qsee_log",
 	.stat[TZDBG_HYP_GENERAL].name = "hyp_general",
 	.stat[TZDBG_HYP_LOG].name = "hyp_log",
+	.stat[TZDBG_RM_LOG].name = "rm_log",
+	.stat[TZDBG_TME_LOG].name = "tme_log",
 };
 
 static struct tzdbg_log_t *g_qsee_log;
@@ -462,13 +485,12 @@ static uint32_t debug_rw_buf_size;
 static uint32_t display_buf_size;
 static uint32_t qseelog_buf_size;
 static phys_addr_t disp_buf_paddr;
+static uint32_t tmecrashdump_address_offset;
 
 static uint64_t qseelog_shmbridge_handle;
 static struct encrypted_log_info enc_qseelog_info;
 static struct encrypted_log_info enc_tzlog_info;
 
-static int tzdbg_request_encrypted_log(dma_addr_t buf_paddr,
-				       size_t len, uint32_t log_id);
 /*
  * Debugfs data structure and functions
  */
@@ -726,9 +748,9 @@ static int _disp_log_stats(struct tzdbg_log_t *log,
 	wrap_end = log->log_pos.wrap;
 
 	/* Calculate difference in # of buffer wrap-arounds */
-	if (wrap_end >= wrap_start) {
+	if (wrap_end >= wrap_start)
 		wrap_cnt = wrap_end - wrap_start;
-	} else {
+	else {
 		/* wrap counter has wrapped around, invalidate start position */
 		wrap_cnt = 2;
 	}
@@ -756,10 +778,12 @@ static int _disp_log_stats(struct tzdbg_log_t *log,
 		if (t != 0) {
 			/* Some event woke us up, so let's quit */
 			return 0;
-		}
+}
+
 		if (buf_idx == TZDBG_LOG)
 			memcpy_fromio((void *)tzdbg.diag_buf, tzdbg.virt_iobase,
-				      debug_rw_buf_size);
+						debug_rw_buf_size);
+
 	}
 
 	max_len = (count > debug_rw_buf_size) ? debug_rw_buf_size : count;
@@ -785,9 +809,8 @@ static int _disp_log_stats(struct tzdbg_log_t *log,
 }
 
 static int _disp_log_stats_v2(struct tzdbg_log_v2_t *log,
-			      struct tzdbg_log_pos_v2_t *log_start,
-			      uint32_t log_len, size_t count,
-			      uint32_t buf_idx)
+			struct tzdbg_log_pos_v2_t *log_start, uint32_t log_len,
+			size_t count, uint32_t buf_idx)
 {
 	uint32_t wrap_start;
 	uint32_t wrap_end;
@@ -800,12 +823,12 @@ static int _disp_log_stats_v2(struct tzdbg_log_v2_t *log,
 	wrap_end = log->log_pos.wrap;
 
 	/* Calculate difference in # of buffer wrap-arounds */
-	if (wrap_end >= wrap_start) {
+	if (wrap_end >= wrap_start)
 		wrap_cnt = wrap_end - wrap_start;
-	} else {
+	else {
 		/* wrap counter has wrapped around, invalidate start position */
 		wrap_cnt = 2;
-	}
+}
 
 	if (wrap_cnt > 1) {
 		/* end position has wrapped around more than once, */
@@ -878,9 +901,9 @@ static int __disp_hyp_log_stats(uint8_t *log,
 	wrap_end = hyp->log_pos.wrap;
 
 	/* Calculate difference in # of buffer wrap-arounds */
-	if (wrap_end >= wrap_start) {
+	if (wrap_end >= wrap_start)
 		wrap_cnt = wrap_end - wrap_start;
-	} else {
+	else {
 		/* wrap counter has wrapped around, invalidate start position */
 		wrap_cnt = 2;
 	}
@@ -932,11 +955,27 @@ static int __disp_hyp_log_stats(uint8_t *log,
 	tzdbg.stat[buf_idx].data = tzdbg.disp_buf;
 	return len;
 }
+static int __disp_rm_log_stats(uint8_t *log_ptr, uint32_t max_len)
+{
+	uint32_t i = 0;
+	/*
+	 *  Transfer data from rm dialog buff to display buffer in user space
+	 */
+	while ((i < max_len) && (i < display_buf_size)) {
+		tzdbg.disp_buf[i] = log_ptr[i];
+		i++;
+	}
+	if (i != max_len)
+		pr_err("Dropping RM log message, max_len:%d display_buf_size:%d\n",
+			i, display_buf_size);
+	tzdbg.stat[TZDBG_RM_LOG].data = tzdbg.disp_buf;
+	return i;
+}
 
 static int print_text(char *intro_message,
-		      unsigned char *text_addr,
-		      unsigned int size,
-		      char *buf, uint32_t buf_len)
+			unsigned char *text_addr,
+			unsigned int size,
+			char *buf, uint32_t buf_len)
 {
 	unsigned int   i;
 	int len = 0;
@@ -950,7 +989,7 @@ static int print_text(char *intro_message,
 			return buf_len;
 		}
 		len += scnprintf(buf + len, buf_len - len, "%02hhx ",
-				 text_addr[i]);
+					text_addr[i]);
 		if ((i & 0x1f) == 0x1f)
 			len += scnprintf(buf + len, buf_len - len, "%c", '\n');
 	}
@@ -959,14 +998,18 @@ static int print_text(char *intro_message,
 }
 
 static int _disp_encrpted_log_stats(struct encrypted_log_info *enc_log_info,
-				    enum tzdbg_stats_type type, uint32_t log_id)
+				enum tzdbg_stats_type type, uint32_t log_id)
 {
 	int ret = 0, len = 0;
 	struct tzbsp_encr_log_t *encr_log_head;
 	uint32_t size = 0;
 
-	ret = tzdbg_request_encrypted_log(enc_log_info->paddr,
-					  enc_log_info->size, log_id);
+	if ((!tzdbg.is_full_encrypted_tz_logs_supported) &&
+		(tzdbg.is_full_encrypted_tz_logs_enabled))
+		pr_info("TZ not supporting full encrypted log functionality\n");
+	ret = qcom_scm_request_encrypted_log(enc_log_info->paddr,
+		enc_log_info->size, log_id, tzdbg.is_full_encrypted_tz_logs_supported,
+		tzdbg.is_full_encrypted_tz_logs_enabled);
 	if (ret)
 		return 0;
 	encr_log_head = (struct tzbsp_encr_log_t *)(enc_log_info->vaddr);
@@ -978,7 +1021,7 @@ static int _disp_encrpted_log_stats(struct encrypted_log_info *enc_log_info,
 			(display_buf_size - 1) - len,
 			"\n-------- New Encrypted %s --------\n",
 			((log_id == ENCRYPTED_QSEE_LOG_ID) ?
-			"QSEE Log" : "TZ Dialog"));
+				"QSEE Log" : "TZ Dialog"));
 
 	len += scnprintf(tzdbg.disp_buf + len,
 			(display_buf_size - 1) - len,
@@ -992,23 +1035,23 @@ static int _disp_encrpted_log_stats(struct encrypted_log_info *enc_log_info,
 			encr_log_head->wrap_count);
 
 	len += print_text("\nKey : ", encr_log_head->key,
-			  TZBSP_AES_256_ENCRYPTED_KEY_SIZE,
-			  tzdbg.disp_buf + len, display_buf_size);
+			TZBSP_AES_256_ENCRYPTED_KEY_SIZE,
+			tzdbg.disp_buf + len, display_buf_size);
 	len += print_text("\nNonce : ", encr_log_head->nonce,
-			  TZBSP_NONCE_LEN,
-			  tzdbg.disp_buf + len, display_buf_size - len);
+			TZBSP_NONCE_LEN,
+			tzdbg.disp_buf + len, display_buf_size - len);
 	len += print_text("\nTag : ", encr_log_head->tag,
-			  TZBSP_TAG_LEN,
-			  tzdbg.disp_buf + len, display_buf_size - len);
+			TZBSP_TAG_LEN,
+			tzdbg.disp_buf + len, display_buf_size - len);
 
 	if (len > display_buf_size - size)
 		pr_warn("Cannot fit all info into the buffer\n");
 
 	pr_debug("encrypted log size %d, disply buffer size %d, used len %d\n",
-		 size, display_buf_size, len);
+			size, display_buf_size, len);
 
 	len += print_text("\nLog : ", encr_log_head->log_buf, size,
-			  tzdbg.disp_buf + len, display_buf_size - len);
+				tzdbg.disp_buf + len, display_buf_size - len);
 	memset(enc_log_info->vaddr, 0, enc_log_info->size);
 	tzdbg.stat[type].data = tzdbg.disp_buf;
 	return len;
@@ -1022,12 +1065,12 @@ static int _disp_tz_log_stats(size_t count)
 	struct tzdbg_log_t *log_ptr;
 
 	log_ptr = (struct tzdbg_log_t *)((unsigned char *)tzdbg.diag_buf +
-		   tzdbg.diag_buf->ring_off -
-		   offsetof(struct tzdbg_log_t, log_buf));
+			tzdbg.diag_buf->ring_off -
+			offsetof(struct tzdbg_log_t, log_buf));
 
 	log_v2_ptr = (struct tzdbg_log_v2_t *)((unsigned char *)tzdbg.diag_buf +
-		      tzdbg.diag_buf->ring_off -
-		      offsetof(struct tzdbg_log_v2_t, log_buf));
+			tzdbg.diag_buf->ring_off -
+			offsetof(struct tzdbg_log_v2_t, log_buf));
 
 	if (!tzdbg.is_enlarged_buf)
 		return _disp_log_stats(log_ptr, &log_start,
@@ -1049,6 +1092,55 @@ static int _disp_hyp_log_stats(size_t count)
 
 	return __disp_hyp_log_stats(log_ptr, &log_start,
 			log_len, count, TZDBG_HYP_LOG);
+}
+
+static int _disp_rm_log_stats(size_t count)
+{
+	static struct rmdbg_log_pos_t log_start = { 0 };
+	struct rmdbg_log_hdr_t *p_log_hdr = NULL;
+	uint8_t *log_ptr = NULL;
+	uint32_t log_len = 0;
+	static bool wrap_around = { false };
+
+	/* Return 0 to close the display file,if there is nothing else to do */
+	if ((log_start.size == 0x0) && wrap_around) {
+		wrap_around = false;
+		return 0;
+	}
+	/* Copy RM log data to tzdbg diag buffer for the first time */
+	/* Initialize the tracking data structure */
+	if (tzdbg.rmlog_rw_buf_size != 0) {
+		if (!wrap_around) {
+			memcpy_fromio((void *)tzdbg.rm_diag_buf,
+					tzdbg.rmlog_virt_iobase,
+					tzdbg.rmlog_rw_buf_size);
+			/* get RM header info first */
+			p_log_hdr = (struct rmdbg_log_hdr_t *)tzdbg.rm_diag_buf;
+			/* Update RM log buffer index tracker and its size */
+			log_start.read_idx = 0x0;
+			log_start.size = p_log_hdr->size;
+		}
+		/* Update RM log buffer starting ptr */
+		log_ptr =
+			(uint8_t *) ((unsigned char *)tzdbg.rm_diag_buf +
+				 sizeof(struct rmdbg_log_hdr_t));
+	} else {
+	/* Return 0 to close the display file,if there is nothing else to do */
+		pr_err("There is no RM log to read, size is %d!\n",
+			tzdbg.rmlog_rw_buf_size);
+		return 0;
+	}
+	log_len = log_start.size;
+	log_ptr += log_start.read_idx;
+	/* Check if we exceed the max length provided by user space */
+	log_len = (count > log_len) ? log_len : count;
+	/* Update tracking data structure */
+	log_start.size -= log_len;
+	log_start.read_idx += log_len;
+
+	if (log_start.size)
+		wrap_around =  true;
+	return __disp_rm_log_stats(log_ptr, log_len);
 }
 
 static int _disp_qsee_log_stats(size_t count)
@@ -1102,48 +1194,80 @@ static int _disp_hyp_general_stats(size_t count)
 	return len;
 }
 
-static int tzdbg_request_encrypted_log(dma_addr_t buf_paddr,
-				       size_t len, uint32_t log_id)
+#if IS_ENABLED(CONFIG_MSM_TMECOM_QMP)
+static int _disp_tme_log_stats(size_t count)
 {
-	uint32_t smc_id = 0;
-	struct scm_desc desc = {0};
+	static struct tme_log_pos log_start = { 0 };
+	static bool wrap_around = { false };
+	uint32_t buf_size;
+	uint8_t *log_ptr = NULL;
+	uint32_t log_len = 0;
 	int ret = 0;
 
-	smc_id = TZ_OS_REQUEST_ENCR_LOG_BUFFER_ID;
-	desc.args[0] = buf_paddr;
-	desc.args[1] = len;
-	desc.args[2] = log_id;
-	desc.arginfo = TZ_OS_REQUEST_ENCR_LOG_BUFFER_ID_PARAM_ID;
-	pr_debug("%s: buf_paddr %lx, len %d, log_id %d\n",
-		 __func__, (uint64_t)buf_paddr, len, log_id);
-	ret = scm_call2(smc_id, &desc);
-	if (ret || desc.ret[0] != QSEOS_RESULT_SUCCESS) {
-		pr_err("fail to req encrypted %d log, ret %d, rep.rst =%lld\n",
-		       log_id, ret, desc.ret[0]);
-		return -EINVAL;
+	/* Return 0 to close file in case some error in initialising step. */
+	if (!tzdbg.tmelog_virt_iobase || !tmecrashdump_address_offset)
+		return 0;
+
+	/* Return 0 to close the display file */
+	if ((log_start.size == 0x0) && wrap_around) {
+		wrap_around = false;
+		return 0;
 	}
-	pr_debug("succeed to req encrypted %d log, ret %d, rep.rst =%lld\n",
-		 log_id, ret, desc.ret[0]);
+
+	/* Copy TME log data to tzdbg diag buffer for the first time */
+	if (!wrap_around) {
+		if (tmelog_process_request(tmecrashdump_address_offset,
+								   TME_LOG_BUF_SIZE, &buf_size)) {
+			pr_err("Read tme log failed, ret=%d, buf_size: %#x\n", ret, buf_size);
+			return 0;
+		}
+		log_start.offset = 0x0;
+		log_start.size = buf_size;
+	}
+
+	log_ptr = tzdbg.tmelog_virt_iobase;
+	log_len = log_start.size;
+	log_ptr += log_start.offset;
+
+	/* Check if we exceed the max length provided by user space */
+	log_len = min(min((uint32_t)count, log_len), display_buf_size);
+
+	log_start.size -= log_len;
+	log_start.offset += log_len;
+	pr_debug("log_len: %d, log_start.offset: %#x, log_start.size: %#x\n",
+			log_len, log_start.offset, log_start.size);
+
+	if (log_start.size)
+		wrap_around =  true;
+
+	/* Copy TME log data to display buffer */
+	memcpy_fromio(tzdbg.disp_buf, log_ptr, log_len);
+
+	tzdbg.stat[TZDBG_TME_LOG].data = tzdbg.disp_buf;
+	return log_len;
+}
+#else
+static int _disp_tme_log_stats(size_t count)
+{
 	return 0;
 }
+#endif
 
-static ssize_t tzdbgfs_read_unencrypted(struct file *file, char __user *buf,
+static ssize_t tzdbg_fs_read_unencrypted(int tz_id, char __user *buf,
 	size_t count, loff_t *offp)
 {
 	int len = 0;
-	int tz_id = *(int *)(file->private_data);
 
 	if (tz_id == TZDBG_BOOT || tz_id == TZDBG_RESET ||
 		tz_id == TZDBG_INTERRUPT || tz_id == TZDBG_GENERAL ||
-		tz_id == TZDBG_VMID || tz_id == TZDBG_LOG ||
-		tz_id == TZDBG_QSEE_LOG)
+		tz_id == TZDBG_VMID || tz_id == TZDBG_LOG)
 		memcpy_fromio((void *)tzdbg.diag_buf, tzdbg.virt_iobase,
 						debug_rw_buf_size);
 
 	if (tz_id == TZDBG_HYP_GENERAL || tz_id == TZDBG_HYP_LOG)
 		memcpy_fromio((void *)tzdbg.hyp_diag_buf,
-			      tzdbg.hyp_virt_iobase,
-			      tzdbg.hyp_debug_rw_buf_size);
+				tzdbg.hyp_virt_iobase,
+				tzdbg.hyp_debug_rw_buf_size);
 
 	switch (tz_id) {
 	case TZDBG_BOOT:
@@ -1181,6 +1305,14 @@ static ssize_t tzdbgfs_read_unencrypted(struct file *file, char __user *buf,
 		len = _disp_hyp_log_stats(count);
 		*offp = 0;
 		break;
+	case TZDBG_RM_LOG:
+		len = _disp_rm_log_stats(count);
+		*offp = 0;
+		break;
+	case TZDBG_TME_LOG:
+		len = _disp_tme_log_stats(count);
+		*offp = 0;
+		break;
 	default:
 		break;
 	}
@@ -1192,11 +1324,10 @@ static ssize_t tzdbgfs_read_unencrypted(struct file *file, char __user *buf,
 				tzdbg.stat[tz_id].data, len);
 }
 
-static ssize_t tzdbgfs_read_encrypted(struct file *file, char __user *buf,
-				      size_t count, loff_t *offp)
+static ssize_t tzdbg_fs_read_encrypted(int tz_id, char __user *buf,
+	size_t count, loff_t *offp)
 {
 	int len = 0, ret = 0;
-	int tz_id = *(int *)(file->private_data);
 	struct tzdbg_stat *stat = &(tzdbg.stat[tz_id]);
 
 	pr_debug("%s: tz_id = %d\n", __func__, tz_id);
@@ -1209,12 +1340,12 @@ static ssize_t tzdbgfs_read_encrypted(struct file *file, char __user *buf,
 	if (!stat->display_len) {
 		if (tz_id == TZDBG_QSEE_LOG)
 			stat->display_len = _disp_encrpted_log_stats(
-						&enc_qseelog_info,
-						tz_id, ENCRYPTED_QSEE_LOG_ID);
+					&enc_qseelog_info,
+					tz_id, ENCRYPTED_QSEE_LOG_ID);
 		else
 			stat->display_len = _disp_encrpted_log_stats(
-						&enc_tzlog_info,
-						tz_id, ENCRYPTED_TZ_LOG_ID);
+					&enc_tzlog_info,
+					tz_id, ENCRYPTED_TZ_LOG_ID);
 		stat->display_offset = 0;
 	}
 	len = stat->display_len;
@@ -1223,42 +1354,78 @@ static ssize_t tzdbgfs_read_encrypted(struct file *file, char __user *buf,
 
 	*offp = 0;
 	ret = simple_read_from_buffer(buf, len, offp,
-				      tzdbg.stat[tz_id].data +
-					stat->display_offset, count);
+				tzdbg.stat[tz_id].data + stat->display_offset,
+				count);
 	stat->display_offset += ret;
 	stat->display_len -= ret;
 	pr_debug("ret = %d, offset = %d\n", ret, (int)(*offp));
 	pr_debug("display_len = %d, offset = %d\n",
-		 stat->display_len, stat->display_offset);
+			stat->display_len, stat->display_offset);
 	return ret;
 }
 
-static ssize_t tzdbgfs_read(struct file *file, char __user *buf,
-			    size_t count, loff_t *offp)
+static ssize_t tzdbg_fs_read(struct file *file, char __user *buf,
+	size_t count, loff_t *offp)
 {
+	struct seq_file *seq = file->private_data;
 	int tz_id = TZDBG_STATS_MAX;
 
-	if (file->private_data)
-		tz_id = *(int *)(file->private_data);
+	if (seq)
+		tz_id = *(int *)(seq->private);
 	else {
-		pr_err("%s: file data private null unable to proceed\n",
-			__func__);
+		pr_err("%s: Seq data null unable to proceed\n", __func__);
 		return 0;
 	}
 
 	if (!tzdbg.is_encrypted_log_enabled ||
-	   (tz_id == TZDBG_HYP_GENERAL || tz_id == TZDBG_HYP_LOG))
-		return tzdbgfs_read_unencrypted(file, buf, count, offp);
+	    (tz_id == TZDBG_HYP_GENERAL || tz_id == TZDBG_HYP_LOG)
+	    || tz_id == TZDBG_RM_LOG || tz_id == TZDBG_TME_LOG)
+		return tzdbg_fs_read_unencrypted(tz_id, buf, count, offp);
 	else
-		return tzdbgfs_read_encrypted(file, buf, count, offp);
+		return tzdbg_fs_read_encrypted(tz_id, buf, count, offp);
 }
 
-static const struct file_operations tzdbg_fops = {
-	.owner   = THIS_MODULE,
-	.read    = tzdbgfs_read,
-	.open    = simple_open,
+static int tzdbg_procfs_open(struct inode *inode, struct file *file)
+{
+	return single_open(file, NULL, PDE_DATA(inode));
+}
+
+static int tzdbg_procfs_release(struct inode *inode, struct file *file)
+{
+	return single_release(inode, file);
+}
+
+struct proc_ops tzdbg_fops = {
+	.proc_flags   = PROC_ENTRY_PERMANENT,
+	.proc_read    = tzdbg_fs_read,
+	.proc_open    = tzdbg_procfs_open,
+	.proc_release = tzdbg_procfs_release,
 };
 
+static int tzdbg_init_tme_log(struct platform_device *pdev, void __iomem *virt_iobase)
+{
+	/*
+	 * Tme logs are dumped in tme log ddr region but that region is not
+	 * accessible to hlos. Instead, collect logs at tme crashdump ddr
+	 * region with tmecom interface and then display logs reading from
+	 * crashdump region.
+	 */
+	if (of_property_read_u32((&pdev->dev)->of_node, "tmecrashdump-address-offset",
+				&tmecrashdump_address_offset)) {
+		pr_err("Tme Crashdump address offset need to be defined!\n");
+		return -EINVAL;
+	}
+
+	tzdbg.tmelog_virt_iobase =
+		devm_ioremap(&pdev->dev, tmecrashdump_address_offset, TME_LOG_BUF_SIZE);
+	if (!tzdbg.tmelog_virt_iobase) {
+		pr_err("ERROR: Could not ioremap: start=%#x, len=%u\n",
+				tmecrashdump_address_offset, TME_LOG_BUF_SIZE);
+		return -ENXIO;
+	}
+
+	return 0;
+}
 
 /*
  * Allocates log buffer from ION, registers the buffer at TZ
@@ -1266,7 +1433,6 @@ static const struct file_operations tzdbg_fops = {
 static int tzdbg_register_qsee_log_buf(struct platform_device *pdev)
 {
 	int ret = 0;
-	struct scm_desc desc = {0};
 	void *buf = NULL;
 	uint32_t ns_vmids[] = {VMID_HLOS};
 	uint32_t ns_vm_perms[] = {PERM_READ | PERM_WRITE};
@@ -1298,23 +1464,21 @@ static int tzdbg_register_qsee_log_buf(struct platform_device *pdev)
 			goto exit_free_mem;
 		}
 	}
+
 	g_qsee_log = (struct tzdbg_log_t *)buf;
 	g_qsee_log->log_pos.wrap = g_qsee_log->log_pos.offset = 0;
 
 	g_qsee_log_v2 = (struct tzdbg_log_v2_t *)buf;
 	g_qsee_log_v2->log_pos.wrap = g_qsee_log_v2->log_pos.offset = 0;
 
-	desc.args[0] = coh_pmem;
-	desc.args[1] = qseelog_buf_size;
-	desc.arginfo = 0x22;
-	ret = scm_call2(SCM_QSEEOS_FNID(1, 6), &desc);
-	if (ret || desc.ret[0] != QSEOS_RESULT_SUCCESS) {
+	ret = qcom_scm_register_qsee_log_buf(coh_pmem, qseelog_buf_size);
+	if (ret != QSEOS_RESULT_SUCCESS) {
 		pr_err(
-		"%s: scm_call to register log buf failed, ret = %d, resp result =%lld\n",
-		__func__, ret, desc.ret[0]);
-		ret = -EINVAL;
+		"%s: scm_call to register log buf failed, resp result =%lld\n",
+		__func__, ret);
 		goto exit_dereg_bridge;
 	}
+
 	return ret;
 
 exit_dereg_bridge:
@@ -1348,38 +1512,32 @@ static int tzdbg_allocate_encrypted_log_buf(struct platform_device *pdev)
 	enc_qseelog_info.size = qseelog_buf_size + PAGE_SIZE;
 
 	enc_qseelog_info.vaddr = dma_alloc_coherent(&pdev->dev,
-						    enc_qseelog_info.size,
-						    &enc_qseelog_info.paddr,
-						    GFP_KERNEL);
+					enc_qseelog_info.size,
+					&enc_qseelog_info.paddr, GFP_KERNEL);
 	if (enc_qseelog_info.vaddr == NULL)
 		return -ENOMEM;
 
 	ret = qtee_shmbridge_register(enc_qseelog_info.paddr,
-				      enc_qseelog_info.size, ns_vmids,
-				      ns_vm_perms, ns_vm_nums,
-				      PERM_READ | PERM_WRITE,
-				      &enc_qseelog_info.shmb_handle);
+			enc_qseelog_info.size, ns_vmids,
+			ns_vm_perms, ns_vm_nums,
+			PERM_READ | PERM_WRITE, &enc_qseelog_info.shmb_handle);
 	if (ret) {
 		pr_err("failed to create encr_qsee_log bridge, ret %d\n", ret);
 		goto exit_free_qseelog;
 	}
 	pr_debug("Alloc memory for encr_qsee_log, size = %zu\n",
-		 enc_qseelog_info.size);
+			enc_qseelog_info.size);
 
 	enc_tzlog_info.size = debug_rw_buf_size;
 	enc_tzlog_info.vaddr = dma_alloc_coherent(&pdev->dev,
-						  enc_tzlog_info.size,
-						  &enc_tzlog_info.paddr,
-						  GFP_KERNEL);
-
+					enc_tzlog_info.size,
+					&enc_tzlog_info.paddr, GFP_KERNEL);
 	if (enc_tzlog_info.vaddr == NULL)
 		goto exit_unreg_qseelog;
 
 	ret = qtee_shmbridge_register(enc_tzlog_info.paddr,
-				      enc_tzlog_info.size, ns_vmids,
-				      ns_vm_perms, ns_vm_nums,
-				      PERM_READ | PERM_WRITE,
-				      &enc_tzlog_info.shmb_handle);
+			enc_tzlog_info.size, ns_vmids, ns_vm_perms, ns_vm_nums,
+			PERM_READ | PERM_WRITE, &enc_tzlog_info.shmb_handle);
 	if (ret) {
 		pr_err("failed to create encr_tz_log bridge, ret = %d\n", ret);
 		goto exit_free_tzlog;
@@ -1391,12 +1549,12 @@ static int tzdbg_allocate_encrypted_log_buf(struct platform_device *pdev)
 
 exit_free_tzlog:
 	dma_free_coherent(&pdev->dev, enc_tzlog_info.size,
-			  enc_tzlog_info.vaddr, enc_tzlog_info.paddr);
+			enc_tzlog_info.vaddr, enc_tzlog_info.paddr);
 exit_unreg_qseelog:
 	qtee_shmbridge_deregister(enc_qseelog_info.shmb_handle);
 exit_free_qseelog:
 	dma_free_coherent(&pdev->dev, enc_qseelog_info.size,
-			  enc_qseelog_info.vaddr, enc_qseelog_info.paddr);
+			enc_qseelog_info.vaddr, enc_qseelog_info.paddr);
 	return -ENOMEM;
 }
 
@@ -1404,50 +1562,51 @@ static void tzdbg_free_encrypted_log_buf(struct platform_device *pdev)
 {
 	qtee_shmbridge_deregister(enc_tzlog_info.shmb_handle);
 	dma_free_coherent(&pdev->dev, enc_tzlog_info.size,
-			  enc_tzlog_info.vaddr, enc_tzlog_info.paddr);
+			enc_tzlog_info.vaddr, enc_tzlog_info.paddr);
 	qtee_shmbridge_deregister(enc_qseelog_info.shmb_handle);
 	dma_free_coherent(&pdev->dev, enc_qseelog_info.size,
 			enc_qseelog_info.vaddr, enc_qseelog_info.paddr);
 }
 
-static int  tzdbgfs_init(struct platform_device *pdev)
+static int  tzdbg_fs_init(struct platform_device *pdev)
 {
 	int rc = 0;
 	int i;
-	struct dentry           *dent_dir;
-	struct dentry           *dent;
+	struct proc_dir_entry *dent_dir;
+	struct proc_dir_entry *dent;
 
-	dent_dir = debugfs_create_dir("tzdbg", NULL);
+	dent_dir = proc_mkdir(TZDBG_DIR_NAME, NULL);
 	if (dent_dir == NULL) {
-		dev_err(&pdev->dev, "tzdbg debugfs_create_dir failed\n");
+		dev_err(&pdev->dev, "tzdbg proc_mkdir failed\n");
 		return -ENOMEM;
 	}
 
 	for (i = 0; i < TZDBG_STATS_MAX; i++) {
 		tzdbg.debug_tz[i] = i;
-		dent = debugfs_create_file_unsafe(tzdbg.stat[i].name,
+		dent = proc_create_data(tzdbg.stat[i].name,
 				0444, dent_dir,
-				&tzdbg.debug_tz[i], &tzdbg_fops);
+				&tzdbg_fops, &tzdbg.debug_tz[i]);
 		if (dent == NULL) {
-			dev_err(&pdev->dev, "TZ debugfs_create_file failed\n");
+			dev_err(&pdev->dev, "TZ proc_create_data failed\n");
 			rc = -ENOMEM;
 			goto err;
 		}
 	}
-
 	platform_set_drvdata(pdev, dent_dir);
 	return 0;
 err:
-	debugfs_remove_recursive(dent_dir);
+	remove_proc_entry(TZDBG_DIR_NAME, NULL);
 
 	return rc;
 }
 
-static void tzdbgfs_exit(struct platform_device *pdev)
+static void tzdbg_fs_exit(struct platform_device *pdev)
 {
-	struct dentry *dent_dir;
+	struct proc_dir_entry *dent_dir;
+
 	dent_dir = platform_get_drvdata(pdev);
-	debugfs_remove_recursive(dent_dir);
+	if (dent_dir)
+		remove_proc_entry(TZDBG_DIR_NAME, NULL);
 }
 
 static int __update_hypdbg_base(struct platform_device *pdev,
@@ -1474,7 +1633,7 @@ static int __update_hypdbg_base(struct platform_device *pdev,
 	tzdbg.hyp_debug_rw_buf_size = readl_relaxed(virt_iobase +
 					hyp_size_offset);
 
-	tzdbg.hyp_virt_iobase = devm_ioremap_nocache(&pdev->dev,
+	tzdbg.hyp_virt_iobase = devm_ioremap(&pdev->dev,
 					hypdiag_phy_iobase,
 					tzdbg.hyp_debug_rw_buf_size);
 	if (!tzdbg.hyp_virt_iobase) {
@@ -1493,65 +1652,108 @@ static int __update_hypdbg_base(struct platform_device *pdev,
 	return 0;
 }
 
+static int __update_rmlog_base(struct platform_device *pdev,
+			       void __iomem *virt_iobase)
+{
+	uint32_t rmlog_address;
+	uint32_t rmlog_size;
+	uint32_t *ptr = NULL;
+
+	/* if we don't get the node just ignore it */
+	if (of_property_read_u32((&pdev->dev)->of_node, "rmlog-address",
+							&rmlog_address)) {
+		dev_err(&pdev->dev, "RM log address is not defined\n");
+		tzdbg.rmlog_rw_buf_size = 0;
+		return 0;
+	}
+	/* if we don't get the node just ignore it */
+	if (of_property_read_u32((&pdev->dev)->of_node, "rmlog-size",
+							&rmlog_size)) {
+		dev_err(&pdev->dev, "RM log size is not defined\n");
+		tzdbg.rmlog_rw_buf_size = 0;
+		return 0;
+	}
+
+	tzdbg.rmlog_rw_buf_size = rmlog_size;
+
+	/* Check if there is RM log to read */
+	if (!tzdbg.rmlog_rw_buf_size) {
+		tzdbg.rmlog_virt_iobase = NULL;
+		tzdbg.rm_diag_buf = NULL;
+		dev_err(&pdev->dev, "RM log size is %d\n",
+			tzdbg.rmlog_rw_buf_size);
+		return 0;
+	}
+
+	tzdbg.rmlog_virt_iobase = devm_ioremap(&pdev->dev,
+					rmlog_address,
+					rmlog_size);
+	if (!tzdbg.rmlog_virt_iobase) {
+		dev_err(&pdev->dev, "ERROR could not ioremap: start=%pr, len=%u\n",
+			rmlog_address, tzdbg.rmlog_rw_buf_size);
+		return -ENXIO;
+	}
+
+	ptr = kzalloc(tzdbg.rmlog_rw_buf_size, GFP_KERNEL);
+	if (!ptr)
+		return -ENOMEM;
+
+	tzdbg.rm_diag_buf = (uint8_t *)ptr;
+	return 0;
+}
 static int tzdbg_get_tz_version(void)
 {
-	uint32_t smc_id = 0;
-	uint64_t version = 0;
-	struct scm_desc desc = {0};
+	u64 version;
 	int ret = 0;
 
-	smc_id = TZ_INFO_GET_FEATURE_VERSION_ID;
-	desc.arginfo = TZ_INFO_GET_FEATURE_VERSION_ID_PARAM_ID;
-	desc.args[0] = QCOM_SCM_FEAT_LOG_ID;
-	ret = scm_call2(smc_id, &desc);
+	ret = qcom_scm_get_tz_log_feat_id(&version);
 
 	if (ret) {
 		pr_err("%s: scm_call to get tz version failed\n",
 				__func__);
 		return ret;
 	}
-	tzdbg.tz_version = desc.ret[0];
+	tzdbg.tz_version = version;
 
-
-	desc.args[0] = QCOM_SCM_FEAT_DIAG_ID;
-	ret = scm_call2(smc_id, &desc);
+	ret = qcom_scm_get_tz_feat_id_version(QCOM_SCM_FEAT_DIAG_ID, &version);
 	if (ret) {
 		pr_err("%s: scm_call to get tz diag version failed, ret = %d\n",
 				__func__, ret);
 		return ret;
 	}
-
-	version = desc.ret[0];
-
 	pr_warn("tz diag version is %x\n", version);
-	if (
-	(((version >> TZBSP_FVER_MAJOR_SHIFT) & TZBSP_FVER_MAJOR_MINOR_MASK)
-			== TZBSP_DIAG_MAJOR_VERSION_V9) &&
-	((((version >> TZBSP_FVER_MINOR_SHIFT) & TZBSP_FVER_MAJOR_MINOR_MASK)
-			== TZBSP_DIAG_MINOR_VERSION_V2) ||
-	(((version >> TZBSP_FVER_MINOR_SHIFT) & TZBSP_FVER_MAJOR_MINOR_MASK)
-			== TZBSP_DIAG_MINOR_VERSION_V21)))
-		tzdbg.is_enlarged_buf = true;
-	else
+	tzdbg.tz_diag_major_version =
+		((version >> TZBSP_FVER_MAJOR_SHIFT) & TZBSP_FVER_MAJOR_MINOR_MASK);
+	tzdbg.tz_diag_minor_version =
+		((version >> TZBSP_FVER_MINOR_SHIFT) & TZBSP_FVER_MAJOR_MINOR_MASK);
+	if (tzdbg.tz_diag_major_version == TZBSP_DIAG_MAJOR_VERSION_V9) {
+		switch (tzdbg.tz_diag_minor_version) {
+		case TZBSP_DIAG_MINOR_VERSION_V2:
+		case TZBSP_DIAG_MINOR_VERSION_V21:
+		case TZBSP_DIAG_MINOR_VERSION_V22:
+			tzdbg.is_enlarged_buf = true;
+			break;
+		default:
+			tzdbg.is_enlarged_buf = false;
+		}
+	} else {
 		tzdbg.is_enlarged_buf = false;
+	}
 	return ret;
 }
 
-static void tzdbg_encrypted_log_init(void)
+static void tzdbg_query_encrypted_log(void)
 {
-	uint32_t smc_id = 0;
-	struct scm_desc desc = {0};
 	int ret = 0;
+	uint64_t enabled;
 
-	smc_id = TZ_OS_QUERY_ENCR_LOG_FEATURE_ID;
-	desc.arginfo = TZ_OS_QUERY_ENCR_LOG_FEATURE_ID_PARAM_ID;
-	ret = scm_call2(smc_id, &desc);
+	ret = qcom_scm_query_encrypted_log_feature(&enabled);
 	if (ret) {
 		pr_err("scm_call QUERY_ENCR_LOG_FEATURE failed ret %d\n", ret);
 		tzdbg.is_encrypted_log_enabled = false;
 	} else {
-		pr_info("encrypted qseelog enabled is %d\n", desc.ret[0]);
-		tzdbg.is_encrypted_log_enabled = desc.ret[0];
+		pr_warn("encrypted qseelog enabled is %d\n", enabled);
+		tzdbg.is_encrypted_log_enabled = enabled;
 	}
 }
 
@@ -1588,7 +1790,7 @@ static int tz_log_probe(struct platform_device *pdev)
 	/*
 	 * Map address that stores the physical location diagnostic data
 	 */
-	virt_iobase = devm_ioremap_nocache(&pdev->dev, resource->start,
+	virt_iobase = devm_ioremap(&pdev->dev, resource->start,
 				debug_rw_buf_size);
 	if (!virt_iobase) {
 		dev_err(&pdev->dev,
@@ -1609,6 +1811,13 @@ static int tz_log_probe(struct platform_device *pdev)
 					__func__, ret);
 				return -EINVAL;
 			}
+			ret = __update_rmlog_base(pdev, virt_iobase);
+			if (ret) {
+				dev_err(&pdev->dev,
+					"%s: fail to get rmlog_base ret %d\n",
+					__func__, ret);
+				return -EINVAL;
+			}
 		} else {
 			dev_info(&pdev->dev, "Hyp log service not support\n");
 		}
@@ -1616,18 +1825,17 @@ static int tz_log_probe(struct platform_device *pdev)
 		dev_dbg(&pdev->dev, "Device tree data is not found\n");
 	}
 
-	tzdbg_encrypted_log_init();
-
 	/*
 	 * Retrieve the address of diagnostic data
 	 */
 	tzdiag_phy_iobase = readl_relaxed(virt_iobase);
 
+	tzdbg_query_encrypted_log();
 	/*
 	 * Map the diagnostic information area if encryption is disabled
 	 */
 	if (!tzdbg.is_encrypted_log_enabled) {
-		tzdbg.virt_iobase = devm_ioremap_nocache(&pdev->dev,
+		tzdbg.virt_iobase = devm_ioremap(&pdev->dev,
 				tzdiag_phy_iobase, debug_rw_buf_size);
 
 		if (!tzdbg.virt_iobase) {
@@ -1637,12 +1845,25 @@ static int tz_log_probe(struct platform_device *pdev)
 				debug_rw_buf_size);
 			return -ENXIO;
 		}
+		/* allocate diag_buf */
+		ptr = kzalloc(debug_rw_buf_size, GFP_KERNEL);
+		if (ptr == NULL)
+			return -ENOMEM;
+		tzdbg.diag_buf = (struct tzdbg_t *)ptr;
+	} else {
+		if ((tzdbg.tz_diag_major_version == TZBSP_DIAG_MAJOR_VERSION_V9) &&
+			(tzdbg.tz_diag_minor_version >= TZBSP_DIAG_MINOR_VERSION_V22))
+			tzdbg.is_full_encrypted_tz_logs_supported = true;
+		if (pdev->dev.of_node) {
+			tzdbg.is_full_encrypted_tz_logs_enabled = of_property_read_bool(
+				(&pdev->dev)->of_node, "qcom,full-encrypted-tz-logs-enabled");
+		}
 	}
-	/* allocate diag_buf */
-	ptr = kzalloc(debug_rw_buf_size, GFP_KERNEL);
-	if (ptr == NULL)
-		return -ENOMEM;
-	tzdbg.diag_buf = (struct tzdbg_t *)ptr;
+
+	/* Init for tme log */
+	ret = tzdbg_init_tme_log(pdev, virt_iobase);
+	if (ret < 0)
+		pr_warn("Tme log initialization failed!\n");
 
 	/* register unencrypted qsee log buffer */
 	ret = tzdbg_register_qsee_log_buf(pdev);
@@ -1671,7 +1892,7 @@ static int tz_log_probe(struct platform_device *pdev)
 		goto exit_free_encr_log_buf;
 	}
 
-	if (tzdbgfs_init(pdev))
+	if (tzdbg_fs_init(pdev))
 		goto exit_free_disp_buf;
 	return 0;
 
@@ -1683,15 +1904,16 @@ exit_free_encr_log_buf:
 exit_free_qsee_log_buf:
 	tzdbg_free_qsee_log_buf(pdev);
 exit_free_diag_buf:
-	kfree(tzdbg.diag_buf);
+	if (!tzdbg.is_encrypted_log_enabled)
+		kfree(tzdbg.diag_buf);
 	return -ENXIO;
 }
 
 static int tz_log_remove(struct platform_device *pdev)
 {
-	tzdbgfs_exit(pdev);
+	tzdbg_fs_exit(pdev);
 	dma_free_coherent(&pdev->dev, display_buf_size,
-			  (void *)tzdbg.disp_buf, disp_buf_paddr);
+			(void *)tzdbg.disp_buf, disp_buf_paddr);
 	tzdbg_free_encrypted_log_buf(pdev);
 	tzdbg_free_qsee_log_buf(pdev);
 	if (!tzdbg.is_encrypted_log_enabled)
@@ -1700,8 +1922,7 @@ static int tz_log_remove(struct platform_device *pdev)
 }
 
 static const struct of_device_id tzlog_match[] = {
-	{	.compatible = "qcom,tz-log",
-	},
+	{.compatible = "qcom,tz-log"},
 	{}
 };
 
@@ -1715,19 +1936,7 @@ static struct platform_driver tz_log_driver = {
 	},
 };
 
-static int __init tz_log_init(void)
-{
-	return platform_driver_register(&tz_log_driver);
-}
-
-static void __exit tz_log_exit(void)
-{
-	platform_driver_unregister(&tz_log_driver);
-}
-
-module_init(tz_log_init);
-module_exit(tz_log_exit);
+module_platform_driver(tz_log_driver);
 
 MODULE_LICENSE("GPL v2");
 MODULE_DESCRIPTION("TZ Log driver");
-MODULE_ALIAS("platform:tz_log");
