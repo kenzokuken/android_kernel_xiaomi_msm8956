@@ -22,8 +22,8 @@
 #include <asm/cacheflush.h>
 #include <linux/sizes.h>
 
-#include "msm_iommu_hw-8xxx.h"
-#include "msm_iommu.h"
+#include "msm-iommu-hw-8xxx.h"
+#include "msm-iommu.h"
 
 #define MRC(reg, processor, op1, crn, crm, op2)				\
 __asm__ __volatile__ (							\

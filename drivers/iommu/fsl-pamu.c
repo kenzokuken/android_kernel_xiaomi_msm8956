@@ -6,7 +6,7 @@
 
 #define pr_fmt(fmt)    "fsl-pamu: %s: " fmt, __func__
 
-#include "fsl_pamu.h"
+#include "fsl-pamu.h"
 
 #include <linux/fsl/guts.h>
 #include <linux/interrupt.h>

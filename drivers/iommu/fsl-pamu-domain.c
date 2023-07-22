@@ -7,7 +7,7 @@
 
 #define pr_fmt(fmt)    "fsl-pamu-domain: %s: " fmt, __func__
 
-#include "fsl_pamu_domain.h"
+#include "fsl-pamu-domain.h"
 
 #include <sysdev/fsl_pci.h>
 

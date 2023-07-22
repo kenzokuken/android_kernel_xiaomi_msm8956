@@ -15,7 +15,7 @@
 #include <asm/apic.h>
 #include <asm/hpet.h>
 
-#include "irq_remapping.h"
+#include "irq-remapping.h"
 
 int irq_remapping_enabled;
 int irq_remap_broken;

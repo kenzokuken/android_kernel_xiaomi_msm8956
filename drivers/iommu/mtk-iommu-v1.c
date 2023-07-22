@@ -31,7 +31,7 @@
 #include <linux/init.h>
 #include <dt-bindings/memory/mt2701-larb-port.h>
 #include <soc/mediatek/smi.h>
-#include "mtk_iommu.h"
+#include "mtk-iommu.h"
 
 #define REG_MMU_PT_BASE_ADDR			0x000
 
