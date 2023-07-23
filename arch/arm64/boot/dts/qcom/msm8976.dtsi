@@ -59,7 +59,7 @@
 		sdhc1 = &sdhc_1; /* SDC1 eMMC slot */
 		sdhc2 = &sdhc_2; /* SDC2 SD card slot */
 		sdhc3 = &sdhc_3; /* SDC3 SDIO card slot */
-		spi0 = &spi_0;
+		spi3 = &spi_3;
 	};
 
 	clocks {
@@ -1687,27 +1687,30 @@
                 cell-index = <0>;
 	};
 
-	spi_0: spi@0x78B5000 { /* BLSP1 QUP0 */
+	spi_3: spi@78b7000 { /* BLSP1 QUP3 */
 		compatible = "qcom,spi-qup-v2";
+		#address-cells = <1>;
+		#size-cells = <0>;
 		reg-names = "spi_physical", "spi_bam_physical";
-		reg = <0x78B5000 0x600>,
-		      <0x7884000 0x1f000>;
+		reg = <0x78b7000 0x600>,
+			<0x7884000 0x1f000>;
 		interrupt-names = "spi_irq", "spi_bam_irq";
-		interrupts = <0 95 0>, <0 238 0>;
+		interrupts = <0 97 0>, <0 238 0>;
 		spi-max-frequency = <19200000>;
 		pinctrl-names = "spi_default", "spi_sleep";
-		pinctrl-0 = <&spi0_default &spi0_cs0_active>;
-		pinctrl-1 = <&spi0_sleep &spi0_cs0_sleep>;
+		pinctrl-0 = <&spi3_default &spi3_cs0_active>;
+		pinctrl-1 = <&spi3_sleep &spi3_cs0_sleep>;
 		clocks = <&clock_gcc GCC_BLSP1_AHB_CLK>,
-			 <&clock_gcc GCC_BLSP1_QUP1_SPI_APPS_CLK>;
+			<&clock_gcc GCC_BLSP1_QUP3_SPI_APPS_CLK>;
 		clock-names = "iface_clk", "core_clk";
 		qcom,infinite-mode = <0>;
 		qcom,use-bam;
 		qcom,use-pinctrl;
 		qcom,ver-reg-exists;
-		qcom,bam-consumer-pipe-index = <4>;
-		qcom,bam-producer-pipe-index = <5>;
+		qcom,bam-consumer-pipe-index = <8>;
+		qcom,bam-producer-pipe-index = <9>;
 		qcom,master-id = <86>;
+		status = "disabled";
 	};
 
 	qcom,msm-ssc-sensors {
