@@ -156,13 +156,6 @@
 			qcom,connections = <&pcnoc_m_0>;
 			qcom,bus-dev = <&fab_pcnoc>;
 			qcom,mas-rpm-id = <ICBID_MASTER_USB_HS2>;
-			qcom,blacklist = <&slv_blsp_2 &slv_crypto_0_cfg &slv_sdcc_2
-				 &slv_message_ram &slv_venus_cfg &slv_camera_ss_cfg
-				 &slv_usb_hs2 &slv_pdm &slv_disp_ss_cfg
-				 &slv_sdcc_3 &slv_usb_hs &slv_snoc_cfg
-				 &slv_blsp_1 &slv_tlmm &slv_pmic_arb
-				 &slv_sdcc_1 &slv_tcsr &slv_gpu_cfg
-				 &slv_dcc_cfg &slv_prng>;
 		};
 
 		mas_blsp_1: mas-blsp-1 {
@@ -173,13 +166,6 @@
 			qcom,connections = <&pcnoc_m_1>;
 			qcom,bus-dev = <&fab_pcnoc>;
 			qcom,mas-rpm-id = <ICBID_MASTER_BLSP_1>;
-			qcom,blacklist = <&slv_blsp_2 &slv_crypto_0_cfg &slv_sdcc_2
-				 &slv_message_ram &slv_venus_cfg &slv_camera_ss_cfg
-				 &slv_usb_hs2 &slv_pdm &slv_disp_ss_cfg
-				 &slv_sdcc_3 &slv_usb_hs &slv_snoc_cfg
-				 &slv_blsp_1 &slv_tlmm &slv_pmic_arb
-				 &slv_sdcc_1 &slv_tcsr &slv_gpu_cfg
-				 &slv_dcc_cfg &slv_prng>;
 		};
 
 		mas_usb_hs1: mas-usb-hs1 {
@@ -190,13 +176,6 @@
 			qcom,connections = <&pcnoc_m_1>;
 			qcom,bus-dev = <&fab_pcnoc>;
 			qcom,mas-rpm-id = <ICBID_MASTER_USB_HS1>;
-			qcom,blacklist = <&slv_blsp_2 &slv_crypto_0_cfg &slv_sdcc_2
-				 &slv_message_ram &slv_venus_cfg &slv_camera_ss_cfg
-				 &slv_usb_hs2 &slv_pdm &slv_disp_ss_cfg
-				 &slv_sdcc_3 &slv_usb_hs &slv_snoc_cfg
-				 &slv_blsp_1 &slv_tlmm &slv_pmic_arb
-				 &slv_sdcc_1 &slv_tcsr &slv_gpu_cfg
-				 &slv_dcc_cfg &slv_prng>;
 		};
 
 		mas_blsp_2: mas-blsp-2 {
@@ -207,13 +186,6 @@
 			qcom,connections = <&pcnoc_m_1>;
 			qcom,bus-dev = <&fab_pcnoc>;
 			qcom,mas-rpm-id = <ICBID_MASTER_BLSP_2>;
-			qcom,blacklist = <&slv_blsp_2 &slv_crypto_0_cfg &slv_sdcc_2
-				 &slv_message_ram &slv_venus_cfg &slv_camera_ss_cfg
-				 &slv_usb_hs2 &slv_pdm &slv_disp_ss_cfg
-				 &slv_sdcc_3 &slv_usb_hs &slv_snoc_cfg
-				 &slv_blsp_1 &slv_tlmm &slv_pmic_arb
-				 &slv_sdcc_1 &slv_tcsr &slv_gpu_cfg
-				 &slv_dcc_cfg &slv_prng>;
 		};
 
 		mas_crypto: mas-crypto {
@@ -229,13 +201,6 @@
 			qcom,prio0 = <0>;
 			qcom,bus-dev = <&fab_pcnoc>;
 			qcom,mas-rpm-id = <ICBID_MASTER_CRYPTO>;
-			qcom,blacklist = <&slv_blsp_2 &slv_crypto_0_cfg &slv_sdcc_2
-				 &slv_message_ram &slv_venus_cfg &slv_camera_ss_cfg
-				 &slv_usb_hs2 &slv_pdm &slv_disp_ss_cfg
-				 &slv_sdcc_3 &slv_usb_hs &slv_snoc_cfg
-				 &slv_blsp_1 &slv_tlmm &slv_pmic_arb
-				 &slv_sdcc_1 &slv_tcsr &slv_gpu_cfg
-				 &slv_dcc_cfg &slv_prng>;
 		};
 
 		mas_sdcc_1: mas-sdcc-1 {
@@ -248,13 +213,6 @@
 			qcom,connections = <&pcnoc_int_1>;
 			qcom,bus-dev = <&fab_pcnoc>;
 			qcom,mas-rpm-id = <ICBID_MASTER_SDCC_1>;
-			qcom,blacklist = <&slv_blsp_2 &slv_crypto_0_cfg &slv_sdcc_2
-				 &slv_message_ram &slv_venus_cfg &slv_camera_ss_cfg
-				 &slv_usb_hs2 &slv_pdm &slv_disp_ss_cfg
-				 &slv_sdcc_3 &slv_usb_hs &slv_snoc_cfg
-				 &slv_blsp_1 &slv_tlmm &slv_pmic_arb
-				 &slv_sdcc_1 &slv_tcsr &slv_gpu_cfg
-				 &slv_dcc_cfg &slv_prng>;
 		};
 
 		mas_sdcc_2: mas-sdcc-2 {
@@ -267,13 +225,6 @@
 			qcom,connections = <&pcnoc_int_1>;
 			qcom,bus-dev = <&fab_pcnoc>;
 			qcom,mas-rpm-id = <ICBID_MASTER_SDCC_2>;
-			qcom,blacklist = <&slv_blsp_2 &slv_crypto_0_cfg &slv_sdcc_2
-				 &slv_message_ram &slv_venus_cfg &slv_camera_ss_cfg
-				 &slv_usb_hs2 &slv_pdm &slv_disp_ss_cfg
-				 &slv_sdcc_3 &slv_usb_hs &slv_snoc_cfg
-				 &slv_blsp_1 &slv_tlmm &slv_pmic_arb
-				 &slv_sdcc_1 &slv_tcsr &slv_gpu_cfg
-				 &slv_dcc_cfg &slv_prng>;
 		};
 
 		mas_sdcc_3: mas-sdcc-3 {
@@ -286,13 +237,6 @@
 			qcom,connections = <&pcnoc_int_1>;
 			qcom,bus-dev = <&fab_pcnoc>;
 			qcom,mas-rpm-id = <ICBID_MASTER_SDCC_3>;
-			qcom,blacklist = <&slv_blsp_2 &slv_crypto_0_cfg &slv_sdcc_2
-				 &slv_message_ram &slv_venus_cfg &slv_camera_ss_cfg
-				 &slv_usb_hs2 &slv_pdm &slv_disp_ss_cfg
-				 &slv_sdcc_3 &slv_usb_hs &slv_snoc_cfg
-				 &slv_blsp_1 &slv_tlmm &slv_pmic_arb
-				 &slv_sdcc_1 &slv_tcsr &slv_gpu_cfg
-				 &slv_dcc_cfg &slv_prng>;
 		};
 
 		mas_snoc_pcnoc: mas-snoc-pcnoc {
@@ -317,13 +261,6 @@
 			qcom,connections = <&slv_pcnoc_snoc>;
 			qcom,bus-dev = <&fab_pcnoc>;
 			qcom,mas-rpm-id = <ICBID_MASTER_LPASS_AHB>;
-			qcom,blacklist = <&slv_blsp_2 &slv_crypto_0_cfg &slv_sdcc_2
-				 &slv_message_ram &slv_venus_cfg &slv_camera_ss_cfg
-				 &slv_usb_hs2 &slv_pdm &slv_disp_ss_cfg
-				 &slv_sdcc_3 &slv_usb_hs &slv_snoc_cfg
-				 &slv_blsp_1 &slv_tlmm &slv_pmic_arb
-				 &slv_sdcc_1 &slv_tcsr &slv_gpu_cfg
-				 &slv_dcc_cfg &slv_prng>;
 		};
 
 		mas_spdm: mas-spdm {
@@ -334,13 +271,6 @@
 			qcom,connections = <&pcnoc_m_0>;
 			qcom,bus-dev = <&fab_pcnoc>;
 			qcom,mas-rpm-id = <ICBID_MASTER_SPDM>;
-			qcom,blacklist = <&slv_blsp_2 &slv_crypto_0_cfg &slv_sdcc_2
-				 &slv_message_ram &slv_venus_cfg &slv_camera_ss_cfg
-				 &slv_usb_hs2 &slv_pdm &slv_disp_ss_cfg
-				 &slv_sdcc_3 &slv_usb_hs &slv_snoc_cfg
-				 &slv_blsp_1 &slv_tlmm &slv_pmic_arb
-				 &slv_sdcc_1 &slv_tcsr &slv_gpu_cfg
-				 &slv_dcc_cfg &slv_prng>;
 		};
 
 		mas_dehr: mas-dehr {
@@ -351,13 +281,6 @@
 			qcom,connections = <&pcnoc_m_0>;
 			qcom,bus-dev = <&fab_pcnoc>;
 			qcom,mas-rpm-id = <ICBID_MASTER_DEHR>;
-			qcom,blacklist = <&slv_blsp_2 &slv_crypto_0_cfg &slv_sdcc_2
-				 &slv_message_ram &slv_venus_cfg &slv_camera_ss_cfg
-				 &slv_usb_hs2 &slv_pdm &slv_disp_ss_cfg
-				 &slv_sdcc_3 &slv_usb_hs &slv_snoc_cfg
-				 &slv_blsp_1 &slv_tlmm &slv_pmic_arb
-				 &slv_sdcc_1 &slv_tcsr &slv_gpu_cfg
-				 &slv_dcc_cfg &slv_prng>;
 		};
 
 		mas_xm_usb_hs1: mas-xm-usb-hs1 {
@@ -368,13 +291,6 @@
 			qcom,connections = <&pcnoc_int_0>;
 			qcom,bus-dev = <&fab_pcnoc>;
 			qcom,mas-rpm-id = <ICBID_MASTER_XM_USB_HS1>;
-			qcom,blacklist = <&slv_blsp_2 &slv_crypto_0_cfg &slv_sdcc_2
-				 &slv_message_ram &slv_venus_cfg &slv_camera_ss_cfg
-				 &slv_usb_hs2 &slv_pdm &slv_disp_ss_cfg
-				 &slv_sdcc_3 &slv_usb_hs &slv_snoc_cfg
-				 &slv_blsp_1 &slv_tlmm &slv_pmic_arb
-				 &slv_sdcc_1 &slv_tcsr &slv_gpu_cfg
-				 &slv_dcc_cfg &slv_prng>;
 		};
 
 		/*SNOC Masters*/
@@ -391,8 +307,6 @@
 			qcom,prio0 = <1>;
 			qcom,bus-dev = <&fab_snoc>;
 			qcom,mas-rpm-id = <ICBID_MASTER_QDSS_BAM>;
-			qcom,blacklist = <&slv_cats_0 &slv_lpass &slv_kpss_ahb
-				 &slv_qdss_stm &slv_cats_1>;
 		};
 
 		mas_bimc_snoc: mas-bimc-snoc {
@@ -403,7 +317,6 @@
 			qcom,connections = <&snoc_int_2>;
 			qcom,bus-dev = <&fab_snoc>;
 			qcom,mas-rpm-id = <ICBID_MASTER_BIMC_SNOC>;
-			qcom,blacklist = <&slv_snoc_bimc>;
 		};
 
 		mas_jpeg: mas-jpeg {
@@ -417,8 +330,6 @@
 			qcom,connections = <&mm_int_0 &slv_smmnoc_bimc>;
 			qcom,bus-dev = <&fab_snoc_mm>;
 			qcom,mas-rpm-id = <ICBID_MASTER_JPEG>;
-			qcom,blacklist = <&slv_lpass &slv_cats_1 &slv_cats_0
-				 &slv_kpss_ahb &slv_imem &slv_qdss_stm>;
 		};
 
 		mas_oxili: mas-oxili {
@@ -433,8 +344,6 @@
 			qcom,connections = <&slv_smmnoc_bimc &mm_int_0>;
 			qcom,bus-dev = <&fab_snoc_mm>;
 			qcom,mas-rpm-id = <ICBID_MASTER_GFX3D>;
-			qcom,blacklist = <&slv_lpass &slv_cats_1 &slv_cats_0
-				 &slv_kpss_ahb &slv_imem &slv_qdss_stm>;
 		};
 
 		mas_mdp0: mas-mdp0 {
@@ -449,8 +358,6 @@
 			qcom,connections = <&mm_int_0 &slv_smmnoc_bimc>;
 			qcom,bus-dev = <&fab_snoc_mm>;
 			qcom,mas-rpm-id = <ICBID_MASTER_MDP0>;
-			qcom,blacklist = <&slv_lpass &slv_cats_1 &slv_cats_0
-				 &slv_kpss_ahb &slv_imem &slv_qdss_stm>;
 		};
 
 		mas_mdp1: mas-mdp1 {
@@ -465,8 +372,6 @@
 			qcom,connections = <&mm_int_0 &slv_smmnoc_bimc>;
 			qcom,bus-dev = <&fab_snoc_mm>;
 			qcom,mas-rpm-id = <ICBID_MASTER_MDP1>;
-			qcom,blacklist = <&slv_lpass &slv_cats_1 &slv_cats_0
-				 &slv_kpss_ahb &slv_imem &slv_qdss_stm>;
 		};
 
 		mas_pcnoc_snoc: mas-pcnoc-snoc {
@@ -479,7 +384,6 @@
 			qcom,connections = <&snoc_int_2>;
 			qcom,bus-dev = <&fab_snoc>;
 			qcom,mas-rpm-id = <ICBID_MASTER_PNOC_SNOC>;
-			qcom,blacklist = <&slv_cats_0 &slv_cats_1>;
 		};
 
 		mas_venus_0: mas-venus-0 {
@@ -493,8 +397,6 @@
 			qcom,connections = <&mm_int_0 &slv_smmnoc_bimc>;
 			qcom,bus-dev = <&fab_snoc_mm>;
 			qcom,mas-rpm-id = <ICBID_MASTER_VIDEO_P0>;
-			qcom,blacklist = <&slv_lpass &slv_cats_1 &slv_cats_0
-				 &slv_kpss_ahb &slv_imem &slv_qdss_stm>;
 		};
 
 		mas_venus_1: mas-venus-1 {
@@ -508,8 +410,6 @@
 			qcom,connections = <&mm_int_0 &slv_smmnoc_bimc>;
 			qcom,bus-dev = <&fab_snoc_mm>;
 			qcom,mas-rpm-id = <ICBID_MASTER_VIDEO_P1>;
-			qcom,blacklist = <&slv_lpass &slv_cats_1 &slv_cats_0
-				 &slv_kpss_ahb &slv_imem &slv_qdss_stm>;
 		};
 
 		mas_vfe_0: mas-vfe-0 {
@@ -523,8 +423,6 @@
 			qcom,connections = <&mm_int_0 &slv_smmnoc_bimc>;
 			qcom,bus-dev = <&fab_snoc_mm>;
 			qcom,mas-rpm-id = <ICBID_MASTER_VFE0>;
-			qcom,blacklist = <&slv_lpass &slv_cats_1 &slv_cats_0
-				 &slv_kpss_ahb &slv_imem &slv_qdss_stm>;
 		};
 
 		mas_vfe_1: mas-vfe-1 {
@@ -538,8 +436,6 @@
 			qcom,connections = <&mm_int_0 &slv_smmnoc_bimc>;
 			qcom,bus-dev = <&fab_snoc_mm>;
 			qcom,mas-rpm-id = <ICBID_MASTER_VFE1>;
-			qcom,blacklist = <&slv_lpass &slv_cats_1 &slv_cats_0
-				 &slv_kpss_ahb &slv_imem &slv_qdss_stm>;
 		};
 
 		mas_cpp: mas-cpp {
@@ -553,8 +449,6 @@
 			qcom,connections = <&mm_int_0 &slv_smmnoc_bimc>;
 			qcom,bus-dev = <&fab_snoc_mm>;
 			qcom,mas-rpm-id = <ICBID_MASTER_CPP>;
-			qcom,blacklist = <&slv_lpass &slv_cats_1 &slv_cats_0
-				 &slv_kpss_ahb &slv_imem &slv_qdss_stm>;
 		};
 
 		mas_qdss_etr: mas-qdss-etr {
@@ -570,8 +464,6 @@
 			qcom,prio0 = <1>;
 			qcom,bus-dev = <&fab_snoc>;
 			qcom,mas-rpm-id = <ICBID_MASTER_QDSS_ETR>;
-			qcom,blacklist = <&slv_cats_0 &slv_cats_1 &slv_lpass
-				 &slv_kpss_ahb &slv_imem>;
 		};
 
 		mas_lpass_proc: mas-lpass-proc {
@@ -584,8 +476,6 @@
 			qcom,connections = <&snoc_int_0 &snoc_int_1 &slv_snoc_bimc>;
 			qcom,bus-dev = <&fab_snoc>;
 			qcom,mas-rpm-id = <ICBID_MASTER_LPASS_PROC>;
-			qcom,blacklist = <&slv_cats_0 &slv_lpass &slv_kpss_ahb
-				 &slv_cats_1>;
 		};
 
 		mas_ipa: mas-ipa {
@@ -601,8 +491,6 @@
 			qcom,prio0 = <1>;
 			qcom,bus-dev = <&fab_snoc>;
 			qcom,mas-rpm-id = <ICBID_MASTER_IPA>;
-			qcom,blacklist = <&slv_cats_0 &slv_lpass &slv_kpss_ahb
-				 &slv_cats_1>;
 		};
 
 		/* PCNOC Internal nodes*/
