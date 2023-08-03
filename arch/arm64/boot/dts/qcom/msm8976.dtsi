@@ -5,6 +5,7 @@
 #include "skeleton64.dtsi"
 #include <dt-bindings/clock/qcom,rpmcc.h>
 #include <dt-bindings/clock/qcom,gcc-msm8976.h>
+#include <dt-bindings/interrupt-controller/arm-gic.h>
 #include <dt-bindings/regulator/qcom,rpm-smd-regulator.h>
 
 / {
