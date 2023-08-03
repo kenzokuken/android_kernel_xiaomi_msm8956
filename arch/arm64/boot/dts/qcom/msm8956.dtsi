@@ -1850,7 +1850,7 @@
 	clock-names = "core_clk", "bus_clk", "micro_clk",
 			"csi_clk";
 	clocks = <&clock_gcc GCC_CAMSS_VFE0_CLK>,
-		 <&clock_gcc GCC_CAMSS_VFE_AXI_CLK>,
+		 <&clock_gcc GCC_CAMSS_VFE0_AXI_CLK>,
 		 <&clock_gcc GCC_CAMSS_MICRO_AHB_CLK>,
 		 <&clock_gcc GCC_CAMSS_CSI_VFE0_CLK>;
 	status = "okay";
