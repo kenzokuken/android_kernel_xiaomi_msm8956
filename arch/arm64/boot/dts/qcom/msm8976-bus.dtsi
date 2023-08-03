@@ -8,7 +8,7 @@
 	/* Version = 3 */
 	ad_hoc_bus: ad-hoc-bus@580000 {
 		compatible = "qcom,msm-bus-device";
-		reg = <0x580000 0x1A000>,
+		reg = <0x580000 0x1a000>,
 			<0x580000 0x1A000>,
 			<0x400000 0x62000>,
 			<0x500000 0x14000>;

@@ -226,7 +226,7 @@
 
 	qcom,msm-gladiator@b1c0000 {
 		compatible = "qcom,msm-gladiator";
-		reg = <0x0b1C0000 0x4000>;
+		reg = <0x0b1c0000 0x4000>;
 		reg-names = "gladiator_base";
 		interrupts = <0 22 0>;
 	};

@@ -31,7 +31,7 @@
 	msm_gpu: qcom,kgsl-3d0@01c00000 {
 		label = "kgsl-3d0";
 		compatible = "qcom,kgsl-3d0", "qcom,kgsl-3d";
-		reg = <0x1C00000 0x40000
+		reg = <0x1c00000 0x40000
 			   0x1C40000 0x10000>;
 		reg-names = "kgsl_3d0_reg_memory" , "kgsl_3d0_shader_memory";
 		interrupts = <0 33 0>;
