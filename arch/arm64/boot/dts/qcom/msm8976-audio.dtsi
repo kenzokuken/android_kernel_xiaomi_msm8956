@@ -59,7 +59,7 @@
 			"WSA_SPK OUT", "VDD_WSA_SWITCH",
 			"SpkrMono WSA_IN", "WSA_SPK OUT";
 
-		qcom,cdc-us-euro-gpios = <&msm_gpio 144 0>;
+		qcom,cdc-us-euro-gpios = <&tlmm 144 0>;
 		qcom,cdc-us-eu-gpios = <&cdc_us_euro_sw>;
 		qcom,cdc-comp-gpios = <&cdc_comp_gpios>;
 		qcom,pri-mi2s-gpios = <&cdc_pri_mi2s_gpios>;
@@ -251,7 +251,7 @@
 			"SpkrRight IN", "SPK2 OUT";
 
 		qcom,tasha-mclk-clk-freq = <9600000>;
-		qcom,cdc-us-euro-gpios = <&msm_gpio 144 0>;
+		qcom,cdc-us-euro-gpios = <&tlmm 144 0>;
 		qcom,msm-mbhc-hphl-swh = <0>;
 		qcom,msm-mbhc-gnd-swh = <0>;
 		qcom,cdc-us-eu-gpios = <&cdc_us_euro_sw>;
@@ -310,8 +310,8 @@
 		compatible = "qcom,wcd9xxx-irq";
 		interrupt-controller;
 		#interrupt-cells = <1>;
-		interrupt-parent = <&msm_gpio>;
-		qcom,gpio-connect = <&msm_gpio 120 0>;
+		interrupt-parent = <&tlmm>;
+		qcom,gpio-connect = <&tlmm 120 0>;
 		pinctrl-names = "default";
 		pinctrl-0 = <&wcd_intr_default>;
 	};

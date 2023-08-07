@@ -9,7 +9,7 @@
 	focaltech@38 {
 		compatible = "focaltech,5x06";
 		reg = <0x38>;
-		interrupt-parent = <&msm_gpio>;
+		interrupt-parent = <&tlmm>;
 		interrupts = <65 0x2>;
 		vdd-supply = <&pm8950_l17>;
 		vcc_i2c-supply = <&pm8950_l6>;
@@ -20,8 +20,8 @@
 		pinctrl-2 = <&ts_release>;
 		focaltech,name = "ft5446";
 		focaltech,family-id = <0x06>;
-		focaltech,reset-gpio = <&msm_gpio 64 0x0>;
-		focaltech,irq-gpio = <&msm_gpio 65 0x2008>;
+		focaltech,reset-gpio = <&tlmm 64 0x0>;
+		focaltech,irq-gpio = <&tlmm 65 0x2008>;
 		focaltech,display-coords = <0 0 1079 1919>;
 		focaltech,panel-coords = <0 0 1079 2084>;
 		focaltech,button-map= <139 102 158>;
@@ -44,7 +44,7 @@
 	synaptics@20 {
 		compatible = "synaptics,rmi4";
 		reg = <0x20>;
-		interrupt-parent = <&msm_gpio>;
+		interrupt-parent = <&tlmm>;
 		interrupts = <65 0x2008>;
 		vdd-supply = <&pm8950_l17>;
 		vcc_i2c-supply = <&pm8950_l6>;
@@ -55,8 +55,8 @@
 		pinctrl-2 = <&ts_release>;
 		synaptics,display-coords = <0 0 1079 1919>;
 		synaptics,panel-coords = <0 0 1079 2084>;
-		synaptics,irq-gpio = <&msm_gpio 65 0x2008>;
-		synaptics,reset-gpio = <&msm_gpio 64 0x0>;
+		synaptics,irq-gpio = <&tlmm 65 0x2008>;
+		synaptics,reset-gpio = <&tlmm 64 0x0>;
 		synaptics,i2c-pull-up;
 		synaptics,power-down;
 		synaptics,disable-gpios;
@@ -108,7 +108,7 @@
 
 		home {
 			label = "home";
-			gpios = <&msm_gpio 112 0x1>;
+			gpios = <&tlmm 112 0x1>;
 			linux,input-type = <1>;
 			linux,code = <102>;
 			gpio-key,wakeup;
@@ -117,7 +117,7 @@
 		
 		vol_up {
 			label = "volume_up";
-			gpios = <&msm_gpio 113 0x1>;
+			gpios = <&tlmm 113 0x1>;
 			linux,input-type = <1>;
 			linux,code = <115>;
 			gpio-key,wakeup;
@@ -190,7 +190,7 @@
 
 &tlmm {
 	tlmm_gpio_key {
-		qcom,pins = <&gp 112>, <&gp 113>;
+		qcom,pins = <&tlmm 112>, <&tlmm 113>;
 		qcom,num-grp-pins = <2>;
 	};
 };
@@ -227,15 +227,15 @@
 	pinctrl-1 = <&mdss_dsi_suspend &mdss_te_suspend>;
 	qcom,dsi-pref-prim-pan = <&dsi_otm1906c_1080p_cmd>;
 
-	qcom,platform-reset-gpio = <&msm_gpio 25 0>;
+	qcom,platform-reset-gpio = <&tlmm 25 0>;
 };
 
 &pmx_mdss {
 	qcom,num-grp-pins = <1>;
-	qcom,pins = <&gp 25>;
+	qcom,pins = <&tlmm 25>;
 };
 
 &pmx_mdss_te {
 	qcom,num-grp-pins = <1>;
-	qcom,pins = <&gp 24>;
+	qcom,pins = <&tlmm 24>;
 };

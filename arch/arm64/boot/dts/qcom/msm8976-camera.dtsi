@@ -393,10 +393,10 @@
 		pinctrl-names = "cci_default", "cci_suspend";
 			pinctrl-0 = <&cci0_active &cci1_active>;
 			pinctrl-1 = <&cci0_suspend &cci1_suspend>;
-		gpios = <&msm_gpio 29 0>,
-			<&msm_gpio 30 0>,
-			<&msm_gpio 103 0>,
-			<&msm_gpio 104 0>;
+		gpios = <&tlmm 29 0>,
+			<&tlmm 30 0>,
+			<&tlmm 103 0>,
+			<&tlmm 104 0>;
 		qcom,gpio-tbl-num = <0 1 2 3>;
 		qcom,gpio-tbl-flags = <1 1 1 1>;
 		qcom,gpio-tbl-label = "CCI_I2C_DATA0",

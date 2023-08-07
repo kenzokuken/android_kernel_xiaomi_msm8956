@@ -791,12 +791,12 @@
 
 		qcom,bus-width = <4>;
 		qcom,large-address-bus;
-		gpios = <&msm_gpio 44 0>, /* CLK */
-			<&msm_gpio 43 0>, /* CMD */
-			<&msm_gpio 42 0>, /* DATA0 */
-			<&msm_gpio 41 0>, /* DATA1 */
-			<&msm_gpio 40 0>, /* DATA2 */
-			<&msm_gpio 39 0>; /* DATA3 */
+		gpios = <&tlmm 44 0>, /* CLK */
+			<&tlmm 43 0>, /* CMD */
+			<&tlmm 42 0>, /* DATA0 */
+			<&tlmm 41 0>, /* DATA1 */
+			<&tlmm 40 0>, /* DATA2 */
+			<&tlmm 39 0>; /* DATA3 */
 		qcom,gpio-names = "CLK", "CMD", "DAT0", "DAT1", "DAT2", "DAT3";
 
 		qcom,clk-rates = <400000 20000000 25000000 50000000 100000000
@@ -832,7 +832,7 @@
 		interrupt-map-mask = <0xffffffff>;
 		interrupt-map = <0 &intc 0 295 0
 			1 &intc 0 297 0
-			2 &msm_gpio 45 0x4>;
+			2 &tlmm 45 0x4>;
 		interrupt-names = "hc_irq", "pwr_irq", "sdiowakeup_irq";
 
 		qcom,bus-speed-mode = "SDR12", "SDR25", "SDR50", "DDR50",
@@ -863,10 +863,10 @@
 		interrupt-map-mask = <0xffffffff>;
 		interrupt-map = <0 &intc 0 107 0
 				1 &intc 0 238 0
-				2 &msm_gpio 1 0>;
+				2 &tlmm 1 0>;
 
-		qcom,tx-gpio = <&msm_gpio 0 0>;
-		qcom,rx-gpio = <&msm_gpio 1 0>;
+		qcom,tx-gpio = <&tlmm 0 0>;
+		qcom,rx-gpio = <&tlmm 1 0>;
 		qcom,inject-rx-on-wakeup;
 		qcom,rx-char-to-inject = <0xFD>;
 		qcom,master-id = <86>;
@@ -1602,8 +1602,8 @@
 		pinctrl-1 = <&wcnss_sleep>;
 		pinctrl-2 = <&wcnss_gpio_default>;
 
-		gpios = <&msm_gpio 40 0>, <&msm_gpio 41 0>, <&msm_gpio 42 0>,
-			<&msm_gpio 43 0>, <&msm_gpio 44 0>;
+		gpios = <&tlmm 40 0>, <&tlmm 41 0>, <&tlmm 42 0>,
+			<&tlmm 43 0>, <&tlmm 44 0>;
 
 		clocks = <&xo_board>,
 			 <&clock_rpmcc RPM_SMD_RF_CLK2>;
