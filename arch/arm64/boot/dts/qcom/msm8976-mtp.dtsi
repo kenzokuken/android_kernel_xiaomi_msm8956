@@ -7,6 +7,12 @@
 #include "msm8976-mdss-mtp.dtsi"
 /*#include "msm8976-wsa881x.dtsi"*/
 
+&blsp1_uart2 {
+	status = "ok";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart_console_sleep>;
+};
+
 &i2c_2 { /* BLSP1 QUP2 */
 	focaltech@38 {
 		compatible = "focaltech,5x06";
@@ -46,9 +52,6 @@
 		focaltech,ignore-id-check;
 	};
 
-
-
-
 	atmel@4a {
 		compatible = "atmel,mxt-ts-1";
 		reg = <0x4a>;
@@ -70,8 +73,8 @@
 		atmel,i2c-pull-up;
 	};
 };
-&i2c_3 {
 
+&i2c_3 {
 	awinic@45 { /* Breath Light-Driven */
 		compatible = "awinic,aw2013";
 		reg = <0x45>;
@@ -109,162 +112,29 @@
 			aw2013,off-time-ms = <1>;
 		};
 	};
-
-};
-/* Parallel-charger configuration */
-/*
-&i2c_1 {
-	smb1351-charger@1d {
-		compatible = "qcom,smb1351-charger";
-		reg = <0x1d>;
-		qcom,parallel-en-pin-polarity = <1>;
-		qcom,parallel-charger;
-		qcom,float-voltage-mv = <4400>;
-		qcom,recharge-mv = <100>;
-	};
-};
-*/
-&usb_otg {
-	qcom,usbid-switch = <&msm_gpio 17 0>;
-};
-
-&soc {
-	ntc_sensor {
-		compatible = "ntc-sensor";
-		qcom,board_ntc-vadc = <&pm8950_vadc>;
-		ntc_vdd-supply = <&pm8950_l16>;
-		qcom,ntc-min-uv = <1800000>;
-		qcom,ntc-max-uv = <1800000>;
-	};
-	hall_switch {
-		compatible = "hall-switch,och175";
-		pinctrl-names = "hall_active","hall_suspend";
-		pinctrl-0 = <&hall_int_active>;
-		pinctrl-1 = <&hall_int_suspend>;
-		vdd-io-supply= <&pm8950_l5>;
-		interrupt-names = "hall_irq";
-		hall,irq-gpio = <&msm_gpio 107 0x00>;
-	};
-	gen-vkeys {
-		compatible = "qcom,gen-vkeys";
-		label = "ft5x06_ts";
-		qcom,disp-maxx = <1080>;
-		qcom,disp-maxy = <1920>;
-		qcom,panel-maxx = <1080>;
-		qcom,panel-maxy = <2200>;
-		qcom,key-codes = <139 172 158>;
-	};
-	gpio_keys {
-		compatible = "gpio-keys";
-		input-name = "gpio-keys";
-		pinctrl-names = "tlmm_gpio_key_active","tlmm_gpio_key_suspend";
-		pinctrl-0 = <&gpio_key_active>;
-		pinctrl-1 = <&gpio_key_suspend>;
-
-		camera_focus {
-			label = "camera_focus";
-			gpios = <&msm_gpio 115 0x1>;
-			linux,input-type = <1>;
-			linux,code = <0x210>;
-			debounce-interval = <15>;
-		};
-
-		camera_snapshot {
-			label = "camera_snapshot";
-			gpios = <&msm_gpio 114 0x1>;
-			linux,input-type = <1>;
-			linux,code = <0x2fe>;
-			debounce-interval = <15>;
-		};
-
-		vol_up {
-			label = "volume_up";
-			gpios = <&msm_gpio 113 0x1>;
-			linux,input-type = <1>;
-			linux,code = <115>;
-			debounce-interval = <15>;
-		};
-	};
-
-	pwm_ir {
-		compatible = "pwm-ir";
-		pwms = <&pmi8950_pwm 0 0>;
-		qcom,test-gpios = <&pmi8950_gpios 1 0>;
-		reg-id = "vdd";
-		vdd-supply = <&pm8950_l10>;
-	};
-
-	fpc_fpc1020 {
-		compatible = "fpc,fpc1020";
-		fpc,reset_gpio = <&msm_gpio 110 0>;
-		fpc,irq_gpio = <&msm_gpio 106 0>;
-		fpc,irq_flags = <0x2001>;
-		fpc,event-type = <4>;
-		fpc,event-code = <4>;
-		vcc_spi-supply = <&pm8950_l6>;
-		vdd_ana-supply = <&pm8950_l6>;
-		vdd_io-supply = <&pm8950_l6>;
-		};
-	};
-
-&blsp1_uart2 {
-	status = "ok";
-	pinctrl-names = "default";
-	pinctrl-0 = <&uart_console_sleep>;
 };
 
 &mem_client_3_size {
 	qcom,peripheral-size = <0x500000>;
 };
 
-&spmi_bus {
-	qcom,pmi8950@3 {
-		qcom,leds@d800 {
-			qcom,fs-curr-ua = <20000>;
-		};
-
-		qcom,haptic@c000 {
-			compatible = "qcom,qpnp-haptic";
-			reg = <0xc000 0x100>;
-			interrupts = <0x3 0xc0 0x0>,
-				<0x3 0xc0 0x1>;
-			interrupt-names = "sc-irq", "play-irq";
-			qcom,play-mode = "direct";
-			qcom,wave-play-rate-us = <5263>;
-			qcom,actuator-type = "erm";
-			qcom,wave-shape = "square";
-			qcom,vmax-mv = <2800>;
-			qcom,ilim-ma = <800>;
-			qcom,sc-deb-cycles = <8>;
-			qcom,int-pwm-freq-khz = <505>;
-			qcom,en-brake;
-			qcom,brake-pattern = [03 03 00 00];
-			qcom,use-play-irq;
-			qcom,use-sc-irq;
-			qcom,wave-samples = [3e 3e 3e 3e 3e 3e 3e 3e];
-			qcom,wave-rep-cnt = <1>;
-			qcom,wave-samp-rep-cnt = <1>;
-		};
+/{
+	mtp_batterydata: qcom,battery-data {
+		qcom,batt-id-range-pct = <15>;
+		#include "batterydata-coslight-4000mah-4400mv.dtsi"
+		#include "batterydata-coslight-4000mah-4400mv-10k.dtsi"
+		#include "batterydata-sunwoda-4000mah-4400mv.dtsi"
 	};
+};
 
-		qcom,pmi8950@2 {
-		qcom,leds@a100 {
-			status = "okay";
-			qcom,led_mpp_2 {
-				label = "mpp";
-				linux,name = "button-backlight";
-				linux,default-trigger = "none";
-				qcom,default-state = "off";
-				qcom,max-current = <40>;
-				qcom,current-setting = <5>;
-				qcom,id = <6>;
-				qcom,mode = "manual";
-				qcom,source-sel = <1>;
-				qcom,mode-ctrl = <0x60>;
-			};
-		};
-	};
+&pmi8950_fg {
+	qcom,battery-data = <&mtp_batterydata>;
+};
 
+&pmi8950_charger {
+	qcom,battery-data = <&mtp_batterydata>;
+	qcom,chg-led-support;
+	qcom,chg-led-sw-controls;
 };
 
 &sdhc_1 {
@@ -315,24 +185,104 @@
 	status = "ok";
 };
 
-/{
-	mtp_batterydata: qcom,battery-data {
-		qcom,batt-id-range-pct = <15>;
-		#include "batterydata-coslight-4000mah-4400mv.dtsi"
-		#include "batterydata-coslight-4000mah-4400mv-10k.dtsi"
-		#include "batterydata-sunwoda-4000mah-4400mv.dtsi"
+&soc {
+	hall_switch {
+		compatible = "hall-switch,och175";
+		pinctrl-names = "hall_active","hall_suspend";
+		pinctrl-0 = <&hall_int_active>;
+		pinctrl-1 = <&hall_int_suspend>;
+		vdd-io-supply= <&pm8950_l5>;
+		interrupt-names = "hall_irq";
+		hall,irq-gpio = <&msm_gpio 107 0x00>;
+	};
+	
+	gen-vkeys {
+		compatible = "qcom,gen-vkeys";
+		label = "ft5x06_ts";
+		qcom,disp-maxx = <1080>;
+		qcom,disp-maxy = <1920>;
+		qcom,panel-maxx = <1080>;
+		qcom,panel-maxy = <2200>;
+		qcom,key-codes = <139 172 158>;
+	};
+	
+	gpio_keys {
+		compatible = "gpio-keys";
+		pinctrl-names = "tlmm_gpio_key_active","tlmm_gpio_key_suspend";
+		pinctrl-0 = <&gpio_key_active>;
+		pinctrl-1 = <&gpio_key_suspend>;
 
+		camera_focus {
+			label = "camera_focus";
+			gpios = <&msm_gpio 115 0x1>;
+			linux,input-type = <1>;
+			linux,code = <0x210>;
+			debounce-interval = <15>;
+		};
+
+		camera_snapshot {
+			label = "camera_snapshot";
+			gpios = <&msm_gpio 114 0x1>;
+			linux,input-type = <1>;
+			linux,code = <0x2fe>;
+			debounce-interval = <15>;
+		};
+
+		vol_up {
+			label = "volume_up";
+			gpios = <&msm_gpio 113 0x1>;
+			linux,input-type = <1>;
+			linux,code = <115>;
+			debounce-interval = <15>;
+		};
+	};
+
+	pwm_ir {
+		compatible = "pwm-ir";
+		pwms = <&pmi8950_pwm 0 0>;
+		qcom,test-gpios = <&pmi8950_gpios 1 0>;
+		reg-id = "vdd";
+		vdd-supply = <&pm8950_l10>;
+	};
+
+	fpc_fpc1020 {
+		compatible = "fpc,fpc1020";
+		fpc,reset_gpio = <&msm_gpio 110 0>;
+		fpc,irq_gpio = <&msm_gpio 106 0>;
+		fpc,irq_flags = <0x2001>;
+		fpc,event-type = <4>;
+		fpc,event-code = <4>;
+		vcc_spi-supply = <&pm8950_l6>;
+		vdd_ana-supply = <&pm8950_l6>;
+		vdd_io-supply = <&pm8950_l6>;
 	};
 };
 
-&pmi8950_fg {
-	qcom,battery-data = <&mtp_batterydata>;
-};
-
-&pmi8950_charger {
-	qcom,battery-data = <&mtp_batterydata>;
-	qcom,chg-led-support;
-	qcom,chg-led-sw-controls;
+&spmi_bus {
+	qcom,pmi8950@3 {
+		qcom,haptic@c000 {
+			compatible = "qcom,qpnp-haptic";
+			reg = <0xc000 0x100>;
+			interrupts = <0x3 0xc0 0x0>,
+				<0x3 0xc0 0x1>;
+			interrupt-names = "sc-irq", "play-irq";
+			qcom,play-mode = "direct";
+			qcom,wave-play-rate-us = <5263>;
+			qcom,actuator-type = "erm";
+			qcom,wave-shape = "square";
+			qcom,vmax-mv = <2800>;
+			qcom,ilim-ma = <800>;
+			qcom,sc-deb-cycles = <8>;
+			qcom,int-pwm-freq-khz = <505>;
+			qcom,en-brake;
+			qcom,brake-pattern = [03 03 00 00];
+			qcom,use-play-irq;
+			qcom,use-sc-irq;
+			qcom,wave-samples = [3e 3e 3e 3e 3e 3e 3e 3e];
+			qcom,wave-rep-cnt = <1>;
+			qcom,wave-samp-rep-cnt = <1>;
+		};
+	};
 };
 
 /* CoreSight */
@@ -359,10 +309,6 @@
 		     &qdsd_data0_spmi &qdsd_data3_spmi>;
 };
 
-&pm8950_cajon_dig {
-	status = "disabled";
-};
-
-&pm8950_cajon_analog {
-	status = "disabled";
+&usb_otg {
+	qcom,usbid-switch = <&msm_gpio 17 0>;
 };

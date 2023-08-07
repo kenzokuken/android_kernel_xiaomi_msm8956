@@ -5,11 +5,6 @@
 #include "msm8976-camera-sensor-qrd.dtsi"
 #include "msm8976-wsa881x.dtsi"
 
-/ {
-	model = "Qualcomm Technologies, Inc. MSM8976 QRD";
-	compatible = "qcom,msm8976-qrd", "qcom,msm8976", "qcom,qrd";
-};
-
 &blsp1_uart2 {
 	status = "ok";
 	pinctrl-names = "default";
