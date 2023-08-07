@@ -631,7 +631,7 @@
 		qcom,pipe-attr-ee;
 	};
 
-	tsens: tsens@4a8000 {
+	tsens0: tsens@4a8000 {
 		compatible = "qcom,tsens-v1";
 		reg = <0x4a8000 0x2000>,
 		      <0xa4000  0x1000>;
