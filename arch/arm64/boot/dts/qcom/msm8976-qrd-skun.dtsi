@@ -3,6 +3,7 @@
 // Copyright (c) 2023, Benarji Anand <benarji385@gmail.com>
 
 #include "msm8976-qrd.dtsi"
+#include "msm8976-mdss-qrd.dtsi"
 #include "msm8976-wsa881x.dtsi"
 
 &i2c_2 { /* BLSP1 QUP2 */
@@ -92,6 +93,16 @@
 
 &pmi8950_haptic {
 	qcom,vmax-mv = <3300>;
+};
+
+&pmx_mdss {
+	qcom,num-grp-pins = <1>;
+	qcom,pins = <&tlmm 25>;
+};
+
+&pmx_mdss_te {
+	qcom,num-grp-pins = <1>;
+	qcom,pins = <&tlmm 24>;
 };
 
 &sdc2_cd_on {
@@ -193,49 +204,4 @@
 		qcom,pins = <&tlmm 112>, <&tlmm 113>;
 		qcom,num-grp-pins = <2>;
 	};
-};
-
-&dsi_otm1906c_1080p_cmd {
-	qcom,panel-supply-entries = <&dsi_panel_pwr_supply>;
-	qcom,mdss-dsi-bl-pmic-control-type = "bl_ctrl_wled";
-	qcom,mdss-dsi-bl-min-level = <1>;
-	qcom,mdss-dsi-bl-max-level = <4095>;
-};
-
-&dsi_hx8399a_1080p_video {
-	qcom,panel-supply-entries = <&dsi_panel_pwr_supply>;
-	qcom,mdss-dsi-bl-pmic-control-type = "bl_ctrl_wled";
-	qcom,mdss-dsi-bl-min-level = <1>;
-	qcom,mdss-dsi-bl-max-level = <4095>;
-	qcom,esd-check-enabled;
-	qcom,mdss-dsi-pan-enable-dynamic-fps;
-	qcom,mdss-dsi-pan-fps-update = "dfps_immediate_porch_mode_hfp";
-};
-
-&labibb {
-	status = "ok";
-	qpnp,qpnp-labibb-mode = "lcd";
-};
-
-&mdss_mdp {
-	qcom,mdss-pref-prim-intf = "dsi";
-};
-
-&mdss_dsi0 {
-	pinctrl-names = "mdss_default", "mdss_sleep";
-	pinctrl-0 = <&mdss_dsi_active &mdss_te_active>;
-	pinctrl-1 = <&mdss_dsi_suspend &mdss_te_suspend>;
-	qcom,dsi-pref-prim-pan = <&dsi_otm1906c_1080p_cmd>;
-
-	qcom,platform-reset-gpio = <&tlmm 25 0>;
-};
-
-&pmx_mdss {
-	qcom,num-grp-pins = <1>;
-	qcom,pins = <&tlmm 25>;
-};
-
-&pmx_mdss_te {
-	qcom,num-grp-pins = <1>;
-	qcom,pins = <&tlmm 24>;
 };
