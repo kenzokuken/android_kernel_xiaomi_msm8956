@@ -1062,7 +1062,7 @@
 		};
 
 		hall_int_pin {
-			hall_int_pin0_active: hall_int_pin0_active {
+			hall_int_active: hall_int_active {
 				mux {
 					pins = "gpio107";
 					function = "hall_int_pin";
@@ -1075,7 +1075,7 @@
 				};
 			};
 
-			hall_int_pin0_suspend: hall_int_pin0_suspend {
+			hall_int_suspend: hall_int_suspend {
 				mux {
 					pins = "gpio107";
 					function = "hall_int_pin";
