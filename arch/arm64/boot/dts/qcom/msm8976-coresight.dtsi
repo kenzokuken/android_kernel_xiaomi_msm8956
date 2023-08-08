@@ -468,10 +468,6 @@
 		clocks = <&clock_rpmcc RPM_SMD_QDSS_CLK>,
 			 <&clock_rpmcc RPM_SMD_QDSS_A_CLK>;
 		clock-names = "core_clk", "core_a_clk";
-
-		qcom,cti-gpio-trigout = <2>;
-		pinctrl-names = "cti-trigout-pctrl";
-		pinctrl-0 = <&trigout_b0>;
 	};
 
 	cti7: cti@6017000 {
