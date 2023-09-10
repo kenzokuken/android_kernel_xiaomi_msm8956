@@ -1577,11 +1577,9 @@
 		qcom,pronto-vddcx-current = <0>;
 		qcom,pronto-vddpx-current = <0>;
 
-		pinctrl-names = "wcnss_default", "wcnss_sleep",
-				"wcnss_gpio_default";
+		pinctrl-names = "wcnss_default", "wcnss_sleep";
 		pinctrl-0 = <&wcnss_default>;
 		pinctrl-1 = <&wcnss_sleep>;
-		pinctrl-2 = <&wcnss_gpio_default>;
 
 		gpios = <&tlmm 40 0>, <&tlmm 41 0>, <&tlmm 42 0>,
 			<&tlmm 43 0>, <&tlmm 44 0>;
