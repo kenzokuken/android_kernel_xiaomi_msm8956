@@ -240,6 +240,12 @@
 		      <0x0b002000 0x1000>;
 	};
 
+	apcs: mailbox@b011000 {
+		compatible = "qcom,msm8976-apcs-kpss-global", "syscon";
+		reg = <0x0b011000 0x1000>;
+		#mbox-cells = <1>;
+	};
+
 	qcom,msm-imem@8600000 {
 		compatible = "qcom,msm-imem";
 		reg = <0x08600000 0x1000>; /* Address and size of IMEM */
