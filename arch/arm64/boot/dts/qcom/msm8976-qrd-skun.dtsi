@@ -100,11 +100,6 @@
 	qcom,pins = <&tlmm 25>;
 };
 
-&pmx_mdss_te {
-	qcom,num-grp-pins = <1>;
-	qcom,pins = <&tlmm 24>;
-};
-
 &sdc2_cd_on {
 	/delete-property/ bias-pull-up;
 	bias-disable;
