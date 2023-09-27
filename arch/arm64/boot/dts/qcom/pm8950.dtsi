@@ -1,381 +1,161 @@
 // SPDX-License-Identifier: GPL-2.0
 // Copyright (c) 2015-2023, The Linux Foundation. All rights reserved.
 
+#include <dt-bindings/iio/qcom,spmi-vadc.h>
+#include <dt-bindings/input/linux-event-codes.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+#include <dt-bindings/pinctrl/qcom,pmic-mpp.h>
 #include <dt-bindings/spmi/spmi.h>
 
 &spmi_bus {
-	qcom,pm8950@0 {
-		compatible ="qcom,spmi-pmic";
+	pmic@0 {
+		compatible = "qcom,pm8950", "qcom,spmi-pmic";
 		reg = <0x0 SPMI_USID>;
-		#address-cells = <2>;
+		#address-cells = <1>;
 		#size-cells = <0>;
 
-		pm8950_revid: qcom,revid@100 {
-			compatible = "qcom,qpnp-revid";
-			reg = <0x100 0x100>;
-		};
+		pon@800 {
+			compatible = "qcom,pm8916-pon";
+			reg = <0x0800>;
+			mode-bootloader = <0x2>;
+			mode-recovery = <0x1>;
 
-		pm8950_temp_alarm: qcom,temp-alarm@2400 {
-			compatible = "qcom,qpnp-temp-alarm";
-			reg = <0x2400 0x100>;
-			interrupts = <0x0 0x24 0x0>;
-			label = "pm8950_tz";
-			qcom,channel-num = <8>;
-			qcom,threshold-set = <0>;
-			qcom,temp_alarm-vadc = <&pm8950_vadc>;
-		};
-
-		qcom,power-on@800 {
-			compatible = "qcom,qpnp-power-on";
-			reg = <0x800 0x100>;
-			interrupts = <0x0 0x8 0x0>,
-				<0x0 0x8 0x1>,
-				<0x0 0x8 0x4>,
-				<0x0 0x8 0x5>;
-			interrupt-names = "kpdpwr", "resin",
-				"resin-bark", "kpdpwr-resin-bark";
-			qcom,pon-dbc-delay = <15625>;
-			qcom,system-reset;
-
-			qcom,pon_1 {
-				qcom,pon-type = <0>;
-				qcom,pull-up = <1>;
-				linux,code = <116>;
-			};
-
-			qcom,pon_2 {
-				qcom,pon-type = <1>;
-				qcom,pull-up = <1>;
-				linux,code = <114>;
+			pwrkey {
+				compatible = "qcom,pm8941-pwrkey";
+				interrupts = <0x0 0x8 0 IRQ_TYPE_EDGE_BOTH>;
+				debounce = <15625>;
+				bias-pull-up;
+				linux,code = <KEY_POWER>;
 			};
 		};
 
-		pm8950_coincell: qcom,coincell@2800 {
-			compatible = "qcom,qpnp-coincell";
-			reg = <0x2800 0x100>;
+		pm8950_temp: temp-alarm@2400 {
+			compatible = "qcom,spmi-temp-alarm";
+			reg = <0x2400>;
+			interrupts = <0 0x24 0 IRQ_TYPE_EDGE_RISING>;
+			io-channels = <&pm8950_vadc VADC_DIE_TEMP>;
+			io-channel-names = "thermal";
+			#thermal-sensor-cells = <0>;
 		};
 
-		pm8950_mpps: mpps {
-			compatible = "qcom,qpnp-pin";
-			spmi-dev-container;
-			gpio-controller;
-			#gpio-cells = <2>;
-			#address-cells = <1>;
-			#size-cells = <1>;
-			label = "pm8950-mpp";
-
-			mpp@a000 {
-				reg = <0xa000 0x100>;
-				qcom,pin-num = <1>;
-				status = "disabled";
-			};
-
-			mpp@a100 {
-				/* MPP2 - PA_THERM config */
-				reg = <0xa100 0x100>;
-				qcom,pin-num = <2>;
-				qcom,mode = <4>; /* AIN input */
-				qcom,invert = <1>; /* Enable MPP */
-				qcom,ain-route = <1>; /* AMUX 6 */
-				qcom,master-en = <1>;
-				qcom,src-sel = <0>; /* Function constant */
-			};
-
-			mpp@a200 {
-				reg = <0xa200 0x100>;
-				qcom,pin-num = <3>;
-				status = "disabled";
-			};
-
-			mpp@a300 {
-				/* MPP4 - CASE_THERM config */
-				reg = <0xa300 0x100>;
-				qcom,pin-num = <4>;
-				qcom,mode = <4>; /* AIN input */
-				qcom,invert = <1>; /* Enable MPP */
-				qcom,ain-route = <3>; /* AMUX 8 */
-				qcom,master-en = <1>;
-				qcom,src-sel = <0>; /* Function constant */
-			};
-		};
-
-		pm8950_gpios: gpios {
-			spmi-dev-container;
-			compatible = "qcom,qpnp-pin";
-			gpio-controller;
-			#gpio-cells = <2>;
-			#address-cells = <1>;
-			#size-cells = <1>;
-			label = "pm8950-gpio";
-
-			gpio@c000 {
-				reg = <0xc000 0x100>;
-				qcom,pin-num = <1>;
-				status = "disabled";
-			};
-
-			gpio@c100 {
-				reg = <0xc100 0x100>;
-				qcom,pin-num = <2>;
-				status = "disabled";
-			};
-
-			gpio@c200 {
-				reg = <0xc200 0x100>;
-				qcom,pin-num = <3>;
-				status = "disabled";
-			};
-
-			gpio@c300 {
-				reg = <0xc300 0x100>;
-				qcom,pin-num = <4>;
-				status = "disabled";
-			};
-
-			gpio@c400 {
-				reg = <0xc400 0x100>;
-				qcom,pin-num = <5>;
-				status = "disabled";
-			};
-
-			gpio@c500 {
-				reg = <0xc500 0x100>;
-				qcom,pin-num = <6>;
-				status = "disabled";
-			};
-
-			gpio@c600 {
-				reg = <0xc600 0x100>;
-				qcom,pin-num = <7>;
-				status = "disabled";
-			};
-
-			gpio@c700 {
-				reg = <0xc700 0x100>;
-				qcom,pin-num = <8>;
-				status = "disabled";
-			};
-		};
-
-		pm8950_vadc: vadc@3100 {
-			compatible = "qcom,qpnp-vadc";
-			reg = <0x3100 0x100>;
+		pm8950_vadc: adc@3100 {
+			compatible = "qcom,spmi-vadc";
+			reg = <0x3100>;
+			interrupts = <0x0 0x31 0x0 IRQ_TYPE_EDGE_RISING>;
 			#address-cells = <1>;
 			#size-cells = <0>;
-			interrupts = <0x0 0x31 0x0>;
-			interrupt-names = "eoc-int-en-set";
-			qcom,adc-bit-resolution = <15>;
-			qcom,adc-vdd-reference = <1800>;
-			qcom,vadc-poll-eoc;
-			qcom,pmic-revid = <&pm8950_revid>;
+			#io-channel-cells = <1>;
 
-			chan@5 {
-				label = "vcoin";
-				reg = <5>;
-				qcom,decimation = <0>;
-				qcom,pre-div-channel-scaling = <1>;
-				qcom,calibration-type = "absolute";
-				qcom,scale-function = <0>;
-				qcom,hw-settle-time = <0>;
-				qcom,fast-avg-setup = <0>;
+			vcoin@5 {
+				reg = <VADC_VCOIN>;
+				qcom,pre-scaling = <1 1>;
 			};
 
-			chan@7 {
-				label = "vph_pwr";
-				reg = <7>;
-				qcom,decimation = <0>;
-				qcom,pre-div-channel-scaling = <1>;
-				qcom,calibration-type = "absolute";
-				qcom,scale-function = <0>;
-				qcom,hw-settle-time = <0>;
-				qcom,fast-avg-setup = <0>;
+			vph-pwr@7 {
+				reg = <VADC_VSYS>;
+				qcom,pre-scaling = <1 1>;
 			};
 
-			chan@8 {
-				label = "die_temp";
-				reg = <8>;
-				qcom,decimation = <0>;
-				qcom,pre-div-channel-scaling = <0>;
-				qcom,calibration-type = "absolute";
-				qcom,scale-function = <3>;
-				qcom,hw-settle-time = <0>;
-				qcom,fast-avg-setup = <0>;
+			die-temp@8 {
+				reg = <VADC_DIE_TEMP>;
+				qcom,pre-scaling = <1 1>;
 			};
 
-			chan@9 {
-				label = "ref_625mv";
-				reg = <9>;
-				qcom,decimation = <0>;
-				qcom,pre-div-channel-scaling = <0>;
-				qcom,calibration-type = "absolute";
-				qcom,scale-function = <0>;
-				qcom,hw-settle-time = <0>;
-				qcom,fast-avg-setup = <0>;
+			ref-625mv@9 {
+				reg = <VADC_REF_625MV>;
+				qcom,pre-scaling = <1 1>;
 			};
 
-			chan@a {
-				label = "ref_1250v";
-				reg = <0xa>;
-				qcom,decimation = <0>;
-				qcom,pre-div-channel-scaling = <0>;
-				qcom,calibration-type = "absolute";
-				qcom,scale-function = <0>;
-				qcom,hw-settle-time = <0>;
-				qcom,fast-avg-setup = <0>;
+			ref-1250mv@a {
+				reg = <VADC_REF_1250MV>;
+				qcom,pre-scaling = <1 1>;
 			};
 
-			chan@c {
-				label = "ref_buf_625mv";
-				reg = <0xc>;
-				qcom,decimation = <0>;
-				qcom,pre-div-channel-scaling = <0>;
-				qcom,calibration-type = "absolute";
-				qcom,scale-function = <0>;
-				qcom,hw-settle-time = <0>;
-				qcom,fast-avg-setup = <0>;
+			ref-buf-625mv@c {
+				reg = <VADC_SPARE1>;
+				qcom,pre-scaling = <1 1>;
 			};
 
-			chan@36 {
-				label = "pa_therm0";
-				reg = <0x36>;
-				qcom,decimation = <0>;
-				qcom,pre-div-channel-scaling = <0>;
-				qcom,calibration-type = "ratiometric";
-				qcom,scale-function = <2>;
-				qcom,hw-settle-time = <2>;
-				qcom,fast-avg-setup = <0>;
+			ref-gnd@e {
+				reg = <VADC_GND_REF>;
 			};
 
-			chan@11 {
-				label = "pa_therm1";
-				reg = <0x11>;
-				qcom,decimation = <0>;
-				qcom,pre-div-channel-scaling = <0>;
-				qcom,calibration-type = "ratiometric";
-				qcom,scale-function = <2>;
-				qcom,hw-settle-time = <2>;
-				qcom,fast-avg-setup = <0>;
-				qcom,vadc-thermal-node;
+			ref-vdd@f {
+				reg = <VADC_VDD_VADC>;
 			};
 
-			chan@32 {
-				label = "xo_therm";
-				reg = <0x32>;
-				qcom,decimation = <0>;
-				qcom,pre-div-channel-scaling = <0>;
-				qcom,calibration-type = "ratiometric";
-				qcom,scale-function = <4>;
-				qcom,hw-settle-time = <2>;
-				qcom,fast-avg-setup = <0>;
-				qcom,vadc-thermal-node;
+			pa-therm1@11 {
+				reg = <VADC_P_MUX2_1_1>;
+				qcom,pre-scaling = <1 1>;
+				qcom,ratiometric;
+				qcom,hw-settle-time = <200>;
 			};
 
-			chan@3c {
-				label = "xo_therm_buf";
-				reg = <0x3c>;
-				qcom,decimation = <0>;
-				qcom,pre-div-channel-scaling = <0>;
-				qcom,calibration-type = "ratiometric";
-				qcom,scale-function = <4>;
-				qcom,hw-settle-time = <2>;
-				qcom,fast-avg-setup = <0>;
-				qcom,vadc-thermal-node;
+			case-therm@13 {
+				reg = <VADC_P_MUX4_1_1>;
+				qcom,pre-scaling = <1 1>;
+				qcom,ratiometric;
+				qcom,hw-settle-time = <200>;
 			};
 
-			chan@13 {
-				label = "case_therm";
-				reg = <0x13>;
-				qcom,decimation = <0>;
-				qcom,pre-div-channel-scaling = <0>;
-				qcom,calibration-type = "ratiometric";
-				qcom,scale-function = <2>;
-				qcom,hw-settle-time = <2>;
-				qcom,fast-avg-setup = <0>;
-				qcom,vadc-thermal-node;
+			xo-therm@32 {
+				reg = <VADC_LR_MUX3_XO_THERM>;
+				qcom,pre-scaling = <1 1>;
+				qcom,ratiometric;
+				qcom,hw-settle-time = <200>;
+			};
+
+			pa-therm0@36 {
+				reg = <VADC_LR_MUX7_HW_ID>;
+				qcom,pre-scaling = <1 1>;
+				qcom,ratiometric;
+				qcom,hw-settle-time = <200>;
+			};
+
+			xo-therm-buf@3c {
+				reg = <VADC_LR_MUX3_BUF_XO_THERM>;
+				qcom,pre-scaling = <1 1>;
+				qcom,ratiometric;
+				qcom,hw-settle-time = <200>;
 			};
 		};
 
-		pm8950_adc_tm: vadc@3400 {
-			compatible = "qcom,qpnp-adc-tm";
-			reg = <0x3400 0x100>;
-			#address-cells = <1>;
-			#size-cells = <0>;
-			interrupts =	<0x0 0x34 0x0>,
-					<0x0 0x34 0x3>,
-					<0x0 0x34 0x4>;
-			interrupt-names =	"eoc-int-en-set",
-						"high-thr-en-set",
-						"low-thr-en-set";
-			qcom,adc-bit-resolution = <15>;
-			qcom,adc-vdd-reference = <1800>;
-			qcom,adc_tm-vadc = <&pm8950_vadc>;
-			qcom,pmic-revid = <&pm8950_revid>;
-
-			chan@36 {
-				label = "pa_therm0";
-				reg = <0x36>;
-				qcom,decimation = <0>;
-				qcom,pre-div-channel-scaling = <0>;
-				qcom,calibration-type = "ratiometric";
-				qcom,scale-function = <2>;
-				qcom,hw-settle-time = <2>;
-				qcom,fast-avg-setup = <0>;
-				qcom,btm-channel-number = <0x48>;
-				qcom,thermal-node;
-			};
-
-			chan@7 {
-				label = "vph_pwr";
-				reg = <0x7>;
-				qcom,decimation = <0>;
-				qcom,pre-div-channel-scaling = <1>;
-				qcom,calibration-type = "absolute";
-				qcom,scale-function = <0>;
-				qcom,hw-settle-time = <0>;
-				qcom,fast-avg-setup = <0>;
-				qcom,btm-channel-number = <0x68>;
-			};
+		rtc@6000 {
+			compatible = "qcom,pm8941-rtc";
+			reg = <0x6000>;
+			reg-names = "rtc", "alarm";
+			interrupts = <0x0 0x61 0x1 IRQ_TYPE_NONE>;
 		};
 
-		pm8950_rtc: qcom,pm8950_rtc {
-			spmi-dev-container;
-			compatible = "qcom,qpnp-rtc";
-			#address-cells = <1>;
-			#size-cells = <1>;
-			qcom,qpnp-rtc-write = <0>;
-			qcom,qpnp-rtc-alarm-pwrup = <0>;
-
-			qcom,pm8950_rtc_rw@6000 {
-				reg = <0x6000 0x100>;
-			};
-
-			qcom,pm8950_rtc_alarm@6100 {
-				reg = <0x6100 0x100>;
-				interrupts = <0x0 0x61 0x1>;
-			};
+		pm8950_mpps: mpps@a000 {
+			compatible = "qcom,pm8950-mpp", "qcom,spmi-mpp";
+			reg = <0xa000>;
+			gpio-controller;
+			gpio-ranges = <&pm8950_mpps 0 0 4>;
+			#gpio-cells = <2>;
+			interrupt-controller;
+			#interrupt-cells = <2>;
 		};
 
-		qcom,leds@a300 {
-			compatible = "qcom,leds-qpnp";
-			reg = <0xa300 0x100>;
-			label = "mpp";
+		pm8950_gpio: gpio@c000 {
+			compatible = "qcom,pm8950-gpio", "qcom,spmi-gpio";
+			reg = <0xc000>;
+			gpio-controller;
+			gpio-ranges = <&pm8950_gpio 0 0 8>;
+			#gpio-cells = <2>;
+			interrupt-controller;
+			#interrupt-cells = <2>;
 		};
 	};
 
-	pm8950_1: qcom,pm8950@1 {
-		compatible ="qcom,spmi-pmic";
+	pmic@1 {
+		compatible = "qcom,pm8950", "qcom,spmi-pmic";
 		reg = <0x1 SPMI_USID>;
-		#address-cells = <2>;
+		#address-cells = <1>;
 		#size-cells = <0>;
 
-		pm8950_pwm: pwm@bc00 {
-			status = "disabled";
-			compatible = "qcom,qpnp-pwm";
-			reg = <0xbc00 0x100>;
-			reg-names = "qpnp-lpg-channel-base";
-			qcom,channel-id = <0>;
-			qcom,supported-sizes = <6>, <9>;
-			#pwm-cells = <2>;
+		pm8950_spmi_regulators: regulators {
+			compatible = "qcom,pm8950-regulators";
 		};
 	};
 };
