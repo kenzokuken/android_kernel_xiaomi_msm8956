@@ -753,6 +753,7 @@ static const struct labibb_regulator_data pmi8998_labibb_data[] = {
 };
 
 static const struct of_device_id qcom_labibb_match[] = {
+	{ .compatible = "qcom,pmi8950-lab-ibb", .data = &pmi8998_labibb_data},
 	{ .compatible = "qcom,pmi8998-lab-ibb", .data = &pmi8998_labibb_data},
 	{ },
 };
