@@ -387,7 +387,7 @@
 	};
 };
 
-&pm8950_gpios {
+&pm8950_gpio {
 	gpio@c000 {
 		status = "ok";
 		qcom,mode = <1>;
