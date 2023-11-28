@@ -84,7 +84,7 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 
-		labibb {
+		labibb: labibb {
 			compatible = "qcom,pmi8950-lab-ibb";
 
 			ibb: ibb {
