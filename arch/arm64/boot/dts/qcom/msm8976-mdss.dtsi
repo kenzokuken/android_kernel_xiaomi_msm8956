@@ -253,7 +253,7 @@
 			vdd-supply = <&pm8950_l17>;
 			vddio-supply = <&pm8950_l6>;
 			lab-supply = <&lab_regulator>;
-			ibb-supply = <&ibb_regulator>;
+			ibb-supply = <&ibb>;
 
 			clocks = <&clock_mdss GCC_MDSS_BYTE0_CLK>,
 				<&clock_mdss GCC_MDSS_PCLK0_CLK>,
@@ -290,7 +290,7 @@
 			vdd-supply = <&pm8950_l17>;
 			vddio-supply = <&pm8950_l6>;
 			lab-supply = <&lab_regulator>;
-			ibb-supply = <&ibb_regulator>;
+			ibb-supply = <&ibb>;
 
 			clocks = <&clock_mdss GCC_MDSS_BYTE1_CLK>,
 				<&clock_mdss GCC_MDSS_PCLK1_CLK>,

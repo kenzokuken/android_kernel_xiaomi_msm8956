@@ -82,6 +82,6 @@
 	qpnp,qpnp-labibb-mode = "lcd";
 };
 
-&ibb_regulator {
+&ibb {
 	qcom,qpnp-ibb-discharge-resistor = <32>;
 };
