@@ -7,7 +7,7 @@
 	qpnp,qpnp-labibb-mode = "lcd";
 };
 
-&usb3 {
+&usb0 {
 	vbus_dwc3-supply = <&usb2_phy0>;
 	extcon = <&pmi8950_charger>;
 };
