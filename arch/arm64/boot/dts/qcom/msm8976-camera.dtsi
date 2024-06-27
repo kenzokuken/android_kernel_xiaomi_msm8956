@@ -172,13 +172,7 @@
 			"0", "0", "0";
 	};
 
-	qcom,vfe0 {
-		compatible = "qcom,vfe";
-		#address-cells = <1>;
-		#size-cells = <1>;
-		ranges;
-
-		vfe0: qcom,vfe0@1b10000 {
+	vfe0: qcom,vfe0@1b10000 {
 			cell-index = <0>;
 			compatible = "qcom,vfe";
 			reg = <0x1b10000 0x1000>,
@@ -226,9 +220,9 @@
 				0xcccc0011	0x00000110>;
 			max-clk-nominal = <320000000>;
 			max-clk-turbo = <460000000>;
-		};
+	};
 
-		vfe1: qcom,vfe1@1b14000 {
+	vfe1: qcom,vfe1@1b14000 {
 			cell-index = <1>;
 			compatible = "qcom,vfe";
 			reg = <0x1b14000 0x1000>,
@@ -276,7 +270,6 @@
 				0xcccc0011	0x00000110>;
 			max-clk-nominal = <320000000>;
 			max-clk-turbo = <460000000>;
-		};
 	};
 
 	qcom,cam_smmu {
@@ -375,8 +368,6 @@
 		cell-index = <0>;
 		compatible = "qcom,cci";
 		reg = <0x1b0c000 0x1000>;
-		#address-cells = <1>;
-		#size-cells = <0>;
 		reg-names = "cci";
 		interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
 		interrupt-names = "cci";
