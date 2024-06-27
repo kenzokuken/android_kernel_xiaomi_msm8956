@@ -51,11 +51,6 @@
 		qcom,nq-irq = <&tlmm 17 0x00>;
 		qcom,nq-firm = <&tlmm 62 0x00>;
 		qcom,nq-esepwr = <&tlmm 141 0x00>;
-		interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
-		interrupt-names = "nfc_irq";
-
-		clocks = <&clock_rpmcc RPM_SMD_BB_CLK2_PIN>;
-		clock-names = "ref_clk";
 
 		pinctrl-names = "nfc_active", "nfc_suspend";
 		pinctrl-0 = <&nfc_active &nfc_en_active>;
