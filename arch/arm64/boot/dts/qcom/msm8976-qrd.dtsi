@@ -7,7 +7,7 @@
 &blsp1_uart2 {
         status = "ok";
         pinctrl-names = "default";
-        pinctrl-0 = <&uart_console_sleep>;
+        pinctrl-0 = <&uart_console_active>;
 };
 
 &i2c_3 { /* BLSP1 QUP3 */
