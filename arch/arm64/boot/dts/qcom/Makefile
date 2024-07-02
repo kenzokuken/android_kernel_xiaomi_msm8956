@@ -23,7 +23,10 @@ msm8956-qrd-overlay.dtbo-base := msm8956.dtb
 else
 dtb-$(CONFIG_ARCH_MSM8956) += msm8956-cdp.dtb \
 	msm8956-mtp.dtb \
-	msm8956-qrd-skun.dtb
+	msm8956-qrd-skun.dtb \
+	msm8956-v1.1-cdp.dtb \
+	msm8956-v1.1-mtp.dtb \
+	msm8956-v1.1-qrd-skun.dtb
 endif
 
 ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
@@ -39,7 +42,10 @@ msm8976-qrd-overlay.dtbo-base := msm8976.dtb
 else
 dtb-$(CONFIG_ARCH_MSM8976) += msm8976-cdp.dtb \
 	msm8976-mtp.dtb \
-	msm8976-qrd-skun.dtb
+	msm8976-qrd-skun.dtb \
+	msm8976-v1.1-cdp.dtb \
+	msm8976-v1.1-mtp.dtb \
+	msm8976-v1.1-qrd-skun.dtb
 endif
 
 always		:= $(dtb-y)
