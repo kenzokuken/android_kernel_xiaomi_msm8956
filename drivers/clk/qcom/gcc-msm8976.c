@@ -1764,6 +1764,18 @@ static const struct freq_tbl ftbl_sdcc1_apps_clk_src[] = {
 	{ }
 };
 
+static const struct freq_tbl ftbl_sdcc1_8976_v1_1_apps_clk_src[] = {
+	F(19200000, P_XO, 1, 0, 0),
+	F(20000000, P_GPLL0_DIV2, 5, 1, 4),
+	F(25000000, P_GPLL0_DIV2, 16, 0, 0),
+	F(50000000, P_GPLL0, 16, 0, 0),
+	F(100000000, P_GPLL0, 8, 0, 0),
+	F(177770000, P_GPLL0, 4.5, 0, 0),
+	F(186400000, P_GPLL4, 6, 0, 0),
+	F(372800000, P_GPLL4, 3, 0, 0),
+	{ }
+};
+
 static struct clk_rcg2 sdcc1_apps_clk_src = {
 	.cmd_rcgr = 0x42004,
 	.hid_width = 5,
@@ -4574,6 +4586,10 @@ static int gcc_msm8976_probe(struct platform_device *pdev)
 	struct regmap *regmap;
         int ret;
 
+	if (of_device_is_compatible(pdev->dev.of_node, "qcom,gcc-msm8976-v1.1")) {
+		sdcc1_apps_clk_src.freq_tbl = ftbl_sdcc1_8976_v1_1_apps_clk_src;
+	}
+
 	regmap = qcom_cc_map(pdev, &gcc_msm8976_desc);
 	if (IS_ERR(regmap)) {
 		pr_err("Failed to map the GCC registers\n");
@@ -4624,6 +4640,7 @@ static int gcc_msm8976_probe(struct platform_device *pdev)
 
 static const struct of_device_id gcc_msm8976_match_table[] = {
         { .compatible = "qcom,gcc-msm8976" },
+        { .compatible = "qcom,gcc-msm8976-v1.1" },
 	{},
 };
 
