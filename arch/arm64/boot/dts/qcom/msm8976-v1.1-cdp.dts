@@ -16,7 +16,7 @@
 #include "msm8976-cdp.dtsi"
 
 / {
-	model = "Qualcomm Technologies, Inc. MSM8976v1.1 CDP";
+	model = "Qualcomm Technologies, Inc. MSM8976 v1.1 CDP";
 	compatible = "qcom,msm8976-cdp", "qcom,msm8976", "qcom,cdp";
 	qcom,board-id= <1 0>;
 };
