@@ -1298,7 +1298,25 @@ static const struct freq_tbl ftbl_gfx3d_clk_src[] = {
 	F(100000000, P_GPLL0_DIV2, 4, 0, 0),
 	F(133330000, P_GPLL0_DIV2, 3, 0, 0),
 	F(160000000, P_GPLL0_DIV2, 2.5, 0, 0),
-	F(200000000, P_GPLL0_DIV2, 2, 0, 0),
+	F(216000000, P_GPLL0_DIV2, 2, 0, 0),
+	F(266670000, P_GPLL0, 3.0, 0, 0),
+	F(320000000, P_GPLL0, 2.5, 0, 0),
+	F(400000000, P_GPLL0, 2, 0, 0),
+	F(460800000, P_GPLL4, 2.5, 0, 0),
+	F(510000000, P_GPLL3, 2, 0, 0),
+	F(560000000, P_GPLL3, 2, 0, 0),
+	F(600000000, P_GPLL3, 2, 0, 0),
+	{ }
+};
+
+static const struct freq_tbl ftbl_gfx3d_8976_v1_1_clk_src[] = {
+	F(19200000, P_XO, 1, 0, 0),
+	F(50000000, P_GPLL0_DIV2, 8, 0, 0),
+	F(80000000, P_GPLL0_DIV2, 5, 0, 0),
+	F(100000000, P_GPLL0_DIV2, 4, 0, 0),
+	F(133330000, P_GPLL0_DIV2, 3, 0, 0),
+	F(160000000, P_GPLL0_DIV2, 2.5, 0, 0),
+	F(216000000, P_GPLL0_DIV2, 2, 0, 0),
 	F(266670000, P_GPLL0, 3.0, 0, 0),
 	F(320000000, P_GPLL0, 2.5, 0, 0),
 	F(400000000, P_GPLL0, 2, 0, 0),
@@ -4588,6 +4606,7 @@ static int gcc_msm8976_probe(struct platform_device *pdev)
 
 	if (of_device_is_compatible(pdev->dev.of_node, "qcom,gcc-msm8976-v1.1")) {
 		sdcc1_apps_clk_src.freq_tbl = ftbl_sdcc1_8976_v1_1_apps_clk_src;
+		gfx3d_clk_src.freq_tbl = ftbl_gfx3d_8976_v1_1_clk_src;
 	}
 
 	regmap = qcom_cc_map(pdev, &gcc_msm8976_desc);
