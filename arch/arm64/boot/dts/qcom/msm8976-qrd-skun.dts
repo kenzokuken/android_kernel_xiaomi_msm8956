@@ -19,5 +19,5 @@
 / {
 	model = "Qualcomm Technologies, Inc. MSM8976 QRD SKUN";
 	compatible = "qcom,msm8976-qrd-skun", "qcom,msm8976-qrd", "qcom,msm8976", "qcom,qrd";
-	qcom,board-id= <0xb 0>;
+	qcom,board-id = <11 0x5>;
 };

@@ -10,7 +10,7 @@
 / {
         model = "Qualcomm Technologies, Inc. MSM8976 QRD";
         compatible = "qcom,msm8976-qrd", "qcom,msm8976", "qcom,qrd";
-        qcom,board-id = <0xb 0>;
+        qcom,board-id = <11 0x0>;
 };
 
 &int_codec {

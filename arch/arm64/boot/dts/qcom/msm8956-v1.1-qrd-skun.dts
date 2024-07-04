@@ -20,5 +20,5 @@
 	model = "Qualcomm Technologies, Inc. MSM8956 v1.1 QRD SKUN";
 	compatible = "qcom,msm8956-qrd-skun", "qcom,msm8956-qrd",
 		   "qcom,msm8956", "qcom,qrd";
-	qcom,board-id= <0x5000b 0>;
+	qcom,board-id = <11 0x5>;
 };
