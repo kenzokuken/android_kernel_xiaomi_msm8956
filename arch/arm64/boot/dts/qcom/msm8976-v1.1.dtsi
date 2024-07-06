@@ -19,7 +19,7 @@
 
 /* Overwrite with V1.1 spec */
 &clock_gcc {
-	compatible = "qcom,gcc-8976-v1";
+	compatible = "qcom,gcc-msm8976-v1.1";
 };
 
 &mdss_dsi {
