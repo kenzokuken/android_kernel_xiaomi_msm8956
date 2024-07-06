@@ -46,7 +46,7 @@ TARGET := sdm660
 AUDIO_SELECT  := CONFIG_SND_SOC_SDM660=m
 endif
 
-ifeq ($(call is-board-platform-in-list,msm8953 msm8937),true)
+ifeq ($(call is-board-platform-in-list,msm8976 msm8956 msm8953 msm8937),true)
 TARGET := sdm450
 AUDIO_SELECT  += CONFIG_SND_SOC_SDM450=m
 AUDIO_SELECT  += CONFIG_SND_SOC_EXT_CODEC_SDM450=m
@@ -54,7 +54,7 @@ endif
 
 AUDIO_CHIPSET := audio
 # Build/Package only in case of supported target
-ifeq ($(call is-board-platform-in-list,msmnile $(MSMSTEPPE) $(TRINKET) kona lito bengal sdmshrike sdm660 msm8953 msm8937),true)
+ifeq ($(call is-board-platform-in-list,msmnile $(MSMSTEPPE) $(TRINKET) kona lito bengal sdmshrike sdm660 msm8976 msm8956 msm8953 msm8937),true)
 
 LOCAL_PATH := $(call my-dir)
 
@@ -89,7 +89,7 @@ LOCAL_MODULE_DEBUG_ENABLE := true
 LOCAL_MODULE_PATH         := $(KERNEL_MODULES_OUT)
 include $(DLKM_DIR)/AndroidKernelModule.mk
 ###########################################################
-ifeq ($(call is-board-platform-in-list, sdm660 msm8953 msm8937),true)
+ifeq ($(call is-board-platform-in-list, sdm660 msm8976 msm8956 msm8953 msm8937),true)
 include $(CLEAR_VARS)
 LOCAL_MODULE              := $(AUDIO_CHIPSET)_cpe_lsm.ko
 LOCAL_MODULE_KBUILD_NAME  := cpe_lsm_dlkm.ko
@@ -107,7 +107,7 @@ LOCAL_MODULE_DEBUG_ENABLE := true
 LOCAL_MODULE_PATH         := $(KERNEL_MODULES_OUT)
 include $(DLKM_DIR)/AndroidKernelModule.mk
 ###########################################################
-ifeq ($(call is-board-platform-in-list,msm8953 msm8937),true)
+ifeq ($(call is-board-platform-in-list,msm8976 msm8956 msm8953 msm8937),true)
 include $(CLEAR_VARS)
 LOCAL_MODULE              := $(AUDIO_CHIPSET)_machine_ext_$(TARGET).ko
 LOCAL_MODULE_KBUILD_NAME  := machine_ext_dlkm.ko
