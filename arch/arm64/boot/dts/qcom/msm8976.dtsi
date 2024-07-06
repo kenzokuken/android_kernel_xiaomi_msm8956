@@ -682,6 +682,15 @@
 		qcom,client-id = <0x00000001>;
 	};
 
+	scm: scm {
+		compatible = "qcom,scm-msm8976";
+		clocks = <&clock_gcc GCC_CRYPTO_CLK>,
+			 <&clock_gcc GCC_CRYPTO_AXI_CLK>,
+			 <&clock_gcc GCC_CRYPTO_AHB_CLK>;
+		clock-names = "core", "bus", "iface";
+		#reset-cells = <1>;
+	};
+
 	sdcc1_ice: sdcc1ice@7803000 {
 		compatible = "qcom,ice";
 		reg = <0x7803000 0x8000>;
